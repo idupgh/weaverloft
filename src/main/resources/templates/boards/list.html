@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Projects</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <div th:replace="~{/nav :: navfrag}"/>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Projects</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Boards</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Boards</h3>
+
+            <div class="card-tools">
+                <form th:action="@{'/boards'}" th:method="get">
+                    <div class="input-group">
+                        <input type="hidden" name="page" value="1">
+                        <div class="input-group-prepend">
+                            <select class="form-control" name="sort">
+                                <option value=""> 정렬</option>
+                                <option value="asc">Asc</option>
+                                <option value="desc">Desc</option>
+                            </select>
+                            <select class="form-control" name="type">
+                                <option th:selected="${pageRequestDTO.type == null}">검색</option>
+                                <option value="t" th:selected="${pageRequestDTO.type =='t'}">제목</option>
+                                <option value="c" th:selected="${pageRequestDTO.type =='c'}">내용</option>
+                                <option value="w" th:selected="${pageRequestDTO.type =='w'}">작성자</option>
+                                <option value="tc" th:selected="${pageRequestDTO.type =='tc'}">제목 + 내용</option>
+                                <option value="tcw" th:selected="${pageRequestDTO.type =='tcw'}">제목 + 내용 + 작성자</option>
+                            </select>
+                        </div>
+                        <input type="text" name="keyword" class="form-control float-right" placeholder="keyword" th:value="${pageRequestDTO.keyword}">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-striped projects">
+              <thead>
+              <tr>
+                  <th style="width: 5%">
+                      No
+                  </th>
+                  <th style="width: 20%">
+                      Title
+                  </th>
+                  <th style="width: 30%">
+                      Content
+                  </th>
+                  <th>
+                      Writer Email
+                  </th>
+                  <th style="width: 20%" class="text-center">
+                      Reg Date
+                  </th>
+                  <th style="width: 8%">
+                      Replies
+                  </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="board : ${list.dtoList}">
+                  <td>
+                      <a th:href="@{'/boards/' + ${board.bno}}">
+                          [[${board.bno}]] <!-- span 태그 쓴거랑 같음 -->
+                      </a>
+                  </td>
+                  <td>
+                      <a>
+                          [[${board.title}]]
+                      </a>
+                      <br/>
+
+                  </td>
+                  <td class="project_progress">
+                      [[${board.content}]]
+                  </td>
+                  <td>
+                      <ul class="list-inline">
+                          <li class="list-inline-item">
+                              <img alt="Avatar" class="table-avatar" src="../../dist/img/avatar.png">
+                          </li>
+                      </ul>
+                      [[${board.writerEmail}]]
+                  </td>
+
+                  <td class="project-state">
+                      <span class="badge badge-success">[[${board.regDate}]]</span>
+                  </td>
+                  <td class="project-actions text-right">
+                      [[${board.replyCount}]]
+                  </td>
+              </tr>
+
+              </tbody>
+
+          </table>
+        </div>
+        <!-- /.card-body -->
+          <div class="card-footer clearfix">
+              <ul class="pagination pagination-sm m-0 float-right">
+                  <li class="page-item" th:if="${list.prevPage}">
+                      <a class="page-link" th:href="@{/boards(page=${list.startPage - 1},
+                    type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">&laquo;</a>
+                  </li>
+
+                  <li th:class="'page-item' + ${list.currentPage == page? ' active':''}"
+                      th:each="page : ${list.pageList}">
+                      <a class="page-link" th:href="@{/boards(page=${page},sort=${pageRequestDTO.sort},
+                    type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">[[${page}]]</a>
+                  </li>
+                  <li class="page-item" th:if="${list.nextPage}">
+                      <a class="page-link" th:href="@{/boards(page=${list.endPage + 1},
+                    type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">&raquo;</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <div th:replace="~{/footer :: footerfrag}"/>
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+</body>
+</html>

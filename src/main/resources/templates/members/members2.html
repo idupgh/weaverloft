@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1> Member list</h1>
+<table border="1" width="50%" height="50px">
+    <tr>
+        <td>seq</td><td>id</td><td>name</td><td>email</td>
+    </tr>
+    <tr th:each="member : ${list}" border="1" width="50" height="50px" >
+        <td><a th:href="@{'/members/' + ${member.seq}}">
+            <span th:text="${member.seq}"></span></a></td>
+        <td><span th:text="${member.id}"></span></td>
+        <td><span th:text="${member.name}"></span></td>
+        <td><span th:text="${member.email}"></span></td>
+    </tr>
+</table>
+<a th:href="@{'/members/regform'}">Register</a>
+
+</body>
+</html>

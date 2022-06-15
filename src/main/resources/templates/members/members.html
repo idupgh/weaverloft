@@ -1,0 +1,153 @@
+<!DOCTYPE html> <!--list화면 readAll -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Simple Tables</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <div th:replace="~{/nav :: navfrag}"/>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Simple Tables</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Simple Tables</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+
+              <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title">memberDTOS</h3>
+
+                      <div class="card-tools">
+                        <form th:action="@{'/members'}" th:method="get">
+                          <div class="input-group input-group-sm" style="width: 350px;">
+                            <select class="form-control" name="sort">
+                              <option value=""> 정렬</option>
+                              <option value="asc">asc</option>
+                              <option value="desc">desc</option>
+                            </select>
+                            <select class="form-control" name="type">
+                              <option value=""> 검색</option>
+                              <option value="e">email</option>
+                              <option value="p">phone</option>
+                              <option value="a">address</option>
+                              <option value="ea">email + address</option>
+                            </select>
+                            <input type="text" name="keyword" class="form-control float-right" placeholder="keyword">
+                            <div class="input-group-append">
+                              <button type="submit" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                      <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                          <th style="width: 5%">Seq</th>
+                          <th style="width: 15%">Id</th>
+                          <th style="width: 10%">Name</th>
+                          <th style="width: 25%">Email</th>
+                          <th style="width: 15%">Phone</th>
+                          <th style="width: 30%">Address</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="memberDTO : ${list.dtoList}">
+                          <td><a th:href="@{'/members/' + ${memberDTO.seq}}">
+                            <span th:text="${memberDTO.seq}"></span></a></td>
+                          <td><span th:text="${memberDTO.id}"></span></td>
+                          <td><span th:text="${memberDTO.name}"></span></td>
+                          <td><span th:text="${memberDTO.email}"></span></td>
+                          <td><span th:text="${memberDTO.phone}"></span></td>
+                          <td><span th:text="${memberDTO.address}"></span></td>
+                        </tr>
+
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+
+                      <a th:href="@{'/members/regform'}" class="btn btn-sm bg-teal">등록</a>
+
+                      <ul class="pagination pagination-sm m-0 float-right">
+                        <li class="page-item" th:if="${list.prevPage}">
+                          <a class="page-link" th:href="@{/members(page=${list.startPage - 1},
+                    type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">&laquo;</a>
+                        </li>
+
+                        <li th:class="'page-item' + ${list.currentPage == page? ' active':''}"
+                            th:each="page : ${list.pageList}">
+                          <a class="page-link" th:href="@{/members(page=${page},sort=${pageRequestDTO.sort},
+                    type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">[[${page}]]</a>
+                        </li>
+                        <li class="page-item" th:if="${list.nextPage}">
+                          <a class="page-link" th:href="@{/members(page=${list.endPage + 1},
+                    type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">&raquo;</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- /.card -->
+
+                  <footer class="main-footer">
+                    <div class="float-right d-none d-sm-block">
+                      <b>Version</b> 3.2.0
+                    </div>
+                    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> Jay Park.
+                  </footer>
+
+                  <!-- Control Sidebar -->
+                  <aside class="control-sidebar control-sidebar-dark">
+                    <!-- Control sidebar content goes here -->
+                  </aside>
+                  <!-- /.control-sidebar -->
+                </div>
+                <!-- ./wrapper -->
+
+                <!-- jQuery -->
+                <script src="../plugins/jquery/jquery.min.js"></script>
+                <!-- Bootstrap 4 -->
+                <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+                <!-- AdminLTE App -->
+                <script src="../dist/js/adminlte.min.js"></script>
+                <!-- AdminLTE for demo purposes -->
+                <script src="../dist/js/demo.js"></script>
+              </div></div>
+          </div></div></div></section></div></div></body>
+</html>

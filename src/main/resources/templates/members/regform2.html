@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Registration</title>
+</head>
+<body>
+<h1> Member info </h1>
+
+<!-- Method="post" 도 동작, put, delete hidden method 이다 -->
+<form action="#" th:action="@{'/members'}" th:object="${member}" th:method="post">
+
+  <!--Seq : <input type="text" name="seq" th:field="*{seq}"/><br> -->
+
+  Id(*) : <input type="text" name="id" th:field="*{id}"/><br>
+  Pw(*) : <input type="text" name="pw" th:field="*{pw}"/><br>
+  Name(*) : <input type="text" name="name" th:field="*{name}"/><br>
+  Email(*) : <input type="text" name="email" th:field="*{email}"/><br>
+  Phone : <input type="text" name="phone" th:field="*{phone}"/><br>
+  Address : <input type="text" name="address" th:field="*{address}"/><br>
+  <input type="submit" value="Register"/><input type="reset" value="Reset"/>
+
+</form>
+
+</body>
+</html>

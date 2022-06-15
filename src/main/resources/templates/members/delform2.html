@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+<h1> Member delete </h1>
+
+<form action="#" th:action="@{'/members/' + ${member.seq}}" th:object="${member}" th:method="delete">
+    Seq : <input type="text" name="seq" th:field="*{seq}" th:value="*{seq}" readonly/><br>
+    Id(*) : <input type="text" name="id" th:field="*{id}"/><br>
+    <input type="submit" value="Delete"/><input type="reset" value="Reset"/>
+
+</form>
+
+</body>
+</html>
