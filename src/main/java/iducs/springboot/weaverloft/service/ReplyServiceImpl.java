@@ -1,6 +1,6 @@
 package iducs.springboot.weaverloft.service;
 
-import iducs.springboot.weaverloft.domain.Board;
+import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.ReplyDTO;
 import iducs.springboot.weaverloft.entity.ReplyEntity;
 import iducs.springboot.weaverloft.repository.ReplyRepository;
@@ -30,7 +30,7 @@ public class ReplyServiceImpl implements ReplyService{
     @Override
     public List<ReplyDTO> getList(Long bno) {
 
-        List<ReplyEntity> result = replyRepository.getRepliesByBoardOrderByRno(Board.builder().bno(bno).build());
+        List<ReplyEntity> result = replyRepository.getRepliesByBoardOrderByRno(BoardDTO.builder().bno(bno).build());
 
         return result.stream().map(reply -> entityToDTO(reply)).collect(Collectors.toList());
     }

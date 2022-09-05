@@ -3,7 +3,7 @@ package iducs.springboot.weaverloft.service;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import iducs.springboot.weaverloft.domain.Member;
+import iducs.springboot.weaverloft.domain.MemberDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.domain.PageResultDTO;
 import iducs.springboot.weaverloft.entity.BoardEntity;
@@ -35,8 +35,8 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public void create(Member member) {
-        MemberEntity entity = dtoToEntity(member);
+    public void create(MemberDTO memberDTO) {
+        MemberEntity entity = dtoToEntity(memberDTO);
                 /*
                 .seq(member.getSeq())
                 .id(member.getId())
@@ -51,33 +51,33 @@ public class MemberServiceImpl implements MemberService{
         memberRepository.save(entity);
     }
 
-    private MemberEntity dtoToEntity(Member member) {
+    private MemberEntity dtoToEntity(MemberDTO memberDTO) {
         MemberEntity entity = MemberEntity.builder()
-                .seq(member.getSeq())
-                .id(member.getId())
-                .pw(member.getPw())
-                .name(member.getName())
-                .email(member.getEmail())
-                .phone(member.getPhone())
-                .address(member.getAddress())
-                .block(member.getBlock())
+                .seq(memberDTO.getSeq())
+                .id(memberDTO.getId())
+                .pw(memberDTO.getPw())
+                .name(memberDTO.getName())
+                .email(memberDTO.getEmail())
+                .phone(memberDTO.getPhone())
+                .address(memberDTO.getAddress())
+                .block(memberDTO.getBlock())
                 .build();
         return entity;
     }
 
     @Override
-    public Member readById(Long seq) {
-        Member member = null;
+    public MemberDTO readById(Long seq) {
+        MemberDTO memberDTO = null;
         Optional<MemberEntity> result = memberRepository.findById(seq);
         if(result.isPresent()) {
-            member = entityToDto(result.get());
+            memberDTO = entityToDto(result.get());
         }
-        return member;
+        return memberDTO;
     }
 
     // Service -> Controller : entity -> dto 로 변환후 반환
-    private Member entityToDto(MemberEntity entity) {
-        Member member = Member.builder()
+    private MemberDTO entityToDto(MemberEntity entity) {
+        MemberDTO memberDTO = MemberDTO.builder()
                 .seq(entity.getSeq())
                 .id(entity.getId())
                 .pw(entity.getPw())
@@ -87,34 +87,34 @@ public class MemberServiceImpl implements MemberService{
                 .address(entity.getAddress())
                 .block(entity.getBlock())
                 .build();
-        return member;
+        return memberDTO;
     }
 
     @Override
-    public List<Member> readAll() {
-        List<Member> members = new ArrayList<Member>(); //반환 리스트객체
+    public List<MemberDTO> readAll() {
+        List<MemberDTO> memberDTOS = new ArrayList<MemberDTO>(); //반환 리스트객체
         List<MemberEntity> entities = memberRepository.findAll(); //entity 들
         for(MemberEntity entity : entities) {
-            Member member = entityToDto(entity);
-            members.add(member);
+            MemberDTO memberDTO = entityToDto(entity);
+            memberDTOS.add(memberDTO);
         }
-        return members;
+        return memberDTOS;
     }
 
     @Override
-    public void update(Member member) {
-        MemberEntity entity = dtoToEntity(member);
+    public void update(MemberDTO memberDTO) {
+        MemberEntity entity = dtoToEntity(memberDTO);
         memberRepository.save(entity);
     }
 
     @Override
-    public void delete(Member member) {
-        MemberEntity entity = dtoToEntity(member);
+    public void delete(MemberDTO memberDTO) {
+        MemberEntity entity = dtoToEntity(memberDTO);
         memberRepository.deleteById(entity.getSeq());
     }
 
     @Override
-    public PageResultDTO<Member, MemberEntity> readListBy(PageRequestDTO pageRequestDTO) {
+    public PageResultDTO<MemberDTO, MemberEntity> readListBy(PageRequestDTO pageRequestDTO) {
         Sort sort = Sort.by("seq").descending();
         if(pageRequestDTO.getSort() == null)
             sort = Sort.by("seq").descending();
@@ -126,7 +126,7 @@ public class MemberServiceImpl implements MemberService{
         Page<MemberEntity> result = memberRepository.findAll(booleanBuilder, pageable);
 
         // Page<MemberEntity> result = memberRepository.findAll(pageable);
-        Function<MemberEntity, Member> fn = (entity -> entityToDto(entity));
+        Function<MemberEntity, MemberDTO> fn = (entity -> entityToDto(entity));
 
         return new PageResultDTO<>(result, fn);
     }
@@ -157,18 +157,18 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public Member readByName(Member member) {
+    public MemberDTO readByName(MemberDTO memberDTO) {
         return null;
     }
 
     @Override
-    public Member readByEmail(String member) {
+    public MemberDTO readByEmail(String member) {
         return null;
     }
 
     @Override
-    public Member loginByEmail(Member member) {
-        Member memberDTO = null;
+    public MemberDTO loginByEmail(MemberDTO member) {
+        MemberDTO memberDTO = null;
         Object result = memberRepository.getMemberByEmail(member.getEmail(), member.getPw());
         if(result != null){
             memberDTO = entityToDto((MemberEntity) result);

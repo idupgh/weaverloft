@@ -162,7 +162,7 @@
                     <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="/members/logout" class="d-block">[[ ${session.login.email} ]]</br> logout <i class="fas fa-arrow-circle-right right"></i></a>
+                    <a href="/memberDTOS/logout" class="d-block">[[ ${session.login.email} ]]</br> logout <i class="fas fa-arrow-circle-right right"></i></a>
                 </div>
             </div>
             <div class="user-panel mt-3 pb-3 mb-3 d-flex" th:unless="${session.login != null}">
@@ -170,7 +170,7 @@
                     <img src="../../dist/img/user4-128x128.jpg" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="/members/login" class="d-block"> 로그인 전 </a>
+                    <a href="/memberDTOS/login" class="d-block"> 로그인 전 </a>
                 </div>
             </div>
             <div class="user-panel mt-3 pb-3 mb-3 d-flex" th:if="${session.login != null && session.block == 'block'}">
@@ -178,7 +178,7 @@
                     <img src="../../dist/img/anonymous.png" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="/members/logout" class="d-block"> 차단된 사용자 </a>
+                    <a href="/memberDTOS/logout" class="d-block"> 차단된 사용자 </a>
                 </div>
             </div>
 
@@ -210,13 +210,13 @@
                         </a>
                         <ul class="nav nav-treeview" th:unless="${session.login != null}">
                             <li class="nav-item">
-                                <a th:href="@{/members/regform}" class="nav-link">
+                                <a th:href="@{/memberDTOS/regform}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Member Register(회원 등록)</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a th:href="@{/members/login}" class="nav-link">
+                                <a th:href="@{/memberDTOS/login}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Member Login</p>
                                 </a>
@@ -225,32 +225,32 @@
                         <ul class="nav nav-treeview" th:if="${session.login != null && session.block == 'unblock' }">
 
                             <li class="nav-item" th:if="${session.isadmin != null}">
-                                <a th:href="@{/members}" class="nav-link">
+                                <a th:href="@{/memberDTOS}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Member List(회원 목록)</p>
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a th:href="'/members/' + ${session.login.seq}" class="nav-link">
+                                <a th:href="'/memberDTOS/' + ${session.login.seq}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Member Info</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a th:href="@{'/members/' + ${session.login.seq} + '/upform'}" class="nav-link">
+                                <a th:href="@{'/memberDTOS/' + ${session.login.seq} + '/upform'}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Member Modify(수정)</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a th:href="@{'/members/' + ${session.login.seq} + '/delform'}" class="nav-link">
+                                <a th:href="@{'/memberDTOS/' + ${session.login.seq} + '/delform'}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Member Delete(탈퇴)</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a th:href="@{/members/logout}" class="nav-link">
+                                <a th:href="@{/memberDTOS/logout}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Member Logout(로그아웃)</p>
                                 </a>
@@ -258,7 +258,7 @@
                         </ul>
                         <ul class="nav nav-treeview" th:if="${session.login != null && session.block == 'block' }">
                             <li class="nav-item">
-                                <a href="/members/logout" class="nav-link">
+                                <a href="/memberDTOS/logout" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Member Logout(로그아웃)</p>
                                 </a>

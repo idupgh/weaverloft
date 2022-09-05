@@ -1,6 +1,6 @@
 package iducs.springboot.weaverloft.service;
 
-import iducs.springboot.weaverloft.domain.Member;
+import iducs.springboot.weaverloft.domain.MemberDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.domain.PageResultDTO;
 import iducs.springboot.weaverloft.entity.MemberEntity;
@@ -9,16 +9,16 @@ import java.util.List;
 
 public interface MemberService {
 
-    void create(Member member);
-    Member readById(Long seq);
-    List<Member> readAll();
-    void update(Member member);
-    void delete(Member member);
-    PageResultDTO<Member, MemberEntity> readListBy(PageRequestDTO pageRequestDTO);
-    Member readByName(Member member);
-    Member readByEmail(String member);
+    void create(MemberDTO memberDTO);
+    MemberDTO readById(Long seq);
+    List<MemberDTO> readAll();
+    void update(MemberDTO memberDTO);
+    void delete(MemberDTO memberDTO);
+    PageResultDTO<MemberDTO, MemberEntity> readListBy(PageRequestDTO pageRequestDTO);
+    MemberDTO readByName(MemberDTO memberDTO);
+    MemberDTO readByEmail(String member);
 
-    Member loginByEmail(Member member);
+    MemberDTO loginByEmail(MemberDTO memberDTO);
 
     void removeWithBoards(Long seq);
 }

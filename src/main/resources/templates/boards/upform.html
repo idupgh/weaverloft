@@ -51,7 +51,7 @@
               </div>
             </div>
 
-            <form action="#" th:action="@{'/boards/' + ${board.bno}}" th:object="${board}" th:method="PUT">
+            <form action="#" th:action="@{'/boards/' + ${boardDTO.bno}}" th:object="${boardDTO}" th:method="PUT">
 
               <div class="card-body">
                 <div class="form-group">

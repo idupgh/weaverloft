@@ -47,16 +47,16 @@
             <div class="col-12 d-flex align-items-stretch flex-column">
               <div class="card bg-light d-flex flex-fill">
                 <div class="card-header text-muted border-bottom-0">
-                  <span th:text="${member.id}"/>
+                  <span th:text="${memberDTO.id}"/>
                 </div>
                 <div class="card-body pt-0">
                   <div class="row">
                     <div class="col-7">
-                      <h2 class="lead"><b><span th:text="${member.name}"/></b></h2>
-                      <p class="text-muted text-sm"><b>email: </b> <span th:text="${member.email}"></span> </p>
+                      <h2 class="lead"><b><span th:text="${memberDTO.name}"/></b></h2>
+                      <p class="text-muted text-sm"><b>email: </b> <span th:text="${memberDTO.email}"></span> </p>
                       <ul class="ml-4 mb-0 fa-ul text-muted">
-                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Address: <span th:text="${member.address}"></span></li>
-                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: <span th:text="${member.phone}"></span></li>
+                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Address: <span th:text="${memberDTO.address}"></span></li>
+                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: <span th:text="${memberDTO.phone}"></span></li>
                       </ul>
                     </div>
                     <div class="col-5 text-center">
@@ -67,13 +67,13 @@
 
                 <div class="card-footer">
                   <div class="text-right" th:if="${session.isadmin != null}">
-                    <a th:href="@{'/members/' + ${member.seq} + '/upform'}" class="btn btn-sm bg-teal">
+                    <a th:href="@{'/memberDTOS/' + ${memberDTO.seq} + '/upform'}" class="btn btn-sm bg-teal">
                       <i class="fas fa-comments"></i> update
                     </a>
-                    <a th:href="@{'/members/' + ${member.seq} + '/delform'}" class="btn btn-sm bg-teal">
+                    <a th:href="@{'/memberDTOS/' + ${memberDTO.seq} + '/delform'}" class="btn btn-sm bg-teal">
                       <i class="fas fa-comments"></i> delete
                     </a>
-                    <a th:href="@{'/members/'}" class="btn btn-sm bg-teal">
+                    <a th:href="@{'/memberDTOS/'}" class="btn btn-sm bg-teal">
                       <i class="fas fa-copy"></i> list
                     </a>
                   </div>

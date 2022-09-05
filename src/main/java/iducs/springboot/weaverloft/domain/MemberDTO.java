@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data //@Getter, @Setter, @EqualsAndHash, @RequiredArgsConstructor
 @Builder
-public class Member { // DTO(Data Transform Object) : Client <-> Controller <-> Service
+public class MemberDTO { // DTO(Data Transform Object) : Client <-> Controller <-> Service
     private Long seq; //seq 번호, 자동 증가하는 유일키
     private String id;
     private String pw;

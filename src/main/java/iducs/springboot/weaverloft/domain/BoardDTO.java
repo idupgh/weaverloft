@@ -2,7 +2,7 @@ package iducs.springboot.weaverloft.domain;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @ToString
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Board {
+public class BoardDTO {
     private Long bno; // no? seq?
     private String title;
     private String content;
@@ -20,8 +20,8 @@ public class Board {
     private String writerName;
     private String writerEmail;
 
-    private LocalDateTime regDate;
-    private LocalDateTime modDate;
+    private LocalDate regDate;
+    private LocalDate modDate;
 
     private int replyCount; // 게시물 댓글 수
 

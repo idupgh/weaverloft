@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.stream.IntStream;
 
 @SpringBootTest
-class MemberTests {
+class MemberDTOTests {
     // POJO (Plain Old Java Object) : 가장 기본적인 자바 객체 형태 - 필드, getter, setter
     // Beans 규약을 준수, 생성자가 복잡하지 않음
     // DI(Dependency Injection) : 의존성 주입, Spring Framework 가 의존성을 해결하는 방법

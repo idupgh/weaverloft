@@ -2,7 +2,7 @@ package iducs.springboot.weaverloft.controller;
 
 
 
-import iducs.springboot.weaverloft.domain.Board;
+import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.service.BoardService;
 import org.springframework.stereotype.Controller;
@@ -20,12 +20,12 @@ public class BoardController {
 
     @GetMapping("/regform")
     public String getRegform(PageRequestDTO pageRequestDTO, Model model){
-        model.addAttribute("dto", Board.builder().build()); // 빈 Board 객체 생성
+        model.addAttribute("dto", BoardDTO.builder().build()); // 빈 Board 객체 생성
         return "/boards/regform"; // boards/regform.html 전달
     }
 
     @PostMapping("")
-    public String post(@ModelAttribute("dto") Board dto, Model model) {
+    public String post(@ModelAttribute("dto") BoardDTO dto, Model model) {
         // Login 처리하면 그냥 관계 없음
         /*
         Long seqLong = Long.valueOf(new Random().nextInt(50));
@@ -51,13 +51,13 @@ public class BoardController {
 
     @GetMapping("/{bno}/upform") //업데이트폼
     public String getUpform(@PathVariable("bno") Long bno, Model model){
-        Board boardDTO = boardService.getById(bno);
+        BoardDTO boardDTO = boardService.getById(bno);
         model.addAttribute("board", boardDTO); //입력한 객체를 전달, DB로부터 가져온 것 아님
         return "/boards/upform"; //view resolving : upform.html
     }
 
     @PutMapping("/{bno}") //업데이트 구현
-    public String putMember(@PathVariable Long bno, Board boardDTO){
+    public String putMember(@PathVariable Long bno, BoardDTO boardDTO){
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
         boardService.update(bno, boardDTO);
         //return "redirect:/boards/read";
@@ -67,7 +67,7 @@ public class BoardController {
     @GetMapping("/{bno}/delform") //삭제폼
     public String getDelform(@ModelAttribute("bno") Long bno, Model model){
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
-        Board boardDTO = boardService.getById(bno);
+        BoardDTO boardDTO = boardService.getById(bno);
         model.addAttribute("board", boardDTO);
         //return "members/delform";
         return "/boards/delform";

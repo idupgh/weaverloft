@@ -13,7 +13,7 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 @SpringBootTest
-class Board201812064ApplicationTests {
+class BoardDTO201812064ApplicationTests {
 
     @Autowired
     MemberRepository memberRepository; // MemoRepository 클래스형 객체를 Spring 생성

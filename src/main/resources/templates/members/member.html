@@ -7,14 +7,14 @@
 <body>
 <table border="1" width="50" height="50px">
     <tr>
-        <td><span th:text="${member.seq}"></span></td>
-        <td><span th:text="${member.id}"></span></td>
-        <td><span th:text="${member.name}"></span></td>
-        <td><span th:text="${member.email}"></span></td>
+        <td><span th:text="${memberDTO.seq}"></span></td>
+        <td><span th:text="${memberDTO.id}"></span></td>
+        <td><span th:text="${memberDTO.name}"></span></td>
+        <td><span th:text="${memberDTO.email}"></span></td>
     </tr>
 </table>
-<a th:href="@{'/members/' + ${member.seq} + '/upform'}">update</a>
-<a th:href="@{'/members/' + ${member.seq} + '/delform'}">delete</a>
-<a th:href="@{'/members/'}">list</a>
+<a th:href="@{'/memberDTOS/' + ${memberDTO.seq} + '/upform'}">update</a>
+<a th:href="@{'/memberDTOS/' + ${memberDTO.seq} + '/delform'}">delete</a>
+<a th:href="@{'/memberDTOS/'}">list</a>
 </body>
 </html>

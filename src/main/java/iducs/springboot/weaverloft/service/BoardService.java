@@ -1,22 +1,22 @@
 package iducs.springboot.weaverloft.service;
 
 
-import iducs.springboot.weaverloft.domain.Board;
+import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.domain.PageResultDTO;
 import iducs.springboot.weaverloft.entity.BoardEntity;
 import iducs.springboot.weaverloft.entity.MemberEntity;
 
 public interface BoardService {
-    Long register(Board dto);  // Board : DTO or Domain
+    Long register(BoardDTO dto);  // Board : DTO or Domain
 
-    PageResultDTO<Board, Object[]> getList(PageRequestDTO pageRequestDTO);
-    Board getById(Long bno); // Id는 primary key 값 : @ID 필드
-    Long modify(Board dto);
+    PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO);
+    BoardDTO getById(Long bno); // Id는 primary key 값 : @ID 필드
+    Long modify(BoardDTO dto);
     void DeleteById(Long bno);
     void deleteWithReplies(Long bno); //삭제
 
-    default BoardEntity dtoToEntity(Board dto) {
+    default BoardEntity dtoToEntity(BoardDTO dto) {
         MemberEntity member = MemberEntity.builder()
                 .seq(dto.getWriterSeq())
                 .build();
@@ -29,8 +29,8 @@ public interface BoardService {
                 .build();
         return board;
     }
-    default Board entityToDto(BoardEntity entity, MemberEntity member, Long replyCount) {
-        Board dto = Board.builder()
+    default BoardDTO entityToDto(BoardEntity entity, MemberEntity member, Long replyCount) {
+        BoardDTO dto = BoardDTO.builder()
                 .bno(entity.getBno())
                 .title(entity.getTitle())
                 .content(entity.getContent())
@@ -46,11 +46,11 @@ public interface BoardService {
         return dto;
     }
 
-    void deleteById(Board dto);
+    void deleteById(BoardDTO dto);
 
-    Board readById(Long seq);
+    BoardDTO readById(Long seq);
 
     void deleteByBno(Long bno);
 
-    Long update(Long bno, Board boardDTO);
+    Long update(Long bno, BoardDTO boardDTO);
 }

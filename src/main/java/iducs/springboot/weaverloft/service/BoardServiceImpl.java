@@ -1,6 +1,6 @@
 package iducs.springboot.weaverloft.service;
 
-import iducs.springboot.weaverloft.domain.Board;
+import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.domain.PageResultDTO;
 import iducs.springboot.weaverloft.entity.BoardEntity;
@@ -30,7 +30,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Long register(Board dto) { // Controller -> 객체 -> Service
+    public Long register(BoardDTO dto) { // Controller -> 객체 -> Service
         log.info(dto);
         BoardEntity boardEntity = dtoToEntity(dto);
         boardRepository.save(boardEntity);
@@ -38,10 +38,10 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public PageResultDTO<Board, Object[]> getList(PageRequestDTO pageRequestDTO) {
+    public PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
         log.info(">>>>" + pageRequestDTO);
 
-        Function<Object[], Board> fn = (entity -> entityToDto((BoardEntity) entity[0],
+        Function<Object[], BoardDTO> fn = (entity -> entityToDto((BoardEntity) entity[0],
                 (MemberEntity) entity[1],(Long) entity[2]));
 
         String type = pageRequestDTO.getType();
@@ -62,14 +62,14 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Board getById(Long bno) {
+    public BoardDTO getById(Long bno) {
         Object result = boardRepository.getBoardByBno(bno); // 기본 CRUD 는 JpaRepository 에서 제공
         Object[] en = (Object[]) result;
         return entityToDto((BoardEntity) en[0], (MemberEntity) en[1], (Long) en[2]);
     }
 
     @Override
-    public Long modify(Board dto) {
+    public Long modify(BoardDTO dto) {
         return null;
     }
 
@@ -79,30 +79,30 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardEntity dtoToEntity(Board dto) {
+    public BoardEntity dtoToEntity(BoardDTO dto) {
         return BoardService.super.dtoToEntity(dto);
     }
 
     @Override
-    public Board entityToDto(BoardEntity entity, MemberEntity member, Long replyCount) {
+    public BoardDTO entityToDto(BoardEntity entity, MemberEntity member, Long replyCount) {
         return BoardService.super.entityToDto(entity, member, replyCount);
     }
 
     @Override
-    public void deleteById(Board dto) {
+    public void deleteById(BoardDTO dto) {
         BoardEntity entity = dtoToEntity(dto);
         boardRepository.deleteById(entity.getBno());
     }
 
 
     @Override
-    public Board readById(Long seq) {
-        Board board = null;
+    public BoardDTO readById(Long seq) {
+        BoardDTO boardDTO = null;
         Optional<BoardEntity> result = boardRepository.findById(seq);
         if (result.isPresent()) {
-            board = entityToDto(result.get());
+            boardDTO = entityToDto(result.get());
         }
-        return board;
+        return boardDTO;
     }
 
     @Override
@@ -113,15 +113,15 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Long update(Long bno, Board boardDTO) {
+    public Long update(Long bno, BoardDTO boardDTO) {
         BoardEntity boardEntity = dtoToEntity(boardDTO);
         boardRepository.save(boardEntity);
         return bno;
     }
 
 
-    private Board entityToDto(BoardEntity entity) {
-        Board board = Board.builder()
+    private BoardDTO entityToDto(BoardEntity entity) {
+        BoardDTO boardDTO = BoardDTO.builder()
                 .bno(entity.getBno())
                 .modDate(entity.getModDate())
                 .regDate(entity.getRegDate())
@@ -129,7 +129,7 @@ public class BoardServiceImpl implements BoardService {
                 .title(entity.getTitle())
                 .writerSeq(entity.getWriter().getSeq())
                 .build();
-        return board;
+        return boardDTO;
     }
 
     @Transactional
