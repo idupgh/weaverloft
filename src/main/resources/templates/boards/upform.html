@@ -36,77 +36,82 @@
     </section>
 
     <!-- Main content -->
+    <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <!-- left column -->
-          <div class="col-md-12">
-            <!-- general form elements -->
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">Update</h3>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Board</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
               </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <form action="#" th:action="@{'/boards/' + ${board.bno}}" th:object="${board}" th:method="put">
+            </div>
+
+            <form action="#" th:action="@{'/boards/' + ${board.bno}}" th:object="${board}" th:method="PUT">
+
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="inputBno"></label>
+                  <input type="hidden" name="bno" th:field="*{bno}"  id="inputBno" class="form-control" readonly>
+                </div>
+
+                <div data-toggle="buttons" class="btn-group" role="group" th:if="${session.isadmin != null}">
+                  <label class="btn mb-2 col-md-5 btn-light" style="">
+                    <input type="radio" name="mode"  value="block" th:field="*{block}"
+                           th:attr="checked=*{block.toString() == 'block' ? 'true' : 'false'}"  autocomplete="off">block
+                  </label>
+                  <label class="btn mb-2 col-md-5 btn-light" style="" >
+                    <input type="radio" name="mode" value="unblock" th:field="*{block}"
+                           th:attr="checked=*{block.toString() == 'unblock' ? 'true' : 'false'}" autocomplete="off">unblock
+                  </label>
+                </div>
+
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputSeq1">Seq</label>
-                    <input type="text" name="bno" th:field="*{bno}" th:value="*{bno}"
-                           class="form-control" id="exampleInputSeq1" placeholder="Enter Id" readonly>
-                  </div>
-                  <div class="form-group">
-                    <label for="inputWriter">Writer</label>
-                    <input type="text" id="inputWriter" th:value="${session.login.seq}" th:name="writerSeq" readonly class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputId1">Title</label>
-                    <input type="text" name="title" th:field="*{title}" class="form-control" id="exampleInputId1" placeholder="Enter Title">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputPassword1">Content</label>
-                    <input type="text" name="content" th:field="*{content}" class="form-control" id="exampleInputPassword1" placeholder="Content">
+                    <label for="inputW">WriterSeq</label>
+                    <input type="text" name="writerSeq" th:field="*{writerSeq}"  id="inputW" class="form-control" readonly>
                   </div>
 
+                  <div class="card-body">
+                    <div class="form-group">
+                      <label for="inputTitle">Title</label>
+                      <input type="text" name="title" th:field="*{title}"  id="inputTitle" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="inputContent">content</label>
+                      <input type="text" name="content" th:field="*{content}"  id="inputContent" class="form-control">
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
                 </div>
-                <!-- /.card-body -->
-
-                <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="row">
+                  <div class="col-12">
+                    <input type="submit" value="Update" class="btn btn-success float-right">
+                  </div>
                 </div>
-              </form>
-            </div>
-            <!-- /.card -->
-
-            <!-- general form elements -->
-
+              </div>
+            </form>
           </div>
-          <!-- /.card -->
-
         </div>
-        <!--/.col (left) -->
-        <!-- right column -->
-
       </div>
-      <!-- /.card-body -->
-    </section></div>
-  <!-- /.card -->
-  </section></div>
-<!--/.col (right) -->
-</div>
-<!-- /.row -->
-</div><!-- /.container-fluid -->
-</section>
-<!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
-<div th:replace="~{/footer :: footerfrag}"/>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- /.content-wrapper -->
+  <div th:replace="~{/footer :: footerfrag}"/>
 
-<!-- Control Sidebar -->
-<aside class="control-sidebar control-sidebar-dark">
-  <!-- Control sidebar content goes here -->
-</aside>
-<!-- /.control-sidebar -->
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
 

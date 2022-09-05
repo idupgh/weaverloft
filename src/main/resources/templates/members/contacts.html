@@ -64,21 +64,21 @@
                     </div>
                   </div>
                 </div>
-                <!--
+
                 <div class="card-footer">
-                    <div class="text-right">
-                        <a th:href="@{'/members/' + ${member.seq} + '/upform'}" class="btn btn-sm bg-teal">
-                            <i class="fas fa-comments"></i> update
-                        </a>
-                        <a th:href="@{'/members/' + ${member.seq} + '/delform'}" class="btn btn-sm bg-teal">
-                            <i class="fas fa-comments"></i> delete
-                        </a>
-                        <a th:href="@{'/members/'}" class="btn btn-sm bg-teal">
-                            <i class="fas fa-copy"></i> list
-                        </a>
-                    </div>
+                  <div class="text-right" th:if="${session.isadmin != null}">
+                    <a th:href="@{'/members/' + ${member.seq} + '/upform'}" class="btn btn-sm bg-teal">
+                      <i class="fas fa-comments"></i> update
+                    </a>
+                    <a th:href="@{'/members/' + ${member.seq} + '/delform'}" class="btn btn-sm bg-teal">
+                      <i class="fas fa-comments"></i> delete
+                    </a>
+                    <a th:href="@{'/members/'}" class="btn btn-sm bg-teal">
+                      <i class="fas fa-copy"></i> list
+                    </a>
+                  </div>
                 </div>
-                -->
+
               </div>
             </div>
 
