@@ -26,4 +26,6 @@ public class BoardEntity extends BaseEntity {
 
     @Column(columnDefinition = "BIGINT(20) default 0", nullable = false)
     private Long views;
+
+    private int replyCount;
 }

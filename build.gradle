@@ -3,6 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
     id 'java' // jar 파일
+    id "io.franzbecker.gradle-lombok" version "3.0.0"
     // id 'war' -> war 파일을 만들겠다 web archive file : 묶음 파일 (압축과는 다르다)
 }
 

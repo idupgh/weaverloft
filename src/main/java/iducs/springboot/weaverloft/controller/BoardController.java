@@ -25,14 +25,14 @@ public class BoardController {
     }
 
     @PostMapping("")
-    public String post(@ModelAttribute("boardDTO") BoardDTO dto, Model model) {
+    public String post(@ModelAttribute("boardDTO") BoardDTO boardDTO, Model model) {
         // Login 처리하면 그냥 관계 없음
         /*
         Long seqLong = Long.valueOf(new Random().nextInt(50));
         seqLong = (seqLong == 0)? 1L:seqLong;
         dto.setWriterSeq(seqLong);
          */
-        Long bno = boardService.register(dto);
+        Long bno = boardService.register(boardDTO);
         //model.addAttribute("")
         return "redirect:/boards/"+ bno; // 등록 후 상세보기
     }

@@ -23,9 +23,9 @@ public class BoardDTO {
     private LocalDate regDate;
     private LocalDate modDate;
 
-    private int replyCount; // 게시물 댓글 수
-
     private String block = "unblock"; // 차단 여부
 
     private Long views;
+    private int replyCount; // 게시물 댓글 수
+
 }

@@ -1,7 +1,10 @@
 package iducs.springboot.weaverloft.controller;
 
 import iducs.springboot.weaverloft.domain.ReplyDTO;
+import iducs.springboot.weaverloft.service.BoardService;
 import iducs.springboot.weaverloft.service.ReplyService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +15,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/replies/")
+@RequiredArgsConstructor
 public class ReplyController {
 
-    private final ReplyService replyService = null;
+    @Autowired
+    private final ReplyService replyService;
 
     @GetMapping(value = "/boards/{bno}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ReplyDTO>> getListByBoard(@PathVariable("bno") Long bno){

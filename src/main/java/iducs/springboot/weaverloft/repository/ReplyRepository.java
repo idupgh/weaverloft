@@ -1,6 +1,7 @@
 package iducs.springboot.weaverloft.repository;
 
 import iducs.springboot.weaverloft.domain.BoardDTO;
+import iducs.springboot.weaverloft.entity.BoardEntity;
 import iducs.springboot.weaverloft.entity.ReplyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,5 +18,5 @@ public interface ReplyRepository extends JpaRepository<ReplyEntity, Long> {
     void deleteByBno(@Param("bno")Long bno);
 
     // 게시물로 댓글 목록 가져오기
-    List<ReplyEntity> getRepliesByBoardOrderByRno(BoardDTO boardDTO);
+    List<ReplyEntity> getRepliesByBoardOrderByRno(BoardEntity board);
 }
