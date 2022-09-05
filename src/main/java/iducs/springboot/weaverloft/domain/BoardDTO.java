@@ -3,6 +3,7 @@ package iducs.springboot.weaverloft.domain;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @ToString
@@ -20,8 +21,8 @@ public class BoardDTO {
     private String writerName;
     private String writerEmail;
 
-    private LocalDate regDate;
-    private LocalDate modDate;
+    private LocalDateTime regDate;
+    private LocalDateTime modDate;
 
     private String block = "unblock"; // 차단 여부
 

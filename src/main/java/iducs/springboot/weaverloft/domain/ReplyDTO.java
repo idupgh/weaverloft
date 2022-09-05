@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
@@ -21,5 +22,5 @@ public class ReplyDTO {
 
     private Long bno; //게시글 번호
 
-    private LocalDate regDate, modDate;
+    private LocalDateTime regDate, modDate;
 }
