@@ -30,9 +30,9 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Long register(BoardDTO dto) { // Controller -> 객체 -> Service
-        log.info(dto);
-        BoardEntity boardEntity = dtoToEntity(dto);
+    public Long register(BoardDTO boardDTO) { // Controller -> 객체 -> Service
+        log.info(boardDTO);
+        BoardEntity boardEntity = dtoToEntity(boardDTO);
         boardRepository.save(boardEntity);
         return boardEntity.getBno();// 게시물 번호
     }
@@ -49,10 +49,10 @@ public class BoardServiceImpl implements BoardService {
         Pageable pageable = null;
         String page = pageRequestDTO.getSort();
         String asc = "asc";
-        pageable = pageRequestDTO.getPageable(Sort.by("bno").descending());
+        pageable = pageRequestDTO.getPageable(Sort.by("views").descending());
         if(page != null) {
             if(page.equals(asc)) {
-                pageable = pageRequestDTO.getPageable(Sort.by("bno").ascending());
+                pageable = pageRequestDTO.getPageable(Sort.by("views").ascending());
             }
         }
 
@@ -69,7 +69,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Long modify(BoardDTO dto) {
+    public Long modify(BoardDTO boardDTO) {
         return null;
     }
 
@@ -79,8 +79,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardEntity dtoToEntity(BoardDTO dto) {
-        return BoardService.super.dtoToEntity(dto);
+    public BoardEntity dtoToEntity(BoardDTO boardDTO) {
+        return BoardService.super.dtoToEntity(boardDTO);
     }
 
     @Override
@@ -89,8 +89,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void deleteById(BoardDTO dto) {
-        BoardEntity entity = dtoToEntity(dto);
+    public void deleteById(BoardDTO boardDTO) {
+        BoardEntity entity = dtoToEntity(boardDTO);
         boardRepository.deleteById(entity.getBno());
     }
 
@@ -140,6 +140,11 @@ public class BoardServiceImpl implements BoardService {
 
         // 게시글 삭제
         boardRepository.deleteById(bno);
+    }
 
+    @Transactional
+    @Override
+    public int updateView(Long bno) {
+        return boardRepository.updateView(bno);
     }
 }

@@ -4,6 +4,7 @@ import iducs.springboot.weaverloft.entity.BoardEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -33,4 +34,8 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long>, Searc
     @Query("select b, r from BoardEntity b left join ReplyEntity r on r.board = b where b.bno = :bno")
     Object getBoardWithReply(@Param("bno") Long bno);
 
+    // 게시글 조회수 처리
+    @Modifying
+    @Query("update BoardEntity b set b.views = b.views + 1 where b.bno = :bno")
+    int updateView(@Param("bno") Long bno);
 }

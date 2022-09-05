@@ -26,4 +26,6 @@ public class BoardDTO {
     private int replyCount; // 게시물 댓글 수
 
     private String block = "unblock"; // 차단 여부
+
+    private Long views;
 }

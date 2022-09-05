@@ -22,12 +22,12 @@ public class MemberController {
     @GetMapping("/regform")
     public String getRegform(Model model){
         // 정보를 전달받을 객체를 보냄
-        model.addAttribute("member", MemberDTO.builder().build());
+        model.addAttribute("memberDTO", MemberDTO.builder().build());
         return "/members/regform";
     }
 
     @PostMapping("")
-    public String postMember(@ModelAttribute("member") MemberDTO memberDTO, Model model){
+    public String postMember(@ModelAttribute("memberDTO") MemberDTO memberDTO, Model model){
         memberService.create(memberDTO);
         return "redirect:/";
         //return "/members/"+ member.getClass() +"/upform";
@@ -37,7 +37,7 @@ public class MemberController {
     public String getUpform(@PathVariable("idx") Long seq, Model model){
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(seq);
-        model.addAttribute("member", memberDTO);
+        model.addAttribute("memberDTO", memberDTO);
         return "/members/upform"; // view resolving : upform.html
     }
 
@@ -45,7 +45,7 @@ public class MemberController {
     public String getMember(@PathVariable("idx") Long seq, Model model){
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(seq);
-        model.addAttribute("member", memberDTO);
+        model.addAttribute("memberDTO", memberDTO);
         //return "/members/member"; // view resolving : upform.html
         return "/members/contacts";
     }
@@ -60,7 +60,7 @@ public class MemberController {
     }
 
     @PutMapping("/{idx}")
-    public String putMember(@ModelAttribute("member") MemberDTO memberDTO, Model model) {
+    public String putMember(@ModelAttribute("memberDTO") MemberDTO memberDTO, Model model) {
         // HTML 에서 전달된 model 객체를 전달 받음 : member 라는 애트리뷰트 명 th:object 애트리뷰트 값
         memberService.update(memberDTO);
         model.addAttribute(memberDTO);
@@ -71,12 +71,12 @@ public class MemberController {
     public String getDelform(@PathVariable("idx") Long seq, Model model){
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(seq);
-        model.addAttribute("member", memberDTO);
+        model.addAttribute("memberDTO", memberDTO);
         return "/members/delform"; // view resolving : upform.html
     }
 
     @DeleteMapping("/{idx}") //삭제 구현
-    public String deleteMember(@ModelAttribute("member") MemberDTO memberDTO, Model model, HttpSession session,
+    public String deleteMember(@ModelAttribute("memberDTO") MemberDTO memberDTO, Model model, HttpSession session,
                                Long seq){
         memberService.removeWithBoards(memberService.readById(seq).getSeq());
         memberService.delete(memberDTO);
@@ -87,11 +87,11 @@ public class MemberController {
 
     @GetMapping("/login")
     public String getLoginform(Model model) {
-        model.addAttribute("member", MemberDTO.builder().build());
+        model.addAttribute("memberDTO", MemberDTO.builder().build());
         return "/members/login"; // view resolving
     }
     @PostMapping("/login")
-    public String postLogin(@ModelAttribute("member") MemberDTO memberDTO, HttpServletRequest request) {
+    public String postLogin(@ModelAttribute("memberDTO") MemberDTO memberDTO, HttpServletRequest request) {
         MemberDTO dto = null;
         if((dto = memberService.loginByEmail(memberDTO)) != null) {
             HttpSession session = request.getSession();

@@ -67,13 +67,13 @@
 
                 <div class="card-footer">
                   <div class="text-right" th:if="${session.isadmin != null}">
-                    <a th:href="@{'/memberDTOS/' + ${memberDTO.seq} + '/upform'}" class="btn btn-sm bg-teal">
+                    <a th:href="@{'/members/' + ${memberDTO.seq} + '/upform'}" class="btn btn-sm bg-teal">
                       <i class="fas fa-comments"></i> update
                     </a>
-                    <a th:href="@{'/memberDTOS/' + ${memberDTO.seq} + '/delform'}" class="btn btn-sm bg-teal">
+                    <a th:href="@{'/members/' + ${memberDTO.seq} + '/delform'}" class="btn btn-sm bg-teal">
                       <i class="fas fa-comments"></i> delete
                     </a>
-                    <a th:href="@{'/memberDTOS/'}" class="btn btn-sm bg-teal">
+                    <a th:href="@{'/members/'}" class="btn btn-sm bg-teal">
                       <i class="fas fa-copy"></i> list
                     </a>
                   </div>

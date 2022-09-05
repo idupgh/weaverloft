@@ -92,13 +92,13 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public List<MemberDTO> readAll() {
-        List<MemberDTO> memberDTOS = new ArrayList<MemberDTO>(); //반환 리스트객체
+        List<MemberDTO> members = new ArrayList<MemberDTO>(); //반환 리스트객체
         List<MemberEntity> entities = memberRepository.findAll(); //entity 들
         for(MemberEntity entity : entities) {
             MemberDTO memberDTO = entityToDto(entity);
-            memberDTOS.add(memberDTO);
+            members.add(memberDTO);
         }
-        return memberDTOS;
+        return members;
     }
 
     @Override

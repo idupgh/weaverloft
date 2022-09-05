@@ -24,7 +24,7 @@
         <div class="card-body">
             <p class="login-box-msg">Sign in to start your session</p>
 
-            <form th:action="@{'/memberDTOS/login'}" th:object="${memberDTO}" th:method="post">
+            <form th:action="@{'/members/login'}" th:object="${memberDTO}" th:method="post">
                 <div class="input-group mb-3">
                     <input type="text" name="email" th:field="*{email}" class="form-control" placeholder="Email">
                     <div class="input-group-append">

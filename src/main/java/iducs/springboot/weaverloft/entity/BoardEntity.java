@@ -23,4 +23,7 @@ public class BoardEntity extends BaseEntity {
 
     @ManyToOne
     private MemberEntity writer; // 연관관계 지정
+
+    @Column(columnDefinition = "BIGINT(20) default 0", nullable = false)
+    private Long views;
 }

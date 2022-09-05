@@ -20,12 +20,12 @@ public class BoardController {
 
     @GetMapping("/regform")
     public String getRegform(PageRequestDTO pageRequestDTO, Model model){
-        model.addAttribute("dto", BoardDTO.builder().build()); // 빈 Board 객체 생성
+        model.addAttribute("boardDTO", BoardDTO.builder().build()); // 빈 Board 객체 생성
         return "/boards/regform"; // boards/regform.html 전달
     }
 
     @PostMapping("")
-    public String post(@ModelAttribute("dto") BoardDTO dto, Model model) {
+    public String post(@ModelAttribute("boardDTO") BoardDTO dto, Model model) {
         // Login 처리하면 그냥 관계 없음
         /*
         Long seqLong = Long.valueOf(new Random().nextInt(50));
@@ -43,16 +43,20 @@ public class BoardController {
         return "/boards/list"; // boards/list.html 전달
     }
 
+    // 조회수
     @GetMapping("/{bno}")
-    public String get(@PathVariable("bno") Long bno, Model model){
-        model.addAttribute("dto", boardService.getById(bno));
-        return "/boards/read"; // boards/read.html 전달
+    public String getBoard(@PathVariable("bno") Long bno, Model model) {
+
+        BoardDTO boardDTO = boardService.getById(bno);
+        boardService.updateView(bno);
+        model.addAttribute("boardDTO", boardDTO);
+        return "/boards/read";
     }
 
     @GetMapping("/{bno}/upform") //업데이트폼
     public String getUpform(@PathVariable("bno") Long bno, Model model){
         BoardDTO boardDTO = boardService.getById(bno);
-        model.addAttribute("board", boardDTO); //입력한 객체를 전달, DB로부터 가져온 것 아님
+        model.addAttribute("boardDTO", boardDTO); //입력한 객체를 전달, DB로부터 가져온 것 아님
         return "/boards/upform"; //view resolving : upform.html
     }
 
