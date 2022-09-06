@@ -1,62 +1,58 @@
 package iducs.springboot.weaverloft.service;
 
-
-import iducs.springboot.weaverloft.domain.BoardDTO;
-import iducs.springboot.weaverloft.domain.PageRequestDTO;
-import iducs.springboot.weaverloft.domain.PageResultDTO;
-import iducs.springboot.weaverloft.entity.BoardEntity;
-import iducs.springboot.weaverloft.entity.MemberEntity;
+import iducs.springboot.weaverloft.domian.Board;
+import iducs.springboot.weaverloft.dto.BoardRequestDto;
+import iducs.springboot.weaverloft.dto.BoardResponseDto;
+import iducs.springboot.weaverloft.repository.BoardRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface BoardService {
-    Long register(BoardDTO boardDTO);  // Board : boardDTO or Domain
+import java.util.List;
+import java.util.stream.Collectors;
 
-    PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO);
-    BoardDTO getById(Long bno); // Id는 primary key 값 : @ID 필드
-    Long modify(BoardDTO boardDTO);
-    void DeleteById(Long bno);
-    void deleteWithReplies(Long bno); //삭제
+@RequiredArgsConstructor
+@Service
+public class BoardService {
 
-    default BoardEntity dtoToEntity(BoardDTO boardDTO) {
-        MemberEntity member = MemberEntity.builder()
-                .seq(boardDTO.getWriterSeq())
-                .build();
-        BoardEntity board = BoardEntity.builder()
-                .bno(boardDTO.getBno())
-                .title(boardDTO.getTitle())
-                .content(boardDTO.getContent())
-                .writer(member)
-                .block(boardDTO.getBlock())
-                .views(boardDTO.getViews())
-                .replyCount(boardDTO.getReplyCount())
-                .build();
-        return board;
-    }
-    default BoardDTO entityToDto(BoardEntity entity, MemberEntity member, Long replyCount) {
-        BoardDTO boardDTO = BoardDTO.builder()
-                .bno(entity.getBno())
-                .title(entity.getTitle())
-                .content(entity.getContent())
-                .writerSeq(member.getSeq())
-                .writerId(member.getId())
-                .writerName(member.getName())
-                .writerEmail(member.getEmail())
-                .regDate(entity.getRegDate())
-                .modDate(entity.getModDate())
-                .replyCount(replyCount.intValue())
-                .block(entity.getBlock())
-                .views(entity.getViews())
-                .build();
-        return boardDTO;
+    private final BoardRepository boardRepository;
+
+    /* CREATE */
+    @Transactional
+    public Long write(BoardRequestDto dto) {
+
+        Board board = dto.toEntity();
+
+        boardRepository.save(board);
+
+        return board.getId();
     }
 
-    void deleteById(BoardDTO boardDTO);
+    /* 게시글 리스트 조회 readOnly 속성으로 조회속도 개선 */
+    @Transactional(readOnly = true)
+    public List<BoardResponseDto> findAllDesc() {
+        return boardRepository.findAllDesc().stream()
+                .map(BoardResponseDto::new)
+                .collect(Collectors.toList());
+    }
 
-    BoardDTO readById(Long seq);
+    /* READ */
+    @Transactional(readOnly = true)
+    public BoardResponseDto findById(Long id) {
+        Board entity = boardRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id=" + id));
 
-    void deleteByBno(Long bno);
+        return new BoardResponseDto(entity);
+    }
 
-    Long update(Long bno, BoardDTO boardDTO);
+    /* UPDATE (dirty checking)*/
+    @Transactional
+    public Long update(Long id, BoardRequestDto requestDto) {
+        Board board = boardRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id=" + id));
 
-    int updateView(Long bno);
+        board.update(requestDto.getTitle(), requestDto.getWriter(), requestDto.getContent());
+
+        return id;
+    }
 }

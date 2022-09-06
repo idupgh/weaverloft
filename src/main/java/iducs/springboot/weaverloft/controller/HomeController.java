@@ -33,5 +33,5 @@ public class HomeController {
     public String getContacts() {
         return "/pages/contacts"; //view name
     }
-
 }
+
