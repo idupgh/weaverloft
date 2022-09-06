@@ -5,7 +5,7 @@ import lombok.Builder.Default;
 
 import javax.persistence.*;
 
-// 브랜치 테스트
+// 브랜치 테스트 ??
 @Entity
 @Table(name="tb_board_201812064")
 @Builder
