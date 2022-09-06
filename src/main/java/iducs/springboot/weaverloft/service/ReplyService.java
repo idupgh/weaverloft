@@ -44,5 +44,5 @@ public interface ReplyService {
         return replyDTO;
     }
 
-    ReplyDTO getReply(Long rno);
+    // ReplyDTO getReply(Long rno);
 }

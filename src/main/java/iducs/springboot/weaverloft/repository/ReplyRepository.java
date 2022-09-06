@@ -20,6 +20,8 @@ public interface ReplyRepository extends JpaRepository<ReplyEntity, Long> {
     // 게시물로 댓글 목록 가져오기
     List<ReplyEntity> getRepliesByBoardOrderByRno(BoardEntity board);
 
+    /*
     @Query("select r from ReplyEntity r where r.replier =:replier")
     Object getReply(@Param("rno")Long rno);
+     */
 }

@@ -25,8 +25,8 @@ public class ReplyController {
     @GetMapping(value = "/boards/{bno}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ReplyDTO>> getListByBoard(@PathVariable("bno") Long bno, Long rno, Model model){
 
-        ReplyDTO replyDTO = replyService.getReply(rno);
-        model.addAttribute("replyDTO", replyDTO);
+        // ReplyDTO replyDTO = replyService.getReply(rno);
+        // model.addAttribute("replyDTO", replyDTO);
 
         return new ResponseEntity<>(replyService.getList(bno), HttpStatus.OK);
     }

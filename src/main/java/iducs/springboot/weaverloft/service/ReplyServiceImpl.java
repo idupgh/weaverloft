@@ -55,10 +55,13 @@ public class ReplyServiceImpl implements ReplyService{
         return null;
     }
 
+    /*
     @Override
     public ReplyDTO getReply(Long rno) {
         replyRepository.getReply(rno);
         return null;
     }
+
+     */
 
 }
