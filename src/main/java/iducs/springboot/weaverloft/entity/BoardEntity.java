@@ -1,6 +1,7 @@
 package iducs.springboot.weaverloft.entity;
 
 import lombok.*;
+import lombok.Builder.Default;
 
 import javax.persistence.*;
 
@@ -24,8 +25,9 @@ public class BoardEntity extends BaseEntity {
     @ManyToOne
     private MemberEntity writer; // 연관관계 지정
 
-    @Column(columnDefinition = "BIGINT(20) default 0", nullable = false)
-    private Long views;
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int views;
+
 
     private int replyCount;
 }

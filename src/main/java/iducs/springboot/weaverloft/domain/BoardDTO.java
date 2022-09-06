@@ -2,7 +2,6 @@ package iducs.springboot.weaverloft.domain;
 
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -26,7 +25,7 @@ public class BoardDTO {
 
     private String block = "unblock"; // 차단 여부
 
-    private Long views;
+    private int views;
     private int replyCount; // 게시물 댓글 수
 
 }

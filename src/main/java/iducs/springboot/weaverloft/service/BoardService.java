@@ -28,6 +28,7 @@ public interface BoardService {
                 .writer(member)
                 .block(boardDTO.getBlock())
                 .views(boardDTO.getViews())
+                .replyCount(boardDTO.getReplyCount())
                 .build();
         return board;
     }

@@ -3,8 +3,9 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
     id 'java' // jar 파일
-    id "io.franzbecker.gradle-lombok" version "3.0.0"
     // id 'war' -> war 파일을 만들겠다 web archive file : 묶음 파일 (압축과는 다르다)
+
+    id "io.franzbecker.gradle-lombok" version "3.0.0"
 }
 
 group = 'iducs.springboot'
@@ -33,7 +34,8 @@ dependencies {
     implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
     testImplementation ('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage:junit-vintage-engine:5.8.2' // JUnit 4 vs JUnit5
     }
@@ -45,6 +47,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+//querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
@@ -54,9 +57,14 @@ querydsl {
 sourceSets {
     main.java.srcDir querydslDir
 }
-configurations {
-    querydsl.extendsFrom compileClasspath
-}
-compileQuerydsl {
+compileQuerydsl{
     options.annotationProcessorPath = configurations.querydsl
 }
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+//querydsl 추가 끝
