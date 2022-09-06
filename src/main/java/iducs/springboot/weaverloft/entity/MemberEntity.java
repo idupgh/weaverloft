@@ -35,8 +35,10 @@ public class MemberEntity extends BaseEntity {
     @Column(length = 100, nullable = true)
     private String address;
 
+    @Builder.Default
     private String block = "unblock"; // 차단 여부
 
+    @Builder.Default
     @OneToMany(mappedBy = "writer") //값을 수정하고 삭제 할수없음 조회만 가능
     private List<BoardEntity> boardEntities = new ArrayList<>();
 }

@@ -61,9 +61,12 @@
                   <label for="inputContent">Content</label>
                   <textarea id="inputContent" class="form-control" rows="4" th:field="*{content}"></textarea>
                 </div>
+
+                  <input type="hidden" th:value="${session.login.seq}" th:name="writerSeq">
+
                 <div class="form-group">
                   <label for="inputProjectLeader">Writer</label>
-                  <input type="text" th:value="${session.login.seq}" th:name="writerSeq" readonly id="inputProjectLeader" class="form-control">
+                  <input type="text" th:value="${session.login.email}" th:name="writerEmail" readonly id="inputProjectLeader" class="form-control">
                 </div>
               </div>
               <a href="/" class="btn btn-secondary">Cancel</a>

@@ -13,7 +13,7 @@ public interface ReplyService {
 
     void modify(ReplyDTO replyDTO); //댓글 수정
 
-    void remove(Long rno);//댓글 삭제
+    ReplyDTO remove(Long rno);//댓글 삭제\
 
     // ReplyDTO를 Reply 객체로 변환 Board객체의 처리가 수반된다
     default ReplyEntity dtoToEntity(ReplyDTO replyDTO){
@@ -44,4 +44,5 @@ public interface ReplyService {
         return replyDTO;
     }
 
+    ReplyDTO getReply(Long rno);
 }

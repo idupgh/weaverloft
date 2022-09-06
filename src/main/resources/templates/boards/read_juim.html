@@ -127,16 +127,14 @@
                   <input class="form-control"  type="text" name="replyText" placeholder="Reply Text...">
                 </div>
                 <div class="form-group" th:if="${session.login != null}">
-                  <input class="form-control"  type="text" th:value="${session.login.name}" th:name="replier" readonly>
+                  <input class="form-control"  type="text" th:value="${session.login.id}" th:name="replier" readonly>
                   <input type="hidden" name="rno" >
                 </div>
 
               </div>
               <div class="modal-footer">
-                <div th:if="${(session.login.name == replyDTO) || session.isadmin != null}">
-                  <button type="button" class="btn btn-danger replyRemove">Remove</button>
-                  <button type="button" class="btn btn-warning replyModify">Modify</button>
-                </div>
+                <button type="button" class="btn btn-danger replyRemove">Remove</button>
+                <button type="button" class="btn btn-warning replyModify">Modify</button>
                 <button type="button" class="btn btn-primary replySave">Save</button>
                 <button type="button" class="btn btn-outline-secondary replyClose" data-dismiss="modal">Close</button>
               </div>
@@ -150,7 +148,7 @@
           $(document).ready(function() {
 
             var bno = [[${boardDTO.bno}]];
-            var replier = [[${session.login.name}]];
+            var replier = [[${session.login.id}]];
 
             var listGroup  = $(".replyList");
 
@@ -255,12 +253,18 @@
 
               var rno = $(this).data("rno");
 
+              console.log("$(this).find('.card-title').html()", $(this).find('.card-title').html());
               $("input[name='replyText']").val( $(this).find('.card-title').html());
-              $("input[name='replier']").val(replier);
+              $("input[name='replier']").val( $(this).find('.card-subtitle').html());
               $("input[name='rno']").val(rno);
 
               $(".modal-footer .btn").hide();
-              $(".replyRemove, .replyModify, .replyClose").show();
+              if([[${session.login.id}]] == replier){
+                $(".replyRemove, .replyModify").show();
+              }
+              $(".replyClose").show();
+
+
 
               modal.modal('show');
 

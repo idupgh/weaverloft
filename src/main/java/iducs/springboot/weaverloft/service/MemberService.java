@@ -4,6 +4,7 @@ import iducs.springboot.weaverloft.domain.MemberDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.domain.PageResultDTO;
 import iducs.springboot.weaverloft.entity.MemberEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,4 +22,7 @@ public interface MemberService {
     MemberDTO loginByEmail(MemberDTO memberDTO);
 
     void removeWithBoards(Long seq);
+
+    @Transactional(readOnly = true)
+    boolean checkUsernameDuplication(String name);
 }

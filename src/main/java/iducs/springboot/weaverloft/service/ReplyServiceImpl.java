@@ -1,6 +1,5 @@
 package iducs.springboot.weaverloft.service;
 
-import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.ReplyDTO;
 import iducs.springboot.weaverloft.entity.BoardEntity;
 import iducs.springboot.weaverloft.entity.ReplyEntity;
@@ -18,6 +17,7 @@ public class ReplyServiceImpl implements ReplyService{
     public ReplyServiceImpl(ReplyRepository replyRepository) {
         this.replyRepository = replyRepository;
     }
+
 
 
     @Override
@@ -48,9 +48,17 @@ public class ReplyServiceImpl implements ReplyService{
     }
 
     @Override
-    public void remove(Long rno) {
+    public ReplyDTO remove(Long rno) {
 
         replyRepository.deleteById(rno);
 
+        return null;
     }
+
+    @Override
+    public ReplyDTO getReply(Long rno) {
+        replyRepository.getReply(rno);
+        return null;
+    }
+
 }

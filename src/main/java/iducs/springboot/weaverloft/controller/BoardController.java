@@ -4,7 +4,9 @@ package iducs.springboot.weaverloft.controller;
 
 import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
+import iducs.springboot.weaverloft.domain.ReplyDTO;
 import iducs.springboot.weaverloft.service.BoardService;
+import iducs.springboot.weaverloft.service.ReplyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
     // 생성자 주입 : Spring Framework <- Autowired (필드 주입)
     private final BoardService boardService;
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService, ReplyService replyService) {
         this.boardService = boardService;
     }
 
