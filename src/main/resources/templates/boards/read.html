@@ -133,10 +133,10 @@
 
               </div>
               <div class="modal-footer">
-                <div th:if="${(session.login.name == replyDTO) || session.isadmin != null}">
+                <!--<div th:if="${(session.login.name == replyDTO) || session.isadmin != null}">-->
                   <button type="button" class="btn btn-danger replyRemove">Remove</button>
                   <button type="button" class="btn btn-warning replyModify">Modify</button>
-                </div>
+                <!--</div>-->
                 <button type="button" class="btn btn-primary replySave">Save</button>
                 <button type="button" class="btn btn-outline-secondary replyClose" data-dismiss="modal">Close</button>
               </div>
@@ -150,7 +150,8 @@
           $(document).ready(function() {
 
             var bno = [[${boardDTO.bno}]];
-            var replier = [[${session.login.name}]];
+            var replier = [[${session.login.id}]];
+            var admin = [[${session.isadmin}]];
 
             var listGroup  = $(".replyList");
 
@@ -179,6 +180,7 @@
                       date.getMinutes();
             }
 
+
             //특정한 게시글의 댓글을 처리하는 함수
             function loadJSONData() {
               $.getJSON('/replies/boards/'+bno, function(arr){
@@ -192,7 +194,13 @@
                 $.each(arr, function(idx, reply){
                   console.log(reply);
                   str += '    <div class="card-body" data-rno="'+reply.rno+'"><b>'+reply.rno +'</b><br>';
-                  str += '    <h5 class="card-title">'+reply.text+'</h5><br>';
+                  //str += '<a class="card-title" ';
+                  if((replier == reply.replier) || admin != null){
+                    str += '<a class="card-title'+reply.rno +'" href="javascript:modalOpen(\''+reply.rno+'\',\''+replier+'\');" style="font-size: 20px;">'+reply.text+'</a><br>';
+                  }else{
+                    str += '<h5 class="card-title'+reply.rno +'">'+reply.text+'</h5>';
+                  }
+                  //str += '    <a class="card-title" href="javascript:modalOpen(\''+reply.rno+'\',\''+replier+'\');">'+reply.text+'</a><br>';
                   str += '    <h6 class="card-subtitle mb-2 text-muted" style="margin-top: 0rem;">'+reply.replier+'</h6>';
                   str += '    <p class="card-text">'+ formatTime(reply.regDate) +'</p>';
                   str += '    </div>';
@@ -251,6 +259,7 @@
               })
             });
 
+            /*
             $('.replyList').on("click", ".card-body", function(){
 
               var rno = $(this).data("rno");
@@ -265,6 +274,7 @@
               modal.modal('show');
 
             });
+            */
 
             $(".replyRemove").on("click", function(){
 
@@ -318,6 +328,21 @@
           });
 
         </script>
+
+      <script>
+        function modalOpen(rno, replier){
+          var modal = $('.modal');
+
+          $("input[name='replyText']").val( $(".card-title"+rno).text());
+          $("input[name='replier']").val(replier);
+          $("input[name='rno']").val(rno);
+
+          $(".modal-footer .btn").hide();
+          $(".replyRemove, .replyModify, .replyClose").show();
+
+          modal.modal('show');
+        }
+      </script>
       </div>
     </section>
   </div>

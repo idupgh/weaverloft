@@ -1,5 +1,6 @@
 package iducs.springboot.board201812064;
 
+import iducs.springboot.weaverloft.Board201812064Application;
 import iducs.springboot.weaverloft.entity.BoardEntity;
 import iducs.springboot.weaverloft.entity.MemberEntity;
 import iducs.springboot.weaverloft.entity.ReplyEntity;
@@ -12,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Random;
 import java.util.stream.IntStream;
 
-@SpringBootTest
+@SpringBootTest(classes = Board201812064Application.class)
 class BoardDTO201812064ApplicationTests {
 
     @Autowired

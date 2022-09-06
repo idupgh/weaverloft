@@ -1,5 +1,6 @@
 package iducs.springboot.board201812064;
 
+import iducs.springboot.weaverloft.Board201812064Application;
 import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.domain.PageResultDTO;
@@ -10,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.stream.IntStream;
 
-@SpringBootTest
+@SpringBootTest(classes = Board201812064Application.class)
 public class BoardDTOServiceTests {
     @Autowired
     BoardService boardService;
