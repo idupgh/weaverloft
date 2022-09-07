@@ -142,11 +142,6 @@
         <!-- /.card-body -->
           <div class="card-footer clearfix">
 
-              <ol class="breadcrumb float-sm-right">
-                  <a href="/boards/regform" role="button" class="btn btn-primary bi bi-pencil-fill"> 글쓰기</a>
-              </ol>
-              <br>
-
               <ul class="pagination pagination-sm " style="margin-left: 50%;">
                   <li class="page-item" th:if="${list.prevPage}">
                       <a class="page-link" th:href="@{/boards(page=${list.startPage - 1},

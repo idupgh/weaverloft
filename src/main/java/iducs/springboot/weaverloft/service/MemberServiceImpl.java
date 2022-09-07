@@ -17,14 +17,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 // @Component, @Configuration, @Beans
 // @Service, @Repository
+@Transactional // jpa는 모든 데이터 변경이 transaction 안에서 실행되어야함
 @Service
 public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
@@ -38,17 +36,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void create(MemberDTO memberDTO) {
         MemberEntity entity = dtoToEntity(memberDTO);
-                /*
-                .seq(member.getSeq())
-                .id(member.getId())
-                .pw(member.getPw())
-                .name(member.getName())
-                .email(member.getEmail())
-                .phone(member.getPhone())
-                .address(member.getAddress())
-                .build();
-                 */
-        // new MemoEntity(seq, id, pw, name, email, phone, address)
+        validateDuplicateMember(entity);
         memberRepository.save(entity);
     }
 
@@ -196,5 +184,23 @@ public class MemberServiceImpl implements MemberService{
     public boolean checkUsernameDuplication(String name) {
         boolean nameDuplicate = memberRepository.existsByName(name);
         return nameDuplicate;
+    }
+
+    /* 아이디, 닉네임, 이메일 중복 여부 확인 */
+    @Transactional(readOnly = true)
+    public boolean checkIdDuplication(String id) {
+        boolean idDuplicate = memberRepository.existsById(id);
+        if (idDuplicate) {
+            throw new IllegalStateException("이미 존재하는 아이디입니다.");
+        }
+        return idDuplicate;
+    }
+
+    @Transactional(readOnly = true)
+    public void validateDuplicateMember(MemberEntity memberEntity) {
+        MemberEntity findMember = memberRepository.findById(memberEntity.getId());
+        if (findMember != null) {
+            throw new IllegalStateException("이미 가입한 아이디입니다.");
+        }
     }
 }

@@ -2,6 +2,7 @@ package iducs.springboot.weaverloft.entity;
 
 import lombok.*;
 
+import javax.jdo.annotations.Unique;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +23,15 @@ public class MemberEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
-    @Column(length = 50, nullable = false)
+    @Column(unique = true,length = 50, nullable = false)
     private String id;
+
     @Column(length = 50, nullable = false)
     private String pw;
+
     @Column(length = 50, nullable = false)
     private String name;
+
     @Column(length = 50, nullable = false)
     private String email;
     @Column(length = 50, nullable = true)

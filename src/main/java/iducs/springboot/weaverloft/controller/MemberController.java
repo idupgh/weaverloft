@@ -5,10 +5,14 @@ import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.service.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/members")
@@ -27,8 +31,18 @@ public class MemberController {
     }
 
     @PostMapping("")
-    public String postMember(@ModelAttribute("memberDTO") MemberDTO memberDTO, Model model){
-        memberService.create(memberDTO);
+    public String postMember(@Valid MemberDTO memberDTO, BindingResult bindingResult, Model model){
+
+        if(bindingResult.hasErrors()){
+            return "/members/regform";
+        }
+        try{
+            memberService.create(memberDTO);
+        } catch (IllegalStateException e){
+            model.addAttribute("errorMessage",e.getMessage());
+            return "/members/regform";
+        }
+
         return "redirect:/";
         //return "/members/"+ member.getClass() +"/upform";
     }
