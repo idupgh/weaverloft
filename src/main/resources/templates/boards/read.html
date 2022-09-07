@@ -127,7 +127,7 @@
                   <input class="form-control"  type="text" name="replyText" placeholder="Reply Text...">
                 </div>
                 <div class="form-group" th:if="${session.login != null}">
-                  <input class="form-control"  type="text" th:value="${session.login.name}" th:name="replier" readonly>
+                  <input class="form-control"  type="text" th:value="${session.login.id}" th:name="replier" readonly>
                   <input type="hidden" name="rno" >
                 </div>
 
@@ -146,12 +146,14 @@
 
 
         <script th:inline="javascript">
+          // Reply Count 부분을 클릭했을 때 해당 게시물의 댓글을 jquery 의
+          // getJSON()을 활용해 가져오고 이를 console.log()를 이용해 확인한다
 
           $(document).ready(function() {
 
             var bno = [[${boardDTO.bno}]];
-            var replier = [[${session.login.id}]];
-            var admin = [[${session.isadmin}]];
+            var replier = [[${session.login.id}]]; // replier 에 session 에 있는 id 값 대입
+            var admin = [[${session.isadmin}]]; // admin 로그인 확인하기 위한 변수
 
             var listGroup  = $(".replyList");
 
@@ -163,7 +165,7 @@
 
               })//end getJSON
 
-            })//end click
+            })//end click -----------------------------------------------------------
 
 
             //댓글이 추가될 영역
@@ -181,7 +183,7 @@
             }
 
 
-            //특정한 게시글의 댓글을 처리하는 함수
+            //특정한 게시글의 댓글을 처리하는 함수 > 게시글에 댓글을 뿌려주는 함수
             function loadJSONData() {
               $.getJSON('/replies/boards/'+bno, function(arr){
 
@@ -193,10 +195,9 @@
 
                 $.each(arr, function(idx, reply){
                   console.log(reply);
-                  str += '    <div class="card-body" data-rno="'+reply.rno+'"><b>'+reply.rno +'</b><br>';
                   //str += '<a class="card-title" ';
                   if((replier == reply.replier) || admin != null){
-                    str += '<a class="card-title'+reply.rno +'" href="javascript:modalOpen(\''+reply.rno+'\',\''+replier+'\');" style="font-size: 20px;">'+reply.text+'</a><br>';
+                    str += '<a class="card-title'+reply.rno +'" href="javascript:modalOpen(\''+reply.rno+'\',\''+replier+'\');" style="font-size: 20px;">'+reply.text+'</a>';
                   }else{
                     str += '<h5 class="card-title'+reply.rno +'">'+reply.text+'</h5>';
                   }
@@ -216,7 +217,7 @@
               loadJSONData();
             })//end click
 
-            //모달 창
+            //모달 창 > 댓글 등록 창
             var modal = $('.modal');
 
             $(".addReply").click(function () {
@@ -229,9 +230,9 @@
 
 
               $(".modal-footer .btn").hide(); //모달 내의 모든 버튼을 안 보이도록
-              $(".replySave, .replyClose").show(); //필요한 버튼들만 보이도록
+              $(".replySave, .replyClose").show(); //필요한 버튼들만 보이도록 > 저장, 닫기
 
-            });
+            }); // -----------------------
 
             $(".replySave").click(function() {
 
@@ -244,7 +245,7 @@
               $.ajax({
                 url: '/replies/',
                 method: 'post',
-                data:  JSON.stringify(reply),
+                data:  JSON.stringify(reply), // JS 객체를 생성 후 해당 객체를 JSON.stringify()를 이용해 JSON 문자열로 바꾸어 전송
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function(data){
@@ -257,7 +258,7 @@
                   loadJSONData();
                 }
               })
-            });
+            }); // 댓글 등록 완료 -------------------
 
             /*
             $('.replyList').on("click", ".card-body", function(){
