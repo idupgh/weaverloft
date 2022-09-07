@@ -35,7 +35,7 @@
       </div><!-- /.container-fluid -->
     </section>
 
-    <!-- Main content -->
+
     <!-- Main content -->
     <section class="content">
       <div class="row">
@@ -77,43 +77,47 @@
                     <input type="text" name="writerSeq" th:field="*{writerSeq}"  id="inputW" class="form-control" readonly>
                   </div>
 
-                  <div class="card-body">
                     <div class="form-group">
                       <label for="inputTitle">Title</label>
                       <input type="text" name="title" th:field="*{title}"  id="inputTitle" class="form-control">
                     </div>
 
                     <div class="form-group">
-                      <label for="inputContent">content</label>
-                      <input type="text" name="content" th:field="*{content}"  id="inputContent" class="form-control">
+                      <label for="inputContent" th:height="100px">content</label>
+                      <textarea type="text" name="content" th:field="*{content}"  id="inputContent" class="form-control"></textarea>
                     </div>
-                    <!-- /.card-body -->
+
+                  <div class="form-group">
+                    <div class="custom-file" id="inputFile">
+                      <input name="file" type="file" class="custom-file-input" id="customFile" />
+                      <label class="custom-file-label" for="customFile"></label>
+                    </div>
                   </div>
-                  <!-- /.card -->
-                </div>
-                <div class="row">
+
                   <div class="col-12">
                     <input type="submit" value="Update" class="btn btn-success float-right">
                   </div>
                 </div>
+
+                <!-- /.card-body -->
               </div>
             </form>
           </div>
+          <!-- /.card -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+
         </div>
       </div>
     </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-  <!-- /.content-wrapper -->
-  <div th:replace="~{/footer :: footerfrag}"/>
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+<!-- /.content -->
 </div>
+<!-- /.content-wrapper -->
+
+<div th:replace="~{/footer :: footerfrag}"/>
+
 <!-- ./wrapper -->
 
 <!-- jQuery -->
@@ -132,5 +136,6 @@
     bsCustomFileInput.init();
   });
 </script>
+</div>
 </body>
 </html>

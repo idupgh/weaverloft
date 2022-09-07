@@ -59,6 +59,8 @@ public class BoardController {
             fileDTO.setFilename(filename);
             fileDTO.setFilePath(filePath);
 
+            model.addAttribute("filename", filename);
+
             Long fileId = fileService.saveFile(fileDTO);
             boardDTO.setFileId(fileId);
             // Long bno = boardService.register(boardDTO);
@@ -90,6 +92,9 @@ public class BoardController {
     @GetMapping("/{bno}/upform") //업데이트폼
     public String getUpform(@PathVariable("bno") Long bno, Model model){
         BoardDTO boardDTO = boardService.getById(bno);
+        FileDTO fileDTO = new FileDTO();
+
+        model.addAttribute("fileDTO", fileDTO);
         model.addAttribute("boardDTO", boardDTO); //입력한 객체를 전달, DB로부터 가져온 것 아님
         return "/boards/upform"; //view resolving : upform.html
     }
