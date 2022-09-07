@@ -29,4 +29,5 @@ public class BoardDTO {
     private int views;
     private int replyCount; // 게시물 댓글 수
 
+    private Long fileId;
 }

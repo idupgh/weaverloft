@@ -29,6 +29,7 @@ public interface BoardService {
                 .block(boardDTO.getBlock())
                 .views(boardDTO.getViews())
                 .replyCount(boardDTO.getReplyCount())
+                .fileId(boardDTO.getFileId())
                 .build();
         return board;
     }
@@ -46,6 +47,7 @@ public interface BoardService {
                 .replyCount(replyCount.intValue())
                 .block(entity.getBlock())
                 .views(entity.getViews())
+                .fileId(entity.getFileId())
                 .build();
         return boardDTO;
     }

@@ -28,6 +28,9 @@ public class BoardEntity extends BaseEntity {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int views;
 
+    @Column
+    private Long fileId;
+
 
     private int replyCount;
 }

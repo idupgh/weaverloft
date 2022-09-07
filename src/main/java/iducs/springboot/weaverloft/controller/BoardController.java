@@ -3,21 +3,29 @@ package iducs.springboot.weaverloft.controller;
 
 
 import iducs.springboot.weaverloft.domain.BoardDTO;
+import iducs.springboot.weaverloft.domain.FileDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
-import iducs.springboot.weaverloft.domain.ReplyDTO;
+import iducs.springboot.weaverloft.entity.FileEntity;
 import iducs.springboot.weaverloft.service.BoardService;
+import iducs.springboot.weaverloft.service.FileService;
 import iducs.springboot.weaverloft.service.ReplyService;
+import iducs.springboot.weaverloft.util.MD5Generator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 
 @Controller
 @RequestMapping("/boards")
 public class BoardController {
     // 생성자 주입 : Spring Framework <- Autowired (필드 주입)
     private final BoardService boardService;
-    public BoardController(BoardService boardService, ReplyService replyService) {
+    private final FileService fileService;
+    public BoardController(BoardService boardService, ReplyService replyService, FileService fileService) {
         this.boardService = boardService;
+        this.fileService = fileService;
     }
 
     @GetMapping("/regform")
@@ -27,16 +35,40 @@ public class BoardController {
     }
 
     @PostMapping("")
-    public String post(@ModelAttribute("boardDTO") BoardDTO boardDTO, Model model) {
-        // Login 처리하면 그냥 관계 없음
-        /*
-        Long seqLong = Long.valueOf(new Random().nextInt(50));
-        seqLong = (seqLong == 0)? 1L:seqLong;
-        dto.setWriterSeq(seqLong);
-         */
-        Long bno = boardService.register(boardDTO);
-        //model.addAttribute("")
-        return "redirect:/boards/"+ bno; // 등록 후 상세보기
+    public String post(@RequestParam("file")MultipartFile files, BoardDTO boardDTO, Model model) {
+
+        try {
+            String origFilename = files.getOriginalFilename();
+            String filename = new MD5Generator(origFilename).toString();
+            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+            String savePath = System.getProperty("user.dir") + "\\files";
+            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+            if (!new File(savePath).exists()) {
+                try{
+                    new File(savePath).mkdir();
+                }
+                catch (Exception e) {
+                    e.getStackTrace();
+                }
+            }
+            String filePath = savePath + "\\" + filename;
+            files.transferTo(new File(filePath));
+
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setOrigFilename(origFilename);
+            fileDTO.setFilename(filename);
+            fileDTO.setFilePath(filePath);
+
+            Long fileId = fileService.saveFile(fileDTO);
+            boardDTO.setFileId(fileId);
+            // Long bno = boardService.register(boardDTO);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return "redirect:/boards/"; // 등록 후 상세보기
+        // return "redirect:/boards/" + bno; >> 등록 후 바로 상세보기 띄우기였음
     }
 
     @GetMapping("")
