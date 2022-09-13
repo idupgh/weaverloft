@@ -51,7 +51,7 @@
               </div>
             </div>
 
-            <form action="#" th:action="@{'/boards/' + ${boardDTO.bno}}" th:object="${boardDTO}" th:method="PUT">
+            <form action="#" th:action="@{'/boards/' + ${boardDTO.bno}}" th:object="${boardDTO}" th:method="PUT" enctype="multipart/form-data">
               <input type="hidden" th:field="*{views}"/>
 
               <div class="card-body">
@@ -89,10 +89,18 @@
 
                   <div class="form-group">
                     <div class="custom-file" id="inputFile">
-                      <input name="file" type="file" class="custom-file-input" id="customFile" />
-                      <label class="custom-file-label" for="customFile"></label>
+                      <input name="file" type="file" class="custom-file-input" id="customFile"/>
+                      <label class="custom-file-label" for="customFile">
+                        <div th:if="${boardDTO.fileId != 0}">
+                          [[${fileDTO.origFilename}]]
+                        </div>
+                        <div th:unless="${boardDTO.fileId != 0}">
+                           파일을 선택해 주세요.
+                        </div>
+                      </label>
                     </div>
                   </div>
+                  <input type="hidden" th:value="${fileDTO}">
 
                   <div class="col-12">
                     <input type="submit" value="Update" class="btn btn-success float-right">
@@ -115,6 +123,12 @@
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+  <script>
+    $('.custom-file-input').on('change', function () {
+      var fileName = $(this).val().split('\\').pop();
+      $(this).siblings('.custom-file-label').addClass('selected').html(fileName);
+    });
+  </script>
 
 <div th:replace="~{/footer :: footerfrag}"/>
 

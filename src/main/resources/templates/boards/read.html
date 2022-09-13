@@ -76,22 +76,23 @@
             </div>
           </div>
           <div th:if="${boardDTO.fileId != null}">
-            <strong>첨부파일 : </strong>
-            <a
-                    class="card-text"
-                    th:href="@{'/boards' + '/download/' + ${boardDTO.fileId}}"
-                    th:text="${fileDTO.origFilename}"
-            ></a>
+              <strong>첨부파일 : </strong>
+              <a
+                      class="card-text"
+                      th:href="@{'/boards' + '/download/' + ${boardDTO.fileId}}"
+                      th:text="${fileDTO.origFilename}"
+              ></a>
           </div>
         </div>
         <div class="text-center mt-5 mb-3">
           <a  th:if="${(session.login != null && session.login.seq == boardDTO.writerSeq) || session.isadmin != null }"
-              th:href="@{'/boards/' + ${boardDTO.bno} + '/upform'}" class="btn btn-sm btn-primary">게시글 수정</a>
-          <a  th:if="${(session.login != null && session.login.seq == boardDTO.writerSeq) || session.isadmin != null }"
-              th:href="@{'/boards/' + ${boardDTO.bno} + '/delform'}" class="btn btn-sm btn-warning">게시글 삭제</a>
+              th:href="@{'/boards/' + ${boardDTO.bno} + '/upform'}" class="btn btn-sm btn-primary button_event" >게시글 수정</a>
+          <span class="btn btn-sm btn-success addReply"> 댓글 쓰기 </span>
           <br>
 
-          <span class="btn btn-sm btn-success addReply"> 댓글 쓰기 </span>
+
+          <a  th:if="${(session.login != null && session.login.seq == boardDTO.writerSeq) || session.isadmin != null }"
+              th:href="@{'/boards/' + ${boardDTO.bno} + '/delform'}" class="btn btn-sm btn-warning">게시글 삭제</a>
           <span class="btn btn-sm btn-dark replyCount"> 댓글 보기</span>
         </div>
       </div>
@@ -155,8 +156,14 @@
 
 
         <script th:inline="javascript">
-          // Reply Count 부분을 클릭했을 때 해당 게시물의 댓글을 jquery 의
-          // getJSON()을 활용해 가져오고 이를 console.log()를 이용해 확인한다
+
+          $(function(){
+            $('.button_event').click(function(){
+              if(!confirm("수정시 기존 첨부파일은 사라집니다. \n정말 수정하시겠습니까?")){
+                return false;
+              }
+            });
+          });
 
           $(document).ready(function() {
 

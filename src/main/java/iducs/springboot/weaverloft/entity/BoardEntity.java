@@ -6,7 +6,7 @@ import lombok.Builder.Default;
 import javax.persistence.*;
 
 @Entity
-@Table(name="tb_board_201812064")
+@Table(name="tb_board")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

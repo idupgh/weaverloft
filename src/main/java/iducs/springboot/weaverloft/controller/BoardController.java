@@ -110,18 +110,51 @@ public class BoardController {
     @GetMapping("/{bno}/upform") //업데이트폼
     public String getUpform(@PathVariable("bno") Long bno, Model model){
         BoardDTO boardDTO = boardService.getById(bno);
-        FileDTO fileDTO = new FileDTO();
+
+        Long id = boardDTO.getFileId();
+        FileDTO fileDTO = fileService.getFile(id);
 
         model.addAttribute("fileDTO", fileDTO);
+
         model.addAttribute("boardDTO", boardDTO); //입력한 객체를 전달, DB로부터 가져온 것 아님
         return "/boards/upform"; //view resolving : upform.html
     }
 
     @PutMapping("/{bno}") //업데이트 구현
-    public String putMember(@PathVariable Long bno, BoardDTO boardDTO){
+    public String putMember(@RequestParam("file")MultipartFile files, Long bno, BoardDTO boardDTO, Model model){
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
-        boardService.update(bno, boardDTO);
-        //return "redirect:/boards/read";
+        try {
+            String origFilename = files.getOriginalFilename();
+            String filename = new MD5Generator(origFilename).toString();
+            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+            String savePath = System.getProperty("user.dir") + "\\files";
+            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+            if (!new File(savePath).exists()) {
+                try{
+                    new File(savePath).mkdir();
+                }
+                catch (Exception e) {
+                    e.getStackTrace();
+                }
+            }
+            String filePath = savePath + "\\" + filename;
+            files.transferTo(new File(filePath));
+
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setOrigFilename(origFilename);
+            fileDTO.setFilename(filename);
+            fileDTO.setFilePath(filePath);
+
+            model.addAttribute("filename", filename);
+
+            Long fileId = fileService.saveFile(fileDTO);
+            boardDTO.setFileId(fileId);
+            boardService.update(bno,boardDTO);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
         return "redirect:/boards";
     }
 

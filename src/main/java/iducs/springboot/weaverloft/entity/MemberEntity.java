@@ -2,14 +2,13 @@ package iducs.springboot.weaverloft.entity;
 
 import lombok.*;
 
-import javax.jdo.annotations.Unique;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 // Spring Data 관련 Annotation
 @Entity // Spring Data JPA의 엔티티(entity, 개체)임을 나타냄
-@Table(name="tb_member_201812064")
+@Table(name="tb_member")
 // Lombok Annotation
 @ToString // toString() 생성
 @Getter // getter() 생성
