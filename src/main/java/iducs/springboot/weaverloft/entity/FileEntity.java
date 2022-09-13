@@ -24,4 +24,7 @@ public class FileEntity {
     @Column(nullable = false)
     private String filePath;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private BoardEntity board; // 연관관계 지정
+
 }

@@ -3,10 +3,10 @@ package iducs.springboot.weaverloft.service;
 import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.domain.PageResultDTO;
-import iducs.springboot.weaverloft.domain.ReplyDTO;
 import iducs.springboot.weaverloft.entity.BoardEntity;
 import iducs.springboot.weaverloft.entity.MemberEntity;
 import iducs.springboot.weaverloft.repository.BoardRepository;
+import iducs.springboot.weaverloft.repository.FileRepository;
 import iducs.springboot.weaverloft.repository.ReplyRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -25,9 +25,12 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final ReplyRepository replyRepository; //추가
 
-    public BoardServiceImpl(BoardRepository boardRepository, ReplyRepository replyRepository) {
+    private final FileRepository fileRepository;
+
+    public BoardServiceImpl(BoardRepository boardRepository, ReplyRepository replyRepository, FileRepository fileRepository) {
         this.boardRepository = boardRepository;
         this.replyRepository = replyRepository;
+        this.fileRepository = fileRepository;
     }
 
     @Override
@@ -136,6 +139,9 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     public void deleteWithReplies(Long bno) { // 삭제 구현, 트랜잭션 추가
+
+        // 파일도 같이 삭제
+        fileRepository.deleteByBno(bno);
 
         // 댓글부터 삭제
         replyRepository.deleteByBno(bno);
