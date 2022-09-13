@@ -10,12 +10,21 @@ import iducs.springboot.weaverloft.service.BoardService;
 import iducs.springboot.weaverloft.service.FileService;
 import iducs.springboot.weaverloft.service.ReplyService;
 import iducs.springboot.weaverloft.util.MD5Generator;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.core.io.Resource;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("/boards")
@@ -63,7 +72,7 @@ public class BoardController {
 
             Long fileId = fileService.saveFile(fileDTO);
             boardDTO.setFileId(fileId);
-            // Long bno = boardService.register(boardDTO);
+            boardService.register(boardDTO);
 
         } catch (Exception e) {
 
@@ -85,7 +94,16 @@ public class BoardController {
 
         BoardDTO boardDTO = boardService.getById(bno);
         boardService.updateView(bno);
+
+        if(boardDTO.getFileId() != null) {
+            Long id = boardDTO.getFileId();
+            FileDTO fileDTO = fileService.getFile(id);
+            model.addAttribute("fileDTO", fileDTO);
+        }
+
         model.addAttribute("boardDTO", boardDTO);
+
+
         return "/boards/read";
     }
 
@@ -111,14 +129,26 @@ public class BoardController {
     public String getDelform(@ModelAttribute("bno") Long bno, Model model){
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
         BoardDTO boardDTO = boardService.getById(bno);
-        model.addAttribute("board", boardDTO);
+        model.addAttribute("boardDTO", boardDTO);
         //return "members/delform";
         return "/boards/delform";
 
     }
     @DeleteMapping("/{bno}") //삭제 구현
     public String deleteMember(@PathVariable Long bno){
-        boardService.deleteByBno(bno);
+        boardService.deleteWithReplies(bno);
         return "redirect:/boards"; //'/members' 요청을 함,
+    }
+
+    // 파일 다운로드
+    @GetMapping("/download/{fileId}")
+    public ResponseEntity<Resource> fileDownload(@PathVariable("fileId") Long fileId) throws IOException {
+        FileDTO fileDTO = fileService.getFile(fileId);
+        Path path = Paths.get(fileDTO.getFilePath());
+        Resource resource = new InputStreamResource(Files.newInputStream(path));
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDTO.getOrigFilename() + "\"")
+                .body(resource);
     }
 }

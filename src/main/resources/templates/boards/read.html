@@ -61,9 +61,10 @@
                     <div class="user-block">
                       <img class="img-circle img-bordered-sm" src="/dist/img/user1-128x128.jpg" alt="user image">
                       <span class="username">
-                          <a>이메일 : [[${boardDTO.writerEmail}]]</a>
+                          <a>작성자 : [[${boardDTO.writerName}]]</a>
                         </span>
-                      <span class="description">작성자 : [[${boardDTO.writerName}]]</span>
+                      <span class="description">이메일 : [[${boardDTO.writerEmail}]]</span>
+
                     </div>
                     <!-- /.user-block -->
                     <p>
@@ -73,6 +74,14 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div th:if="${boardDTO.fileId != null}">
+            <strong>첨부파일 : </strong>
+            <a
+                    class="card-text"
+                    th:href="@{'/boards' + '/download/' + ${boardDTO.fileId}}"
+                    th:text="${fileDTO.origFilename}"
+            ></a>
           </div>
         </div>
         <div class="text-center mt-5 mb-3">
