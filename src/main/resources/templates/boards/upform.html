@@ -11,10 +11,11 @@
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
-  <div th:replace="~{/nav :: navfrag}"/>
+  <div th:replace="~{/nav :: navfrag}"></div>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -89,18 +90,18 @@
 
                   <div class="form-group">
                     <div class="custom-file" id="inputFile">
-                      <input name="file" type="file" class="custom-file-input" id="customFile"/>
+                      <input th:value="${fileDTO}" name="file" type="file" class="custom-file-input" id="customFile"/>
                       <label class="custom-file-label" for="customFile">
-                        <div th:if="${boardDTO.fileId != 0}">
+                        <div th:if="${boardDTO.fileId != null}">
                           [[${fileDTO.origFilename}]]
                         </div>
-                        <div th:unless="${boardDTO.fileId != 0}">
+                        <div th:unless="${boardDTO.fileId != null}">
                            파일을 선택해 주세요.
                         </div>
                       </label>
                     </div>
                   </div>
-                  <input type="hidden" th:value="${fileDTO}">
+
 
                   <div class="col-12">
                     <input type="submit" value="Update" class="btn btn-success float-right">
@@ -130,7 +131,7 @@
     });
   </script>
 
-<div th:replace="~{/footer :: footerfrag}"/>
+  <div th:replace="~{/footer :: footerfrag}"></div>
 
 <!-- ./wrapper -->
 

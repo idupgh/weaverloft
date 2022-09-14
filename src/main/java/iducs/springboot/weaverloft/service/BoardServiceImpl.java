@@ -53,10 +53,10 @@ public class BoardServiceImpl implements BoardService {
         Pageable pageable = null;
         String page = pageRequestDTO.getSort();
         String asc = "asc";
-        pageable = pageRequestDTO.getPageable(Sort.by("views").descending());
+        pageable = pageRequestDTO.getPageable(Sort.by("bno").descending());
         if(page != null) {
             if(page.equals(asc)) {
-                pageable = pageRequestDTO.getPageable(Sort.by("views").ascending());
+                pageable = pageRequestDTO.getPageable(Sort.by("bno").ascending());
             }
         }
 

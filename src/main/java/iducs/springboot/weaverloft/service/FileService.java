@@ -1,6 +1,8 @@
 package iducs.springboot.weaverloft.service;
 
+import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.FileDTO;
+import iducs.springboot.weaverloft.entity.BoardEntity;
 import iducs.springboot.weaverloft.entity.FileEntity;
 import iducs.springboot.weaverloft.repository.FileRepository;
 import org.springframework.stereotype.Service;
@@ -19,16 +21,22 @@ public class FileService {
         return fileRepository.save(fileDTO.toEntity()).getId();
     }
 
+    public Long updateFile(FileDTO fileDTO) {
+        return fileRepository.save(fileDTO.toEntity()).getId();
+    }
+
     @Transactional
     public FileDTO getFile(Long id) {
         FileEntity file = fileRepository.findById(id).get();
 
         FileDTO fileDTO = FileDTO.builder()
-                .id(id)
+                .id(id) // 파일 번호
                 .origFilename(file.getOrigFilename())
                 .filename(file.getFilename())
                 .filePath(file.getFilePath())
                 .build();
         return fileDTO;
     }
+
+
 }

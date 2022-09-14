@@ -121,10 +121,19 @@ public class BoardController {
     }
 
     @PutMapping("/{bno}") //업데이트 구현
-    public String putMember(@RequestParam("file")MultipartFile files, Long bno, BoardDTO boardDTO, Model model){
+    public String putBoard(@RequestParam("file")MultipartFile files, Long bno, BoardDTO boardDTO, Model model){
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
         try {
+            boardDTO = boardService.getById(bno);
+
+            Long id = boardDTO.getFileId();
+            FileDTO fileDTO = fileService.getFile(id);
+
             String origFilename = files.getOriginalFilename();
+            if(origFilename.isEmpty()) {
+                origFilename = fileDTO.getOrigFilename();
+            }
+
             String filename = new MD5Generator(origFilename).toString();
             /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
             String savePath = System.getProperty("user.dir") + "\\files";
@@ -140,7 +149,6 @@ public class BoardController {
             String filePath = savePath + "\\" + filename;
             files.transferTo(new File(filePath));
 
-            FileDTO fileDTO = new FileDTO();
             fileDTO.setOrigFilename(origFilename);
             fileDTO.setFilename(filename);
             fileDTO.setFilePath(filePath);

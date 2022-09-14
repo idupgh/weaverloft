@@ -11,4 +11,5 @@ public interface FileRepository  extends JpaRepository<FileEntity, Long> {
     @Modifying
     @Query("delete from FileEntity f where f.board.bno =:bno ")
     void deleteByBno(@Param("bno")Long bno);
+
 }

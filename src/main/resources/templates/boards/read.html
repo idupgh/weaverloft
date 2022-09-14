@@ -76,7 +76,7 @@
             </div>
           </div><br><br><br><br><br>
 
-          <div th:if="${boardDTO.fileId != null}">
+          <div th:unless="${fileDTO.origFilename.isEmpty()}">
               <strong>첨부파일 : </strong>
               <a
                       class="card-text"
@@ -160,7 +160,7 @@
 
           $(function(){
             $('.button_event').click(function(){
-              if(!confirm("수정시 기존 첨부파일은 사라집니다. \n정말 수정하시겠습니까?")){
+              if(!confirm("수정하시겠습니까?")){
                 return false;
               }
             });
@@ -208,7 +208,7 @@
 
                 var str ="";
 
-                $('.replyCount').html(" Reply Count  " + arr.length);
+                $('.replyCount').html(" 댓글     수  " + arr.length);
 
                 $.each(arr, function(idx, reply){
                   console.log(reply);
