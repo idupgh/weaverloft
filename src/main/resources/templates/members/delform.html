@@ -12,10 +12,12 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
-    <div th:replace="~{/nav :: navfrag}"/>
+    <div th:replace="~{/nav :: navfrag}"></div>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -68,7 +70,7 @@
 
                                 <div class="card-footer">
                                     <div class="text-right">
-                                        <button type="submit" value="Delete" class="btn btn-primary" th:onclick="button_event()">삭제</button>
+                                        <button type="submit" value="Delete" class="btn btn-primary button_event">삭제</button>
                                     </div>
                                 </div>
                             </form>
@@ -86,46 +88,23 @@
 
             </div>
             <!-- /.card-body -->
-        </section></div>
+        </section>
+    </div>
     <!-- /.card -->
-    </section></div>
-<!--/.col (right) -->
-</div>
-<!-- /.row -->
-</div><!-- /.container-fluid -->
-</section>
-<!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
-<div th:replace="~{/footer :: footerfrag}"/>
 
-<!-- Control Sidebar -->
-<aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-</aside>
-<!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
+<div th:replace="~{/footer :: footerfrag}"></div>
 
-<th:block layout:fragment="script">
+
     <script th:inline="javascript">
-        /*<![CDATA[*/
-        function button_event(){
-
-            if (confirm("정말 삭제하시겠습니까??") == true){    //확인
-
-                document.form.submit();
-
-            }else{   //취소
-
-                return false;
-
-            }
-
-        }
-
+        $(function(){
+            $('.button_event').click(function(){
+                if(!confirm("삭제 하시겠습니까?")){
+                    return false;
+                }
+            });
+        });
     </script>
-</th:block>
+
 
 <!-- jQuery -->
 <script src="../../plugins/jquery/jquery.min.js"></script>
@@ -143,5 +122,6 @@
         bsCustomFileInput.init();
     });
 </script>
+</div>
 </body>
 </html>

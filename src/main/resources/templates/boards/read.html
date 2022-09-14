@@ -63,18 +63,19 @@
                       <span class="username">
                           <a>작성자 : [[${boardDTO.writerName}]]</a>
                         </span>
-                      <span class="description">이메일 : [[${boardDTO.writerEmail}]]</span>
+                      <span class="description">이메일 : [[${boardDTO.writerEmail}]]</span><br><br>
 
                     </div>
                     <!-- /.user-block -->
                     <p>
-                    <h4>내용 : [[${boardDTO.content}]]</h4>
+                    <h4>[[${boardDTO.content}]]</h4>
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </div><br><br><br><br><br>
+
           <div th:if="${boardDTO.fileId != null}">
               <strong>첨부파일 : </strong>
               <a

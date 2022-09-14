@@ -107,20 +107,13 @@
 <!-- ./wrapper -->
 <th:block layout:fragment="script">
   <script th:inline="javascript">
-    /*<![CDATA[*/
-    function button_event(){
-
-      if (confirm("정말 삭제하시겠습니까??") == true){    //확인
-
-        document.form.submit();
-
-      }else{   //취소
-
-        return;
-
-      }
-
-    }
+    $(function(){
+      $('.button_event').click(function(){
+        if(!confirm("삭제 하시겠습니까?")){
+          return false;
+        }
+      });
+    });
 
   </script>
 </th:block>
