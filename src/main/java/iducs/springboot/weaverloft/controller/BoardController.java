@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Controller
 @RequestMapping("/boards")
@@ -44,40 +45,41 @@ public class BoardController {
     }
 
     @PostMapping("")
-    public String post(@RequestParam("file")MultipartFile files, BoardDTO boardDTO, Model model) {
+    public String post(@RequestParam("file")List<MultipartFile> files, BoardDTO boardDTO, Model model) {
 
         try {
-            String origFilename = files.getOriginalFilename();
-            String filename = new MD5Generator(origFilename).toString();
-            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-            String savePath = System.getProperty("user.dir") + "\\files";
-            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-            if (!new File(savePath).exists()) {
-                try{
-                    new File(savePath).mkdir();
+
+            for(MultipartFile file : files) {
+                String origFilename = file.getOriginalFilename();
+                String filename = new MD5Generator(origFilename).toString();
+                /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+                String savePath = System.getProperty("user.dir") + "\\files";
+                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+                if (!new File(savePath).exists()) {
+                    try {
+                        new File(savePath).mkdir();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
                 }
-                catch (Exception e) {
-                    e.getStackTrace();
-                }
+                String filePath = savePath + "\\" + filename;
+                file.transferTo(new File(filePath));
+
+                FileDTO fileDTO = new FileDTO();
+                fileDTO.setOrigFilename(origFilename);
+                fileDTO.setFilename(filename);
+                fileDTO.setFilePath(filePath);
+
+                model.addAttribute("filename", filename);
+
+                Long fileId = fileService.saveFile(fileDTO);
+                boardDTO.setFileId(fileId);
             }
-            String filePath = savePath + "\\" + filename;
-            files.transferTo(new File(filePath));
-
-            FileDTO fileDTO = new FileDTO();
-            fileDTO.setOrigFilename(origFilename);
-            fileDTO.setFilename(filename);
-            fileDTO.setFilePath(filePath);
-
-            model.addAttribute("filename", filename);
-
-            Long fileId = fileService.saveFile(fileDTO);
-            boardDTO.setFileId(fileId);
-            boardService.register(boardDTO);
 
         } catch (Exception e) {
 
             e.printStackTrace();
-        }
+        } boardService.register(boardDTO);
         return "redirect:/boards/"; // 등록 후 상세보기
         // return "redirect:/boards/" + bno; >> 등록 후 바로 상세보기 띄우기였음
     }
@@ -121,7 +123,7 @@ public class BoardController {
     }
 
     @PutMapping("/{bno}") //업데이트 구현
-    public String putBoard(@RequestParam("file")MultipartFile files, Long bno, BoardDTO boardDTO, Model model){
+    public String putBoard(@RequestParam("file") List<MultipartFile> files, Long bno, BoardDTO boardDTO, Model model){
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
         try {
             boardDTO = boardService.getById(bno);
@@ -129,40 +131,40 @@ public class BoardController {
             Long id = boardDTO.getFileId();
             FileDTO fileDTO = fileService.getFile(id);
 
-            String origFilename = files.getOriginalFilename();
-            if(origFilename.isEmpty()) {
-                origFilename = fileDTO.getOrigFilename();
-            }
-
-            String filename = new MD5Generator(origFilename).toString();
-            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-            String savePath = System.getProperty("user.dir") + "\\files";
-            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-            if (!new File(savePath).exists()) {
-                try{
-                    new File(savePath).mkdir();
+            for(MultipartFile file : files) {
+                String origFilename = file.getOriginalFilename();
+                if (origFilename.isEmpty()) {
+                    origFilename = fileDTO.getOrigFilename();
                 }
-                catch (Exception e) {
-                    e.getStackTrace();
+
+                String filename = new MD5Generator(origFilename).toString();
+                /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+                String savePath = System.getProperty("user.dir") + "\\files";
+                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+                if (!new File(savePath).exists()) {
+                    try {
+                        new File(savePath).mkdir();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
                 }
+                String filePath = savePath + "\\" + filename;
+                file.transferTo(new File(filePath));
+
+                fileDTO.setOrigFilename(origFilename);
+                fileDTO.setFilename(filename);
+                fileDTO.setFilePath(filePath);
+
+                model.addAttribute("filename", filename);
+
+                Long fileId = fileService.saveFile(fileDTO);
+                boardDTO.setFileId(fileId);
             }
-            String filePath = savePath + "\\" + filename;
-            files.transferTo(new File(filePath));
-
-            fileDTO.setOrigFilename(origFilename);
-            fileDTO.setFilename(filename);
-            fileDTO.setFilePath(filePath);
-
-            model.addAttribute("filename", filename);
-
-            Long fileId = fileService.saveFile(fileDTO);
-            boardDTO.setFileId(fileId);
-            boardService.update(bno,boardDTO);
 
         } catch (Exception e) {
 
             e.printStackTrace();
-        }
+        } boardService.update(bno,boardDTO);
         return "redirect:/boards";
     }
 

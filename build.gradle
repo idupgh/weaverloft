@@ -25,6 +25,8 @@ repositories {
 dependencies {
     // implementation 'org.apache.tomcat.embed:tomcat-embed-jasper' jsp 엔진
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // mybatis 추가
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
 
     implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.5'
 
@@ -43,6 +45,11 @@ dependencies {
     // querydsl : jpa 로 고급 질의 처리 어려움을 해결
     implementation "com.querydsl:querydsl-jpa:5.0.0"
     implementation "com.querydsl:querydsl-apt:5.0.0"
+
+    // file setting
+    compile group: 'commons-io', name: 'commons-io', version: '2.6' /* Apache Commons IO */
+    compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.3.3' /* Apache Commons File Upload */
+    implementation group: 'org.imgscalr', name: 'imgscalr-lib', version: '4.2' // 이미지
 }
 
 tasks.named('test') {

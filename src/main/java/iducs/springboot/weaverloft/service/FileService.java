@@ -18,11 +18,11 @@ public class FileService {
 
     @Transactional
     public Long saveFile(FileDTO fileDTO) {
-        return fileRepository.save(fileDTO.toEntity()).getId();
+        return fileRepository.save(fileDTO.toEntity(fileDTO)).getId();
     }
 
     public Long updateFile(FileDTO fileDTO) {
-        return fileRepository.save(fileDTO.toEntity()).getId();
+        return fileRepository.save(fileDTO.toEntity(fileDTO)).getId();
     }
 
     @Transactional
@@ -37,6 +37,22 @@ public class FileService {
                 .build();
         return fileDTO;
     }
+
+    public FileEntity dtoToEntity(FileDTO fileDTO) {
+
+        BoardEntity board = BoardEntity.builder().bno(fileDTO.getBno()).build();
+
+        FileEntity file = FileEntity.builder()
+                .id(fileDTO.getId())
+                .origFilename(fileDTO.getOrigFilename())
+                .filename(fileDTO.getFilename())
+                .filePath(fileDTO.getFilePath())
+                .board(board)
+                .build();
+
+        return file;
+    }
+
 
 
 }

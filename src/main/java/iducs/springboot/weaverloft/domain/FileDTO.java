@@ -1,5 +1,6 @@
 package iducs.springboot.weaverloft.domain;
 
+import iducs.springboot.weaverloft.entity.BoardEntity;
 import iducs.springboot.weaverloft.entity.FileEntity;
 import lombok.*;
 
@@ -15,7 +16,12 @@ public class FileDTO {
     private String filename;
     private String filePath;
 
-    public FileEntity toEntity() {
+    private Long bno;
+
+    public FileEntity toEntity(FileDTO fileDTO) {
+
+        BoardEntity board = BoardEntity.builder().bno(fileDTO.getBno()).build();
+
         FileEntity build = FileEntity.builder()
                 .id(id)
                 .origFilename(origFilename)
