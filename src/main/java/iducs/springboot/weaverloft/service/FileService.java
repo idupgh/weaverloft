@@ -2,11 +2,18 @@ package iducs.springboot.weaverloft.service;
 
 import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.FileDTO;
+import iducs.springboot.weaverloft.domain.ReplyDTO;
 import iducs.springboot.weaverloft.entity.BoardEntity;
 import iducs.springboot.weaverloft.entity.FileEntity;
+import iducs.springboot.weaverloft.entity.MemberEntity;
+import iducs.springboot.weaverloft.entity.ReplyEntity;
 import iducs.springboot.weaverloft.repository.FileRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FileService {
@@ -18,11 +25,19 @@ public class FileService {
 
     @Transactional
     public Long saveFile(FileDTO fileDTO) {
-        return fileRepository.save(fileDTO.toEntity(fileDTO)).getId();
+        FileEntity file = dtoToEntity(fileDTO);
+
+        fileRepository.save(file);
+
+        return file.getId();
     }
 
     public Long updateFile(FileDTO fileDTO) {
-        return fileRepository.save(fileDTO.toEntity(fileDTO)).getId();
+        FileEntity file = dtoToEntity(fileDTO);
+
+        fileRepository.save(file);
+
+        return file.getId();
     }
 
     @Transactional
@@ -53,6 +68,23 @@ public class FileService {
         return file;
     }
 
+    public FileDTO entityToDTO(FileEntity file){
 
+        FileDTO fileDTO = FileDTO.builder()
+                .id(file.getId())
+                .filePath(file.getFilePath())
+                .filename(file.getFilename())
+                .origFilename(file.getOrigFilename())
+                .build();
+
+        return fileDTO;
+    }
+
+    public List<FileDTO> getList(Long bno) {
+
+        List<FileEntity> result = fileRepository.getFilesByBoardOrderById(BoardEntity.builder().bno(bno).build());
+
+        return result.stream().map(reply -> entityToDTO(reply)).collect(Collectors.toList());
+    }
 
 }

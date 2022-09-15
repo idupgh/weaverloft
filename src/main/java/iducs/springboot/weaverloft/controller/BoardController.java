@@ -47,39 +47,46 @@ public class BoardController {
     @PostMapping("")
     public String post(@RequestParam("file")List<MultipartFile> files, BoardDTO boardDTO, Model model) {
 
+        long bno = boardService.register(boardDTO);
+
         try {
 
             for(MultipartFile file : files) {
                 String origFilename = file.getOriginalFilename();
-                String filename = new MD5Generator(origFilename).toString();
-                /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-                String savePath = System.getProperty("user.dir") + "\\files";
-                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-                if (!new File(savePath).exists()) {
-                    try {
-                        new File(savePath).mkdir();
-                    } catch (Exception e) {
-                        e.getStackTrace();
+                if(!origFilename.isEmpty()){
+                    String[] filenameArray = origFilename.split("\\.");
+                    String filename = new MD5Generator(filenameArray[0]).toString() + "." + filenameArray[1];
+
+                    /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+                    String savePath = System.getProperty("user.dir") + "\\files";
+                    /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+                    if (!new File(savePath).exists()) {
+                        try {
+                            new File(savePath).mkdir();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
                     }
+                    String filePath = savePath + "\\" + filename;
+                    file.transferTo(new File(filePath));
+
+                    FileDTO fileDTO = new FileDTO();
+                    fileDTO.setOrigFilename(origFilename);
+                    fileDTO.setFilename(filename);
+                    fileDTO.setFilePath(filePath);
+                    fileDTO.setBno(bno);
+                    model.addAttribute("filename", filename);
+
+                    Long fileId = fileService.saveFile(fileDTO);
+                    boardDTO.setFileId(fileId);
                 }
-                String filePath = savePath + "\\" + filename;
-                file.transferTo(new File(filePath));
-
-                FileDTO fileDTO = new FileDTO();
-                fileDTO.setOrigFilename(origFilename);
-                fileDTO.setFilename(filename);
-                fileDTO.setFilePath(filePath);
-
-                model.addAttribute("filename", filename);
-
-                Long fileId = fileService.saveFile(fileDTO);
-                boardDTO.setFileId(fileId);
             }
 
         } catch (Exception e) {
 
             e.printStackTrace();
-        } boardService.register(boardDTO);
+        }
+
         return "redirect:/boards/"; // 등록 후 상세보기
         // return "redirect:/boards/" + bno; >> 등록 후 바로 상세보기 띄우기였음
     }
@@ -97,12 +104,7 @@ public class BoardController {
         BoardDTO boardDTO = boardService.getById(bno);
         boardService.updateView(bno);
 
-        if(boardDTO.getFileId() != null) {
-            Long id = boardDTO.getFileId();
-            FileDTO fileDTO = fileService.getFile(id);
-            model.addAttribute("fileDTO", fileDTO);
-        }
-
+        model.addAttribute("fileList", fileService.getList(bno));
         model.addAttribute("boardDTO", boardDTO);
 
 

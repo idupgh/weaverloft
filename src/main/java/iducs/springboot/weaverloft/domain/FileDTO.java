@@ -17,17 +17,4 @@ public class FileDTO {
     private String filePath;
 
     private Long bno;
-
-    public FileEntity toEntity(FileDTO fileDTO) {
-
-        BoardEntity board = BoardEntity.builder().bno(fileDTO.getBno()).build();
-
-        FileEntity build = FileEntity.builder()
-                .id(id)
-                .origFilename(origFilename)
-                .filename(filename)
-                .filePath(filePath)
-                .build();
-        return build;
-    }
 }

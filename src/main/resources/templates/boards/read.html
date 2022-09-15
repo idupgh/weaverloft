@@ -76,14 +76,20 @@
             </div>
           </div><br><br><br><br><br>
 
-          <div th:unless="${fileDTO.origFilename.isEmpty()}">
-              <strong>첨부파일 : </strong>
-              <a
-                      class="card-text"
-                      th:href="@{'/boards' + '/download/' + ${boardDTO.fileId}}"
-                      th:text="${fileDTO.origFilename}"
-              ></a>
+          <strong>첨부파일 : </strong>
+          <div th:each="user : ${fileList}">
+            <a class="card-text"
+                th:href="@{'/boards' + '/download/' + ${user.id}}"
+                th:text="${user.origFilename}"></a>
           </div>
+<!--          <div th:unless="${fileDTO.origFilename.isEmpty()}">-->
+<!--              <strong>첨부파일 : </strong>-->
+<!--              <a-->
+<!--                      class="card-text"-->
+<!--                      th:href="@{'/boards' + '/download/' + ${boardDTO.fileId}}"-->
+<!--                      th:text="${fileDTO.origFilename}"-->
+<!--              ></a>-->
+<!--          </div>-->
         </div>
         <div class="text-center mt-5 mb-3">
           <a  th:if="${(session.login != null && session.login.seq == boardDTO.writerSeq) || session.isadmin != null }"

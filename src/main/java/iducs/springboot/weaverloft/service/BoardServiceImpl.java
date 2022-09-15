@@ -4,6 +4,7 @@ import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.domain.PageResultDTO;
 import iducs.springboot.weaverloft.entity.BoardEntity;
+import iducs.springboot.weaverloft.entity.FileEntity;
 import iducs.springboot.weaverloft.entity.MemberEntity;
 import iducs.springboot.weaverloft.repository.BoardRepository;
 import iducs.springboot.weaverloft.repository.FileRepository;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -122,6 +125,7 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.save(boardEntity);
         return bno;
     }
+
 
 
     private BoardDTO entityToDto(BoardEntity entity) {

@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.Builder.Default;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="tb_board")
@@ -33,4 +35,5 @@ public class BoardEntity extends BaseEntity {
 
 
     private int replyCount;
+
 }
