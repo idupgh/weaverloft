@@ -5,7 +5,6 @@ package iducs.springboot.weaverloft.controller;
 import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.FileDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
-import iducs.springboot.weaverloft.entity.FileEntity;
 import iducs.springboot.weaverloft.service.BoardService;
 import iducs.springboot.weaverloft.service.FileService;
 import iducs.springboot.weaverloft.service.ReplyService;
@@ -26,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/boards")
@@ -44,8 +44,9 @@ public class BoardController {
         return "/boards/regform"; // boards/regform.html 전달
     }
 
+    // 게시글 등록
     @PostMapping("")
-    public String post(@RequestParam("file")List<MultipartFile> files, BoardDTO boardDTO, Model model) {
+    public String post(@RequestParam(value = "file",required = false)List<MultipartFile> files, BoardDTO boardDTO, Model model) {
 
         long bno = boardService.register(boardDTO);
 
@@ -54,8 +55,9 @@ public class BoardController {
             for(MultipartFile file : files) {
                 String origFilename = file.getOriginalFilename();
                 if(!origFilename.isEmpty()){
+                    String uuid = UUID.randomUUID().toString();
                     String[] filenameArray = origFilename.split("\\.");
-                    String filename = new MD5Generator(filenameArray[0]).toString() + "." + filenameArray[1];
+                    String filename = new MD5Generator(uuid + filenameArray[0]).toString() + "." + filenameArray[1];
 
                     /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
                     String savePath = System.getProperty("user.dir") + "\\files";
@@ -76,9 +78,7 @@ public class BoardController {
                     fileDTO.setFilePath(filePath);
                     fileDTO.setBno(bno);
                     model.addAttribute("filename", filename);
-
-                    Long fileId = fileService.saveFile(fileDTO);
-                    boardDTO.setFileId(fileId);
+                    fileService.saveFile(fileDTO);
                 }
             }
 
@@ -115,58 +115,51 @@ public class BoardController {
     public String getUpform(@PathVariable("bno") Long bno, Model model){
         BoardDTO boardDTO = boardService.getById(bno);
 
-        Long id = boardDTO.getFileId();
-        FileDTO fileDTO = fileService.getFile(id);
-
-        model.addAttribute("fileDTO", fileDTO);
-
+        model.addAttribute("fileList", fileService.getList(bno));
         model.addAttribute("boardDTO", boardDTO); //입력한 객체를 전달, DB로부터 가져온 것 아님
         return "/boards/upform"; //view resolving : upform.html
     }
 
     @PutMapping("/{bno}") //업데이트 구현
-    public String putBoard(@RequestParam("file") List<MultipartFile> files, Long bno, BoardDTO boardDTO, Model model){
+    public String putBoard(@RequestParam(value = "file", required = false) List<MultipartFile> files, Long bno, BoardDTO boardDTO, Model model){
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
-        try {
-            boardDTO = boardService.getById(bno);
 
-            Long id = boardDTO.getFileId();
-            FileDTO fileDTO = fileService.getFile(id);
+
+        try {
 
             for(MultipartFile file : files) {
                 String origFilename = file.getOriginalFilename();
-                if (origFilename.isEmpty()) {
-                    origFilename = fileDTO.getOrigFilename();
-                }
+                if(!origFilename.isEmpty()){
+                    String[] filenameArray = origFilename.split("\\.");
+                    String filename = new MD5Generator(filenameArray[0]).toString() + "." + filenameArray[1];
 
-                String filename = new MD5Generator(origFilename).toString();
-                /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-                String savePath = System.getProperty("user.dir") + "\\files";
-                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-                if (!new File(savePath).exists()) {
-                    try {
-                        new File(savePath).mkdir();
-                    } catch (Exception e) {
-                        e.getStackTrace();
+                    /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+                    String savePath = System.getProperty("user.dir") + "\\files";
+                    /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+                    if (!new File(savePath).exists()) {
+                        try {
+                            new File(savePath).mkdir();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
                     }
+                    String filePath = savePath + "\\" + filename;
+                    file.transferTo(new File(filePath));
+
+                    FileDTO fileDTO = new FileDTO();
+                    fileDTO.setOrigFilename(origFilename);
+                    fileDTO.setFilename(filename);
+                    fileDTO.setFilePath(filePath);
+                    fileDTO.setBno(bno);
+                    model.addAttribute("filename", filename);
+                    fileService.saveFile(fileDTO);
                 }
-                String filePath = savePath + "\\" + filename;
-                file.transferTo(new File(filePath));
-
-                fileDTO.setOrigFilename(origFilename);
-                fileDTO.setFilename(filename);
-                fileDTO.setFilePath(filePath);
-
-                model.addAttribute("filename", filename);
-
-                Long fileId = fileService.saveFile(fileDTO);
-                boardDTO.setFileId(fileId);
             }
 
         } catch (Exception e) {
 
             e.printStackTrace();
-        } boardService.update(bno,boardDTO);
+        } boardService.update(bno, boardDTO);
         return "redirect:/boards";
     }
 
@@ -195,5 +188,13 @@ public class BoardController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDTO.getOrigFilename() + "\"")
                 .body(resource);
+    }
+
+    @DeleteMapping("/{bno}/delete/{id}")
+    public String deleteFile(@PathVariable("id") Long id,@PathVariable("bno") Long bno){
+
+        fileService.deleteFile(id, bno);
+
+        return "redirect:/boards/"+bno+"/upform";
     }
 }

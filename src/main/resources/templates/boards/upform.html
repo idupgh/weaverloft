@@ -47,7 +47,6 @@
 
               <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                  <i class="fas fa-minus"></i>
                 </button>
               </div>
             </div>
@@ -87,22 +86,13 @@
                       <label for="inputContent" th:height="100px">content</label>
                       <textarea type="text" name="content" th:field="*{content}"  id="inputContent" class="form-control"></textarea>
                     </div>
-
-                  <div class="form-group">
-                    <div class="custom-file" id="inputFile">
-                      <input th:value="${fileDTO}" name="file" type="file" class="custom-file-input" id="customFile"/>
-                      <label class="custom-file-label" for="customFile">
-                        <div th:if="${boardDTO.fileId != null}">
-                          [[${fileDTO.origFilename}]]
-                        </div>
-                        <div th:unless="${boardDTO.fileId != null}">
-                           파일을 선택해 주세요.
-                        </div>
-                      </label>
+                  <div class="form-group" id="file-list">
+                    <a href="#this" onclick="addFile()">파일추가</a>
+                    <div class="file-group">
+                      <input type="file" name="file">
+                      <a href='#this' name='file-delete'>삭제</a>
                     </div>
                   </div>
-
-
                   <div class="col-12">
                     <input type="submit" value="Update" class="btn btn-success float-right">
                   </div>
@@ -111,6 +101,25 @@
                 <!-- /.card-body -->
               </div>
             </form>
+              <div class="form-group">
+                  <div class="form-group" id="file-list">
+                    <div th:unless="${fileList.isEmpty()}">
+                      <strong>기존파일 : </strong>
+                    </div>
+                      <div th:each="file : ${fileList}">
+                          <!--                        [[${file.origFilename}]]-->
+                          <form id="deleteMember" th:action="@{'/boards/' +${boardDTO.bno}+ '/delete/' + ${file.id}}" method="post">
+                              <input type="hidden" name="_method" value="delete"/>
+                                [[${file.origFilename}]]
+                              <button id="delete-btn">삭제</button>
+                          </form>
+                          <!--                        <input type="hidden" th:value="${file.id}">-->
+                          <!--                        <a href='#this' name='file-delete' th:text="|${file.origFilename} 삭제|"></a>-->
+                      </div>
+                      <br>
+
+                  </div>
+              </div>
           </div>
           <!-- /.card -->
         </div>
@@ -125,10 +134,26 @@
 </div>
 <!-- /.content-wrapper -->
   <script>
-    $('.custom-file-input').on('change', function () {
-      var fileName = $(this).val().split('\\').pop();
-      $(this).siblings('.custom-file-label').addClass('selected').html(fileName);
-    });
+    $(document).ready(function(){
+      $("a[name='file-delete']").on("click",function(e){
+        e.preventDefault();
+        deleteFile($(this));
+      });
+    })
+    function addFile() {
+      var str = "<div class=\"file-group\">\n" +
+          "                        <input type=\"file\" name=\"file\">\n" +
+          "                        <a href='#this' name='file-delete'>삭제</a>\n" +
+          "                      </div>";
+      $("#file-list").append(str);
+      $("a[name='file-delete']").on("click", function(e) {
+        e.preventDefault();
+        deleteFile($(this));
+      });
+    }
+    function deleteFile(obj) {
+      obj.parent().remove();
+    }
   </script>
 
   <div th:replace="~{/footer :: footerfrag}"></div>

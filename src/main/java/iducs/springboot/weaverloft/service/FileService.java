@@ -1,17 +1,12 @@
 package iducs.springboot.weaverloft.service;
 
-import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.FileDTO;
-import iducs.springboot.weaverloft.domain.ReplyDTO;
 import iducs.springboot.weaverloft.entity.BoardEntity;
 import iducs.springboot.weaverloft.entity.FileEntity;
-import iducs.springboot.weaverloft.entity.MemberEntity;
-import iducs.springboot.weaverloft.entity.ReplyEntity;
 import iducs.springboot.weaverloft.repository.FileRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +25,12 @@ public class FileService {
         fileRepository.save(file);
 
         return file.getId();
+    }
+
+    public FileDTO deleteFile(Long id, Long bno) {
+        fileRepository.deleteById(id);
+
+        return null;
     }
 
     public Long updateFile(FileDTO fileDTO) {

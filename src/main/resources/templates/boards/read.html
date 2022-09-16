@@ -76,11 +76,13 @@
             </div>
           </div><br><br><br><br><br>
 
-          <strong>첨부파일 : </strong>
-          <div th:each="user : ${fileList}">
+          <div th:unless="${fileList.isEmpty()}">
+            <strong>첨부파일 : </strong>
+          </div>
+          <div th:each="file : ${fileList}">
             <a class="card-text"
-                th:href="@{'/boards' + '/download/' + ${user.id}}"
-                th:text="${user.origFilename}"></a>
+                th:href="@{'/boards' + '/download/' + ${file.id}}"
+                th:text="|${file.origFilename} 다운로드|"></a>
           </div>
 <!--          <div th:unless="${fileDTO.origFilename.isEmpty()}">-->
 <!--              <strong>첨부파일 : </strong>-->
