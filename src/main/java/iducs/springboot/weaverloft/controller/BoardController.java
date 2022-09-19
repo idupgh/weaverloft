@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.core.io.Resource;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -93,6 +96,7 @@ public class BoardController {
 
     @GetMapping("")
     public String getList(PageRequestDTO pageRequestDTO, Model model){
+
         model.addAttribute("list", boardService.getList(pageRequestDTO));
         return "/boards/list"; // boards/list.html 전달
     }
