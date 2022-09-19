@@ -110,6 +110,7 @@ public class MemberController {
         if((dto = memberService.loginByEmail(memberDTO)) != null) {
             HttpSession session = request.getSession();
             session.setAttribute("login", dto);
+            session.setAttribute("loginSeq", dto.getSeq());
             session.setAttribute("block",dto.getBlock());
             if(dto.getId().contains("admin"))
                 session.setAttribute("isadmin", dto.getId());

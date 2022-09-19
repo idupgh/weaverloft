@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../../../plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../../dist/css/adminlte.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -73,7 +74,7 @@
                     <a th:href="@{'/members/' + ${memberDTO.seq} + '/delform'}" class="btn btn-sm bg-teal">
                       <i class="fas fa-comments"></i> delete
                     </a>
-                    <a th:href="@{'/members/'}" class="btn btn-sm bg-teal">
+                    <a th:href="@{'/members'}" class="btn btn-sm bg-teal">
                       <i class="fas fa-copy"></i> list
                     </a>
                   </div>
@@ -105,7 +106,7 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-<th:block layout:fragment="script">
+
   <script th:inline="javascript">
     $(function(){
       $('.button_event').click(function(){
@@ -116,7 +117,7 @@
     });
 
   </script>
-</th:block>
+
 <!-- jQuery -->
 <script src="../../../plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
