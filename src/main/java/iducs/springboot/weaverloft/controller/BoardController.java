@@ -21,9 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -111,16 +113,25 @@ public class BoardController {
         model.addAttribute("fileList", fileService.getList(bno));
         model.addAttribute("boardDTO", boardDTO);
 
-
         return "/boards/read";
     }
 
     @GetMapping("/{bno}/upform") //업데이트폼
-    public String getUpform(@PathVariable("bno") Long bno, Model model){
+    public String getUpform(@PathVariable("bno") Long bno, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         BoardDTO boardDTO = boardService.getById(bno);
 
         model.addAttribute("fileList", fileService.getList(bno));
         model.addAttribute("boardDTO", boardDTO); //입력한 객체를 전달, DB로부터 가져온 것 아님
+
+        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != boardDTO.getWriterSeq())) {
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            String element =
+                    "<script> alert('자신이 작성한 글만 수정할 수 있습니다.'); location.href='/'; </script>";
+            out.println(element);
+            out.flush();//브라우저 출력 비우기
+            out.close();//아웃객체 닫기
+        }
         return "/boards/upform"; //view resolving : upform.html
     }
 
@@ -168,10 +179,19 @@ public class BoardController {
     }
 
     @GetMapping("/{bno}/delform") //삭제폼
-    public String getDelform(@ModelAttribute("bno") Long bno, Model model){
+    public String getDelform(@ModelAttribute("bno") Long bno, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
         BoardDTO boardDTO = boardService.getById(bno);
         model.addAttribute("boardDTO", boardDTO);
+        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != boardDTO.getWriterSeq())) {
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            String element =
+                    "<script> alert('자신이 작성한 글만 삭제할 수 있습니다.'); location.href='/'; </script>";
+            out.println(element);
+            out.flush();//브라우저 출력 비우기
+            out.close();//아웃객체 닫기
+        }
         //return "members/delform";
         return "/boards/delform";
 

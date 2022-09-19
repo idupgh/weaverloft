@@ -10,8 +10,11 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 
 @Controller
@@ -48,19 +51,36 @@ public class MemberController {
     }
 
     @GetMapping("/{idx}/upform")
-    public String getUpform(@PathVariable("idx") Long seq, Model model){
+    public String getUpform(@PathVariable("idx") Long seq, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(seq);
         model.addAttribute("memberDTO", memberDTO);
+        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getSeq())) {
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            String element =
+                    "<script> alert('자신의 개인정보만 수정 할 수 있습니다.'); location.href='/'; </script>";
+            out.println(element);
+            out.flush();//브라우저 출력 비우기
+            out.close();//아웃객체 닫기
+        }
         return "/members/upform"; // view resolving : upform.html
     }
 
     @GetMapping("/{idx}")
-    public String getMember(@PathVariable("idx") Long seq, Model model){
+    public String getMember(@PathVariable("idx") Long seq, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(seq);
         model.addAttribute("memberDTO", memberDTO);
-        //return "/members/member"; // view resolving : upform.html
+        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getSeq())) {
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            String element =
+                    "<script> alert('자신의 개인정보만 볼 수 있습니다.'); location.href='/'; </script>";
+            out.println(element);
+            out.flush();//브라우저 출력 비우기
+            out.close();//아웃객체 닫기
+        }
         return "/members/contacts";
     }
 
@@ -82,10 +102,19 @@ public class MemberController {
     }
 
     @GetMapping("/{idx}/delform")
-    public String getDelform(@PathVariable("idx") Long seq, Model model){
+    public String getDelform(@PathVariable("idx") Long seq, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(seq);
         model.addAttribute("memberDTO", memberDTO);
+        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getSeq())) {
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            String element =
+                    "<script> alert('자신의 개인정보만 삭제 할 수 있습니다.'); location.href='/'; </script>";
+            out.println(element);
+            out.flush();//브라우저 출력 비우기
+            out.close();//아웃객체 닫기
+        }
         return "/members/delform"; // view resolving : upform.html
     }
 
