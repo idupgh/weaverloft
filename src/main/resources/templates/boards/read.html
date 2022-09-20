@@ -70,6 +70,11 @@
                     <p>
                     <h4>[[${boardDTO.content}]]</h4>
                     </p>
+                    <div th:unless="${fileList.isEmpty()}">
+                      <div th:each="file : ${fileList}">
+                        <img th:src="@{'../../images/' + ${file.filename}}" style="width:800px;" onError="this.style.visibility='hidden'"/>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

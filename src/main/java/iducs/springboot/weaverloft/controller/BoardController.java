@@ -65,7 +65,7 @@ public class BoardController {
                     String filename = new MD5Generator(uuid + filenameArray[0]).toString() + "." + filenameArray[1];
 
                     /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-                    String savePath = System.getProperty("user.dir") + "\\files";
+                    String savePath = (file.getContentType().startsWith("image") == true) ? "C:\\Users\\GeunHyeong\\IdeaProjects\\weaverloft\\src\\main\\resources\\static\\images" : System.getProperty("user.dir") + "\\files";
                     /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
                     if (!new File(savePath).exists()) {
                         try {
@@ -117,7 +117,8 @@ public class BoardController {
     }
 
     @GetMapping("/{bno}/upform") //업데이트폼
-    public String getUpform(@PathVariable("bno") Long bno, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+    public String getUpform(@PathVariable("bno") Long bno, Model model, HttpSession session, HttpServletResponse response)
+            throws IOException {
         BoardDTO boardDTO = boardService.getById(bno);
 
         model.addAttribute("fileList", fileService.getList(bno));
@@ -136,7 +137,8 @@ public class BoardController {
     }
 
     @PutMapping("/{bno}") //업데이트 구현
-    public String putBoard(@RequestParam(value = "file", required = false) List<MultipartFile> files, Long bno, BoardDTO boardDTO, Model model){
+    public String putBoard(@RequestParam(value = "file", required = false)
+                               List<MultipartFile> files, Long bno, BoardDTO boardDTO, Model model){
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
 
 
@@ -149,7 +151,7 @@ public class BoardController {
                     String filename = new MD5Generator(filenameArray[0]).toString() + "." + filenameArray[1];
 
                     /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-                    String savePath = System.getProperty("user.dir") + "\\files";
+                    String savePath = (file.getContentType().startsWith("image") == true) ? "C:\\Users\\GeunHyeong\\IdeaProjects\\weaverloft\\src\\main\\resources\\static\\images" : System.getProperty("user.dir") + "\\files";
                     /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
                     if (!new File(savePath).exists()) {
                         try {
@@ -179,7 +181,8 @@ public class BoardController {
     }
 
     @GetMapping("/{bno}/delform") //삭제폼
-    public String getDelform(@ModelAttribute("bno") Long bno, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+    public String getDelform(@ModelAttribute("bno") Long bno, Model model, HttpSession session, HttpServletResponse response)
+            throws IOException {
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
         BoardDTO boardDTO = boardService.getById(bno);
         model.addAttribute("boardDTO", boardDTO);

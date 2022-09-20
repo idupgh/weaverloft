@@ -61,14 +61,13 @@
                 </div>
                 <div class="form-group">
                   <div class="form-group" id="file-list">
-                    <a href="#this" onclick="addFile()">파일추가</a>
+                    <a href="#this" onclick="addFile()">파일 추가</a>
                       <div class="file-group">
                         <input type="file" name="file">
                         <a href='#this' name='file-delete'>삭제</a>
                       </div>
                   </div>
                 </div>
-
                   <input type="hidden" th:value="${session.login.seq}" th:name="writerSeq">
 
                 <div class="form-group">
@@ -103,6 +102,15 @@
     function addFile() {
       var str = "<div class='file-group'><input type='file' name='file'><a href='#this' name='file-delete'>삭제</a></div>";
       $("#file-list").append(str);
+      $("a[name='file-delete']").on("click", function(e) {
+        e.preventDefault();
+        deleteFile($(this));
+      });
+    }
+
+    function addImageFile() {
+      var str = "<div class='image-file-group'><input type='file' name='imagefile'><a href='#this' name='file-delete'>삭제</a></div>";
+      $("#image-file-list").append(str);
       $("a[name='file-delete']").on("click", function(e) {
         e.preventDefault();
         deleteFile($(this));
