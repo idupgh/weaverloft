@@ -73,17 +73,11 @@
           <table class="table table-striped projects">
               <thead>
               <tr>
-                  <th style="width: 5%">
-                      No
-                  </th>
-                  <th style="width: 20%">
+                  <th style="width: 60%">
                       Title
                   </th>
-                  <th style="width: 30%">
-                      Content
-                  </th>
                   <th>
-                      Writer Email
+                      Writer
                   </th>
                   <th style="width: 20%" class="text-center">
                       Reg Date
@@ -101,22 +95,13 @@
               <tr th:each="boardDTO : ${list.dtoList}">
                   <td>
                       <a th:href="@{'/boards/' + ${boardDTO.bno}}">
-                          [[${boardDTO.bno}]] <!-- span 태그 쓴거랑 같음 -->
-                      </a>
-
-                  </td>
-                  <td>
-                      <a>
                           [[${boardDTO.title}]]
                       </a>
                       <br/>
 
                   </td>
-                  <td class="project_progress">
-                      [[${boardDTO.content}]]
-                  </td>
                   <td>
-                      [[${boardDTO.writerEmail}]]
+                      [[${boardDTO.writerName}]]
                   </td>
 
                   <td class="project-state">
