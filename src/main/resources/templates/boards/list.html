@@ -49,11 +49,7 @@
                     <div class="input-group">
                         <input type="hidden" name="page" value="1">
                         <div class="input-group-prepend">
-                            <select class="form-control" name="sort">
-                                <option value=""> 정렬</option>
-                                <option value="asc">Asc</option>
-                                <option value="desc">Desc</option>
-                            </select>
+
                             <select class="form-control" name="type">
                                 <option th:selected="${pageRequestDTO.type == null}">검색</option>
                                 <option value="t" th:selected="${pageRequestDTO.type =='t'}">제목</option>
