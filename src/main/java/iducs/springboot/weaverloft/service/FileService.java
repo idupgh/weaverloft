@@ -14,6 +14,13 @@ import java.util.stream.Collectors;
 public class FileService {
     private FileRepository fileRepository;
 
+    public List findById(FileDTO fileDTO) {
+        FileEntity file = dtoToEntity(fileDTO);
+        fileRepository.findById(file.getId());
+        return null;
+    }
+
+
     public FileService(FileRepository fileRepository) {
         this.fileRepository = fileRepository;
     }
@@ -87,5 +94,7 @@ public class FileService {
 
         return result.stream().map(reply -> entityToDTO(reply)).collect(Collectors.toList());
     }
+
+
 
 }

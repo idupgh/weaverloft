@@ -84,7 +84,7 @@ public class MemberController {
         return "/members/contacts";
     }
 
-    @GetMapping("")
+    @GetMapping("/list")
     public String getMembers(PageRequestDTO pageRequestDTO, Model model){
         //List<Member> members = memberService.readAll(); // domain 의 리스트, DTO 의 리스트
         //List<MemoEntity> memos = memoService.findAll();

@@ -14,7 +14,7 @@ import java.util.List;
 public class AdminInterceptor implements HandlerInterceptor {
 
     public List adminEssential
-            = Arrays.asList("/members");
+            = Arrays.asList("/members/list");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

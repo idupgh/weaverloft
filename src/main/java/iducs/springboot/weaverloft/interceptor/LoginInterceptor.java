@@ -16,11 +16,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     // 적용할 경로 > 로그인 안되어 있으면 접속 x
     public List loginEssential
-            = Arrays.asList("/boards/regform","/boards/{bno}/**","/members","/members/{seq}/**");
+            = Arrays.asList("/boards/regform","/boards/{bno}/**","/members/{seq}/**");
 
     // 적용 안할 경로 > 로그인 안해도 접속 가능
     public List loginInessential
-            = Arrays.asList("/boards","/boards/{bno}","/members/regform","/members/login");
+            = Arrays.asList("/boards","/boards/{bno}","/members/regform","/members/login","/members");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

@@ -2,6 +2,7 @@ package iducs.springboot.weaverloft.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -14,6 +15,7 @@ public class MemberDTO { // DTO(Data Transform Object) : Client <-> Controller <
     private Long seq; //seq 번호, 자동 증가하는 유일키
 
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
+    @Pattern(regexp = "^(?!admin).*$", message = "ID 에 admin은 포함할 수 없습니다.")
     private String id;
 
     @NotBlank(message = "비밀번호는는 필수 입력 입니다.")

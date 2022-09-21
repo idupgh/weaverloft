@@ -9,6 +9,7 @@ import iducs.springboot.weaverloft.service.BoardService;
 import iducs.springboot.weaverloft.service.FileService;
 import iducs.springboot.weaverloft.service.ReplyService;
 import iducs.springboot.weaverloft.util.MD5Generator;
+import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.core.io.Resource;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
@@ -29,6 +29,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -141,6 +142,7 @@ public class BoardController {
                                List<MultipartFile> files, Long bno, BoardDTO boardDTO, Model model){
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
 
+        Long id = boardDTO.getFileId();
 
         try {
 
@@ -217,11 +219,9 @@ public class BoardController {
                 .body(resource);
     }
 
+    // 파일 삭제
     @DeleteMapping("/{bno}/delete/{id}")
-    public String deleteFile(@PathVariable("id") Long id,@PathVariable("bno") Long bno){
-
+    public void deleteFile(@PathVariable("id") Long id, @PathVariable("bno") Long bno){
         fileService.deleteFile(id, bno);
-
-        return "redirect:/boards/"+bno+"/upform";
     }
 }
