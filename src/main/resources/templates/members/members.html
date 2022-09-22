@@ -68,7 +68,6 @@
                       <table class="table table-bordered">
                         <thead>
                         <tr>
-                          <th style="width: 5%">Seq</th>
                           <th style="width: 15%">Id</th>
                           <th style="width: 10%">Name</th>
                           <th style="width: 25%">Email</th>
@@ -78,9 +77,9 @@
                         </thead>
                         <tbody>
                         <tr th:each="memberDTO : ${list.dtoList}">
-                          <td><a th:href="@{'/members/' + ${memberDTO.seq}}">
-                            <span th:text="${memberDTO.seq}"></span></a></td>
-                          <td><span th:text="${memberDTO.id}"></span></td>
+                          <td>
+                            <a th:href="@{'/members/' + ${memberDTO.seq}}"><span th:text="${memberDTO.id}"></span></a>
+                          </td>
                           <td><span th:text="${memberDTO.name}"></span></td>
                           <td><span th:text="${memberDTO.email}"></span></td>
                           <td><span th:text="${memberDTO.phone}"></span></td>
