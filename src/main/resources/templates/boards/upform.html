@@ -39,39 +39,37 @@
 
     <!-- Main content -->
     <section class="content">
+      <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
           <div class="card card-primary">
             <div class="card-header">
-              <h3 class="card-title">Board</h3>
-
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                </button>
-              </div>
+              <h3 class="card-title">Board Update</h3>
             </div>
 
             <form action="#" th:action="@{'/boards/' + ${boardDTO.bno}}" th:object="${boardDTO}" th:method="PUT" enctype="multipart/form-data">
               <input type="hidden" th:field="*{views}"/>
 
               <div class="card-body">
-                <div class="form-group">
-                  <label for="inputBno"></label>
-                  <input type="hidden" name="bno" th:field="*{bno}"  id="inputBno" class="form-control" readonly>
-                </div>
+                <input type="hidden" name="bno" th:field="*{bno}"  id="inputBno" class="form-control" readonly>
 
-                <div data-toggle="buttons" class="btn-group" role="group" th:if="${session.isadmin != null}">
-                  <label class="btn mb-2 col-md-5 btn-light" style="">
-                    <input type="radio" name="mode"  value="block" th:field="*{block}"
-                           th:attr="checked=*{block.toString() == 'block' ? 'true' : 'false'}"  autocomplete="off">block
-                  </label>
-                  <label class="btn mb-2 col-md-5 btn-light" style="" >
-                    <input type="radio" name="mode" value="unblock" th:field="*{block}"
-                           th:attr="checked=*{block.toString() == 'unblock' ? 'true' : 'false'}" autocomplete="off">unblock
-                  </label>
-                </div>
+                  <div data-toggle="buttons" class="btn-group" role="group" th:if="${session.isadmin != null}">
+                    <div class="form-group"><p><strong>게시글 열람 제한</strong></p>
+                      <div style="float:left">
+                        <label class="btn mb-2 col-md-5 btn-light">
+                          <input type="radio" name="mode"  value="block" th:field="*{block}"
+                                 th:attr="checked=*{block.toString() == 'block' ? 'true' : 'false'}"  autocomplete="off"><br>제한
+                        </label>
+                      </div>
+                      <div style="float:left">
+                        <label class="btn mb-2 col-md-5 btn-light" style="float:left" >
+                          <input type="radio" name="mode" value="unblock" th:field="*{block}"
+                                 th:attr="checked=*{block.toString() == 'unblock' ? 'true' : 'false'}" autocomplete="off"><br>허용
+                        </label>
+                      </div>
+                    </div>
+                  </div>
 
-                <div class="card-body">
                   <div class="form-group">
                     <label for="inputW">WriterSeq</label>
                     <input type="text" name="writerSeq" th:field="*{writerSeq}"  id="inputW" class="form-control" readonly>
@@ -88,39 +86,32 @@
                     </div>
 
                     <!--파일 추가 자리-->
-                  <div class="form-group file-group" id="file-list">
-                    <div class="file-add">
-                      <a href="#this" onclick="addFile()">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 파일추가</a>
-                    </div>
-                    <div th:each="file : ${fileList}">
-                      <div class="file-input">
-                        <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
-                        [[${file.origFilename}]]
-                        <input type="hidden" name="${file.id}" value="true">
-                        <a href='#this' name='file-delete'>삭제</a>
+                    <div class="form-group file-group" id="file-list">
+                      <div class="file-add">
+                        <a href="#this" onclick="addFile()">
+                          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 파일추가</a>
+                      </div>
+                      <div th:each="file : ${fileList}">
+                        <div class="file-input">
+                          <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+                          [[${file.origFilename}]]
+                          <input type="hidden" name="${file.id}" value="true">
+                          <a href='#this' name='file-delete'>삭제</a>
+                        </div>
                       </div>
                     </div>
-
-
-                  <div class="col-12">
-                    <input type="submit" value="Update" class="btn btn-success float-right">
-                  </div>
-                </div>
-
                 <!-- /.card-body -->
               </div>
+              <div class="card-footer">
+                <input type="submit" value="Update" class="btn btn-success float-right">
+              </div>
             </form>
-
           </div>
           <!-- /.card -->
         </div>
       </div>
-      <div class="row">
-        <div class="col-12">
-
-        </div>
       </div>
+
     </section>
 <!-- /.content -->
 </div>
