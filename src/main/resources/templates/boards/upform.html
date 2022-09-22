@@ -54,19 +54,19 @@
                 <input type="hidden" name="bno" th:field="*{bno}"  id="inputBno" class="form-control" readonly>
 
                   <div data-toggle="buttons" class="btn-group" role="group" th:if="${session.isadmin != null}">
-                    <div class="form-group"><p><strong>게시글 열람 제한</strong></p>
-                      <div style="float:left">
-                        <label class="btn mb-2 col-md-5 btn-light">
+                    <div class="form-group"><p><strong>게시글 열람 제한&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;</strong></p>
+
+                        <label class="btn mb-2 col-md-5 btn-light" style="">
                           <input type="radio" name="mode"  value="block" th:field="*{block}"
                                  th:attr="checked=*{block.toString() == 'block' ? 'true' : 'false'}"  autocomplete="off"><br>제한
                         </label>
-                      </div>
-                      <div style="float:left">
-                        <label class="btn mb-2 col-md-5 btn-light" style="float:left" >
+
+
+                        <label class="btn mb-2 col-md-5 btn-light" style="" >
                           <input type="radio" name="mode" value="unblock" th:field="*{block}"
                                  th:attr="checked=*{block.toString() == 'unblock' ? 'true' : 'false'}" autocomplete="off"><br>허용
                         </label>
-                      </div>
+
                     </div>
                   </div>
 
