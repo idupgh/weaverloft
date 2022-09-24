@@ -49,6 +49,7 @@
 
             <form action="#" th:action="@{'/boards/' + ${boardDTO.bno}}" th:object="${boardDTO}" th:method="PUT" enctype="multipart/form-data">
               <input type="hidden" th:field="*{views}"/>
+              <input type="hidden" name="deleteFileId" id="deleteFileId"/>
 
               <div class="card-body">
                 <input type="hidden" name="bno" th:field="*{bno}"  id="inputBno" class="form-control" readonly>
@@ -96,7 +97,7 @@
                           <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
                           [[${file.origFilename}]]
                           <input type="hidden" name="${file.id}" value="true">
-                          <a href='#this' name='file-delete'>삭제</a>
+                          <a href='#this' name='file-delete' th:myName="${file.id}" th:onclick="deleteFileId(this.getAttribute('myName'))">삭제</a>
                         </div>
                       </div>
                     </div>
@@ -136,6 +137,17 @@
     }
     function deleteFile(obj) {
       obj.parent().remove();
+    }
+
+    function deleteFileId(id){
+      var FileIdValue = $("#deleteFileId").val();
+
+      if(FileIdValue == ''){
+        $("#deleteFileId").val(id);
+      }else{
+        $("#deleteFileId").val(FileIdValue + ',' + id);
+      }
+
     }
   </script>
 

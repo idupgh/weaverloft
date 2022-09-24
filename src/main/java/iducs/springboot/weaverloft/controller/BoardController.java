@@ -139,10 +139,25 @@ public class BoardController {
 
     @PutMapping("/{bno}") //업데이트 구현
     public String putBoard(@RequestParam(value = "file", required = false)
-                               List<MultipartFile> files, Long bno, BoardDTO boardDTO, Model model){
+                               List<MultipartFile> files, @RequestParam(value = "deleteFileId", required = false)
+            String deleteFileId, Long bno, BoardDTO boardDTO, Model model){
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
 
         Long id = boardDTO.getFileId();
+
+        try {
+            if(!deleteFileId.equals("")){
+                String[] strArr = deleteFileId.split(",");
+                for(int i=0; i < strArr.length; i++){
+                    Long delid = Long.parseLong(strArr[i]);
+                    fileService.deleteFile(delid, bno);
+                }
+            }
+
+        }catch (Exception e) {
+
+            e.printStackTrace();
+        }
 
         try {
 
