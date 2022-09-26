@@ -39,6 +39,17 @@ class BoardDTO201812064ApplicationTests {
     }
 
     @Test
+    void testMemberPlus() {
+        // Integer 데이터 흐름 ..? Lambda 식 - 함수형 언어의 특징을 활용
+        IntStream.rangeClosed(1, 100).forEach(i -> {
+            MemberEntity member = MemberEntity.builder()
+                            .delete_yn("n")
+                                    .build();
+            memberRepository.save(member);
+        });
+    }
+
+    @Test
     void testAdmin() {
         // Integer 데이터 흐름, Lambda 식 - 함수형 언어의 특징을 활용
         String str = "admin";

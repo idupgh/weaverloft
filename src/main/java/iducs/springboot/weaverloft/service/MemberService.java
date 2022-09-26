@@ -26,6 +26,8 @@ public interface MemberService {
 
     MemberDTO loginByEmail(MemberDTO memberDTO);
 
+    MemberDTO loginByDelete(MemberDTO member, String delete);
+
     void removeWithBoards(Long seq);
 
     @Transactional(readOnly = true)
@@ -48,4 +50,7 @@ public interface MemberService {
         }
         return validatorResult;
     }
+
+    @Transactional
+    void deleteMember(Long seq);
 }

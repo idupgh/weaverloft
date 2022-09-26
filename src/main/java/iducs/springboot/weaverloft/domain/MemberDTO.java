@@ -31,7 +31,11 @@ public class MemberDTO { // DTO(Data Transform Object) : Client <-> Controller <
 
     private String address;
 
+    @Builder.Default
     private String block = "unblock"; // 차단 여부
+
+    @Builder.Default
+    private String delete_yn = "n";
 
 }
 

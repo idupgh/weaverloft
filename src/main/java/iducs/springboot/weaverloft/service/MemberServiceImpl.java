@@ -50,6 +50,7 @@ public class MemberServiceImpl implements MemberService{
                 .phone(memberDTO.getPhone())
                 .address(memberDTO.getAddress())
                 .block(memberDTO.getBlock())
+                .delete_yn(memberDTO.getDelete_yn())
                 .build();
         return entity;
     }
@@ -75,6 +76,7 @@ public class MemberServiceImpl implements MemberService{
                 .phone(entity.getPhone())
                 .address(entity.getAddress())
                 .block(entity.getBlock())
+                .delete_yn(entity.getDelete_yn())
                 .build();
         return memberDTO;
     }
@@ -166,6 +168,16 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    public MemberDTO loginByDelete(MemberDTO member, String delete) {
+        MemberDTO memberDTO = null;
+        Object result = memberRepository.deleteById(member.getDelete_yn());
+        if(result != null){
+            memberDTO = entityToDto((MemberEntity) result);
+        }
+        return memberDTO;
+    }
+
+    @Override
     public void removeWithBoards(Long seq) {
         MemberEntity byId = memberRepository.getById(seq);
 
@@ -201,6 +213,16 @@ public class MemberServiceImpl implements MemberService{
         MemberEntity findMember = memberRepository.findById(memberEntity.getId());
         if (findMember != null) {
             throw new IllegalStateException("이미 가입한 아이디입니다.");
+        }
+    }
+
+    @Transactional
+    @Override
+    public void deleteMember(Long seq){
+        Optional<MemberEntity> optMember = memberRepository.findById(seq);
+        if(optMember.isPresent()){
+            MemberEntity member = optMember.get();
+            member.setDelete_yn("y");
         }
     }
 }

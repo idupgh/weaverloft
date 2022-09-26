@@ -122,7 +122,8 @@ public class MemberController {
     public String deleteMember(@ModelAttribute("memberDTO") MemberDTO memberDTO, Model model, HttpSession session,
                                Long seq){
         memberService.removeWithBoards(memberService.readById(seq).getSeq());
-        memberService.delete(memberDTO);
+        memberService.deleteMember(memberDTO.getSeq());
+        //memberService.delete(memberDTO); > DB 에서 삭제
         model.addAttribute(memberDTO);
         session.invalidate();
         return "redirect:/"; //'/members' 요청을 함,
@@ -134,9 +135,10 @@ public class MemberController {
         return "/members/login"; // view resolving
     }
     @PostMapping("/login")
-    public String postLogin(@ModelAttribute("memberDTO") MemberDTO memberDTO, HttpServletRequest request) {
+    public String postLogin(@ModelAttribute("memberDTO") MemberDTO memberDTO, HttpServletRequest request, HttpServletResponse response) throws IOException {
         MemberDTO dto = null;
-        if((dto = memberService.loginByEmail(memberDTO)) != null) {
+        MemberDTO deletedto = null;
+        if(((dto = memberService.loginByEmail(memberDTO)) != null)) {
             HttpSession session = request.getSession();
             session.setAttribute("login", dto);
             session.setAttribute("loginSeq", dto.getSeq());
@@ -145,9 +147,17 @@ public class MemberController {
                 session.setAttribute("isadmin", dto.getId());
             return "redirect:/";
         }
-        else
-            return "/members/loginfail";
+        else {
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            String element =
+                    "<script> alert('없는 아이디 입니다.'); location.href='/members/login';</script>";
+            out.println(element);
+            out.flush();//브라우저 출력 비우기
+            out.close();//아웃객체 닫기
 
+            return "/members/loginfail";
+        }
     }
     @GetMapping("/logout")
     public String getLogout(HttpSession session) {

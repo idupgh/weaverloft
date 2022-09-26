@@ -19,11 +19,12 @@ import java.util.List;
 @NoArgsConstructor // 디폴트 생성자(아무런 매개변수가 없는)
 
 public class MemberEntity extends BaseEntity {
-    @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
-    @Column(unique = true,length = 50, nullable = false)
+    @Id
+    @Column(length = 50, nullable = false)
     private String id;
 
     @Column(length = 50, nullable = false)
@@ -41,6 +42,9 @@ public class MemberEntity extends BaseEntity {
 
     @Builder.Default
     private String block = "unblock"; // 차단 여부
+
+    @Builder.Default
+    private String delete_yn = "n";
 
     @Builder.Default
     @OneToMany(mappedBy = "writer") //값을 수정하고 삭제 할수없음 조회만 가능
