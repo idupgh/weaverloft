@@ -136,6 +136,7 @@ public class BoardServiceImpl implements BoardService {
                 .content(entity.getContent())
                 .title(entity.getTitle())
                 .writerSeq(entity.getWriter().getSeq())
+                .writerId(entity.getWriter().getId())
                 .fileId(entity.getFileId())
                 .build();
         return boardDTO;

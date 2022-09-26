@@ -23,9 +23,9 @@ public class BoardDTOServiceTests {
             BoardDTO dto = BoardDTO.builder()
                     .title("Test" + i)
                     .content("Content" + i)
-                    .writerSeq(Long.valueOf("" + i))
+                    .writerId("admin")
                     .block("unblock")
-                    .fileId(1l)
+                    .fileId(null)
                     .build();
             Long bno = boardService.register(dto);
         });

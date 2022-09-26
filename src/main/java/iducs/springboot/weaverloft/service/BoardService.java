@@ -21,6 +21,7 @@ public interface BoardService {
     default BoardEntity dtoToEntity(BoardDTO boardDTO) {
         MemberEntity member = MemberEntity.builder()
                 .seq(boardDTO.getWriterSeq())
+                .id(boardDTO.getWriterId())
                 .build();
         BoardEntity board = BoardEntity.builder()
                 .bno(boardDTO.getBno())
