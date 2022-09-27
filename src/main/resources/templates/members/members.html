@@ -77,7 +77,8 @@
                           <th style="width: 30%">Delete</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="memberlist">
+                        <!--
                         <tr th:each="memberDTO : ${list.dtoList}">
                           <td>
                             <a th:href="@{'/members/' + ${memberDTO.id}}"><span th:text="${memberDTO.id}"></span></a>
@@ -88,7 +89,7 @@
                           <td><span th:text="${memberDTO.address}"></span></td>
                           <td><span th:text="${memberDTO.delete_yn}"></span></td>
                         </tr>
-
+                        -->
                         </tbody>
                       </table>
                     </div>
@@ -128,7 +129,28 @@
 
 </div>
 <!-- ./wrapper -->
-<script>
+<script th:inline="javascript">
+  var list = [[${list.dtoList}]];
+  var name = "";
+  var str = "";
+
+  for(i=0; i<list.length; i++){
+    name = list[i].name;
+    name = maskName(name);
+
+    str = "";
+    str += '<tr>';
+    str += '<td><a href="/members/'+list[i].id+'"><span>'+list[i].id+'</span></a></td>';
+    str += '<td><span></span>'+name+'</td>';
+    str += '<td><span></span>'+list[i].email+'</td>';
+    str += '<td><span></span>'+list[i].phone+'</td>';
+    str += '<td><span></span>'+list[i].address+'</td>';
+    str += '<td><span></span>'+list[i].delete_yn+'</td>';
+    str += '</tr>';
+
+    $("#memberlist").append(str);
+  }
+
   function maskName(strName) {
     if (strName.length > 2) {
       var originName = strName.split('');
