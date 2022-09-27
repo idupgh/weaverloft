@@ -40,11 +40,11 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Boards</h3>
+          <h3 class="card-title">Members</h3>
 
 
           <div class="card-tools">
-                        <form th:action="@{'/members'}" th:method="get">
+                        <form th:action="@{'/members/list'}" th:method="get">
                           <div class="input-group input-group-sm" style="width: 350px;">
                             <select class="form-control" name="type">
                               <option value=""> 검색</option>
@@ -79,7 +79,7 @@
                         <tbody>
                         <tr th:each="memberDTO : ${list.dtoList}">
                           <td>
-                            <a th:href="@{'/members/' + ${memberDTO.seq}}"><span th:text="${memberDTO.id}"></span></a>
+                            <a th:href="@{'/members/' + ${memberDTO.id}}"><span th:text="${memberDTO.id}"></span></a>
                           </td>
                           <td><span th:text="${memberDTO.name}"></span></td>
                           <td><span th:text="${memberDTO.email}"></span></td>
@@ -98,18 +98,18 @@
 
                       <ul class="pagination pagination-sm"  style="margin-left: 50%;">
                         <li class="page-item" th:if="${list.prevPage}">
-                          <a class="page-link" th:href="@{/members(page=${list.startPage - 1},
-                    type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">&laquo;</a>
+                          <a class="page-link" th:href="@{/members/list(page=${list.startPage - 1},
+                          type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">&laquo;</a>
                         </li>
 
                         <li th:class="'page-item' + ${list.currentPage == page? ' active':''}"
                             th:each="page : ${list.pageList}">
-                          <a class="page-link" th:href="@{/members(page=${page},sort=${pageRequestDTO.sort},
-                    type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">[[${page}]]</a>
+                          <a class="page-link" th:href="@{/members/list(page=${page},sort=${pageRequestDTO.sort},
+                          type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">[[${page}]]</a>
                         </li>
                         <li class="page-item" th:if="${list.nextPage}">
-                          <a class="page-link" th:href="@{/members(page=${list.endPage + 1},
-                    type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">&raquo;</a>
+                          <a class="page-link" th:href="@{/members/list(page=${list.endPage + 1},
+                          type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">&raquo;</a>
                         </li>
                       </ul>
                       <a th:href="@{'/members/regform'}" class="btn btn-sm bg-teal">등록</a>

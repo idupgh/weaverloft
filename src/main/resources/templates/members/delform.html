@@ -51,13 +51,8 @@
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form action="#" th:action="@{'/members/' + ${memberDTO.seq}}" th:object="${memberDTO}" th:method="delete">
+                            <form action="#" th:action="@{'/members/' + ${memberDTO.id}}" th:object="${memberDTO}" th:method="delete">
                                 <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="exampleInputSeq1">Seq</label>
-                                        <input type="text" name="seq" th:field="*{seq}" th:value="*{seq}"
-                                               class="form-control" id="exampleInputSeq1" placeholder="Enter Id" readonly>
-                                    </div>
                                     <div class="form-group">
                                         <label for="exampleInputId1">Id</label>
                                         <input type="text" name="id" th:field="*{id}" class="form-control" id="exampleInputId1"

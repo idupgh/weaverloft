@@ -103,9 +103,9 @@ public class BoardServiceImpl implements BoardService {
 
 
     @Override
-    public BoardDTO readById(Long seq) {
+    public BoardDTO readById(String id) {
         BoardDTO boardDTO = null;
-        Optional<BoardEntity> result = boardRepository.findById(seq);
+        Optional<BoardEntity> result = boardRepository.findById(Long.valueOf(id));
         if (result.isPresent()) {
             boardDTO = entityToDto(result.get());
         }
@@ -135,7 +135,6 @@ public class BoardServiceImpl implements BoardService {
                 .regDate(entity.getRegDate())
                 .content(entity.getContent())
                 .title(entity.getTitle())
-                .writerSeq(entity.getWriter().getSeq())
                 .writerId(entity.getWriter().getId())
                 .fileId(entity.getFileId())
                 .build();

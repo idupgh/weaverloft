@@ -51,11 +51,11 @@ public class MemberController {
     }
 
     @GetMapping("/{idx}/upform")
-    public String getUpform(@PathVariable("idx") Long seq, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+    public String getUpform(@PathVariable("idx") String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         // 정보를 전달받을 객체를 보냄
-        MemberDTO memberDTO = memberService.readById(seq);
+        MemberDTO memberDTO = memberService.readById(id);
         model.addAttribute("memberDTO", memberDTO);
-        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getSeq())) {
+        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getId())) {
             response.setContentType("text/html; charset=utf-8");
             PrintWriter out = response.getWriter();
             String element =
@@ -68,11 +68,11 @@ public class MemberController {
     }
 
     @GetMapping("/{idx}")
-    public String getMember(@PathVariable("idx") Long seq, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+    public String getMember(@PathVariable("idx") String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         // 정보를 전달받을 객체를 보냄
-        MemberDTO memberDTO = memberService.readById(seq);
+        MemberDTO memberDTO = memberService.readById(id);
         model.addAttribute("memberDTO", memberDTO);
-        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getSeq())) {
+        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getId())) {
             response.setContentType("text/html; charset=utf-8");
             PrintWriter out = response.getWriter();
             String element =
@@ -102,11 +102,11 @@ public class MemberController {
     }
 
     @GetMapping("/{idx}/delform")
-    public String getDelform(@PathVariable("idx") Long seq, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+    public String getDelform(@PathVariable("idx") String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         // 정보를 전달받을 객체를 보냄
-        MemberDTO memberDTO = memberService.readById(seq);
+        MemberDTO memberDTO = memberService.readById(id);
         model.addAttribute("memberDTO", memberDTO);
-        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getSeq())) {
+        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getId())) {
             response.setContentType("text/html; charset=utf-8");
             PrintWriter out = response.getWriter();
             String element =
@@ -120,9 +120,9 @@ public class MemberController {
 
     @DeleteMapping("/{idx}") //삭제 구현
     public String deleteMember(@ModelAttribute("memberDTO") MemberDTO memberDTO, Model model, HttpSession session,
-                               Long seq){
-        memberService.removeWithBoards(memberService.readById(seq).getSeq());
-        memberService.deleteMember(memberDTO.getSeq());
+                               String id){
+        memberService.removeWithBoards(memberService.readById(id).getId());
+        memberService.deleteMember(memberDTO.getId());
         //memberService.delete(memberDTO); > DB 에서 삭제
         model.addAttribute(memberDTO);
         session.invalidate();
@@ -141,9 +141,9 @@ public class MemberController {
         if(((dto = memberService.loginByEmail(memberDTO)) != null)) {
             HttpSession session = request.getSession();
             session.setAttribute("login", dto);
-            session.setAttribute("loginSeq", dto.getSeq());
+            session.setAttribute("loginSeq", dto.getId());
             session.setAttribute("block",dto.getBlock());
-            if(dto.getId().contains("admin"))
+            if(dto.getId().contains("admin")) // ID > ROLE 변경 예정
                 session.setAttribute("isadmin", dto.getId());
             return "redirect:/";
         }

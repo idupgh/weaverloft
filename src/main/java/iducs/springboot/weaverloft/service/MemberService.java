@@ -16,7 +16,7 @@ import java.util.Map;
 public interface MemberService {
 
     void create(MemberDTO memberDTO);
-    MemberDTO readById(Long seq);
+    MemberDTO readById(String id);
     List<MemberDTO> readAll();
     void update(MemberDTO memberDTO);
     void delete(MemberDTO memberDTO);
@@ -28,7 +28,7 @@ public interface MemberService {
 
     MemberDTO loginByDelete(MemberDTO member, String delete);
 
-    void removeWithBoards(Long seq);
+    void removeWithBoards(String id);
 
     @Transactional(readOnly = true)
     boolean checkUsernameDuplication(String name);
@@ -52,5 +52,5 @@ public interface MemberService {
     }
 
     @Transactional
-    void deleteMember(Long seq);
+    void deleteMember(String id);
 }

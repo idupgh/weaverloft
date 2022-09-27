@@ -20,10 +20,6 @@ import java.util.List;
 
 public class MemberEntity extends BaseEntity {
 
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq;
-
     @Id
     @Column(length = 50, nullable = false, unique = true)
     private String id;

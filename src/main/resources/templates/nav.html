@@ -108,19 +108,19 @@
                             </li>
 
                             <li class="nav-item">
-                                <a th:href="'/members/' + ${session.login.seq}" class="nav-link">
+                                <a th:href="'/members/' + ${session.login.id}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Member Info</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a th:href="@{'/members/' + ${session.login.seq} + '/upform'}" class="nav-link">
+                                <a th:href="@{'/members/' + ${session.login.id} + '/upform'}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Member Modify(수정)</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a th:href="@{'/members/' + ${session.login.seq} + '/delform'}" class="nav-link">
+                                <a th:href="@{'/members/' + ${session.login.id} + '/delform'}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Member Delete(탈퇴)</p>
                                 </a>

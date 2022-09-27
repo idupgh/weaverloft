@@ -12,7 +12,6 @@ import javax.validation.constraints.Pattern;
 @Data //@Getter, @Setter, @EqualsAndHash, @RequiredArgsConstructor
 @Builder
 public class MemberDTO { // DTO(Data Transform Object) : Client <-> Controller <-> Service
-    private Long seq; //seq 번호, 자동 증가하는 유일키
 
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
     @Pattern(regexp = "^(?!admin).*$", message = "ID 에 admin은 포함할 수 없습니다.")

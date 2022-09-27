@@ -76,9 +76,9 @@
           </div>
         </div>
         <div class="text-center mt-5 mb-3">
-          <a  th:if="${(session.login != null && session.login.seq == boardDTO.writerSeq) || session.isadmin != null }"
+          <a  th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }"
               th:href="@{'/boards/' + ${boardDTO.bno} + '/upform'}" class="btn btn-sm btn-primary">Modify(수정)</a>
-          <a  th:if="${(session.login != null && session.login.seq == boardDTO.writerSeq) || session.isadmin != null }"
+          <a  th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }"
               th:href="@{'/boards/' + ${boardDTO.bno} + '/delform'}" class="btn btn-sm btn-warning">Delete(삭제)</a>
         </div>
       </div>

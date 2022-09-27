@@ -42,7 +42,6 @@ public class MemberServiceImpl implements MemberService{
 
     private MemberEntity dtoToEntity(MemberDTO memberDTO) {
         MemberEntity entity = MemberEntity.builder()
-                .seq(memberDTO.getSeq())
                 .id(memberDTO.getId())
                 .pw(memberDTO.getPw())
                 .name(memberDTO.getName())
@@ -57,9 +56,9 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public MemberDTO readById(Long seq) {
+    public MemberDTO readById(String id) {
         MemberDTO memberDTO = null;
-        Optional<MemberEntity> result = memberRepository.findById(seq);
+        Optional<MemberEntity> result = Optional.ofNullable(memberRepository.findById(id));
         if(result.isPresent()) {
             memberDTO = entityToDto(result.get());
         }
@@ -69,7 +68,6 @@ public class MemberServiceImpl implements MemberService{
     // Service -> Controller : entity -> dto 로 변환후 반환
     private MemberDTO entityToDto(MemberEntity entity) {
         MemberDTO memberDTO = MemberDTO.builder()
-                .seq(entity.getSeq())
                 .id(entity.getId())
                 .pw(entity.getPw())
                 .name(entity.getName())
@@ -103,16 +101,16 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void delete(MemberDTO memberDTO) {
         MemberEntity entity = dtoToEntity(memberDTO);
-        memberRepository.deleteById(entity.getSeq());
+        memberRepository.deleteById(entity.getId());
     }
 
     @Override
     public PageResultDTO<MemberDTO, MemberEntity> readListBy(PageRequestDTO pageRequestDTO) {
-        Sort sort = Sort.by("seq").descending();
+        Sort sort = Sort.by("regDate").descending();
         if(pageRequestDTO.getSort() == null)
-            sort = Sort.by("seq").descending();
+            sort = Sort.by("regDate").descending();
         else if(pageRequestDTO.getSort().equals("asc"))
-            sort = Sort.by("seq").ascending();
+            sort = Sort.by("regDate").ascending();
         Pageable pageable = pageRequestDTO.getPageable(sort);
         BooleanBuilder booleanBuilder = findByCondition(pageRequestDTO);
 
@@ -129,7 +127,7 @@ public class MemberServiceImpl implements MemberService{
 
         QMemberEntity qMemberEntity = QMemberEntity.memberEntity;
 
-        BooleanExpression expression = qMemberEntity.seq.gt(0L); // where seq > 0 and title == "title"
+        BooleanExpression expression = qMemberEntity.id.isNotNull(); // where seq > 0 and title == "title"
         booleanBuilder.and(expression);
 
         if(type == null || type.trim().length() == 0) {
@@ -180,8 +178,8 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public void removeWithBoards(Long seq) {
-        MemberEntity byId = memberRepository.getById(seq);
+    public void removeWithBoards(String id) {
+        MemberEntity byId = memberRepository.getById(id);
 
         List<BoardEntity> boardEntities = byId.getBoardEntities();
 
@@ -220,8 +218,8 @@ public class MemberServiceImpl implements MemberService{
 
     @Transactional
     @Override
-    public void deleteMember(Long seq){
-        Optional<MemberEntity> optMember = memberRepository.findById(seq);
+    public void deleteMember(String id){
+        Optional<MemberEntity> optMember = Optional.ofNullable(memberRepository.findById(id));
         if(optMember.isPresent()){
             MemberEntity member = optMember.get();
             member.setDelete_yn("y");

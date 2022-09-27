@@ -20,7 +20,6 @@ public interface BoardService {
 
     default BoardEntity dtoToEntity(BoardDTO boardDTO) {
         MemberEntity member = MemberEntity.builder()
-                .seq(boardDTO.getWriterSeq())
                 .id(boardDTO.getWriterId())
                 .build();
         BoardEntity board = BoardEntity.builder()
@@ -40,7 +39,6 @@ public interface BoardService {
                 .bno(entity.getBno())
                 .title(entity.getTitle())
                 .content(entity.getContent())
-                .writerSeq(member.getSeq())
                 .writerId(member.getId())
                 .writerName(member.getName())
                 .writerEmail(member.getEmail())
@@ -56,7 +54,7 @@ public interface BoardService {
 
     void deleteById(BoardDTO boardDTO);
 
-    BoardDTO readById(Long seq);
+    BoardDTO readById(String id);
 
     void deleteByBno(Long bno);
 

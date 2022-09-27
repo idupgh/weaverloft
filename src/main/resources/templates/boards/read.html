@@ -99,15 +99,15 @@
 <!--          </div>-->
         </div>
         <div class="text-center mt-5 mb-3">
-          <a  th:if="${(session.login != null && session.login.seq == boardDTO.writerSeq) || session.isadmin != null }"
+          <a  th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }"
               th:href="@{'/boards/' + ${boardDTO.bno} + '/upform'}" class="btn btn-sm btn-primary button_event" >게시글 수정</a>
-          <span th:if="${(session.login != null && session.login.seq == boardDTO.writerSeq) || session.isadmin != null }" class="btn btn-sm btn-success addReply"> 댓글 쓰기 </span>
+          <span th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }" class="btn btn-sm btn-success addReply"> 댓글 쓰기 </span>
           <br>
 
 
-          <a  th:if="${(session.login != null && session.login.seq == boardDTO.writerSeq) || session.isadmin != null }"
+          <a  th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }"
               th:href="@{'/boards/' + ${boardDTO.bno} + '/delform'}" class="btn btn-sm btn-warning">게시글 삭제</a>
-          <span th:if="${(session.login != null && session.login.seq == boardDTO.writerSeq) || session.isadmin != null }" class="btn btn-sm btn-dark replyCount"> 댓글 보기</span>
+          <span th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }" class="btn btn-sm btn-dark replyCount"> 댓글 보기</span>
         </div>
       </div>
       <div th:if="${boardDTO.block == 'block'}">
