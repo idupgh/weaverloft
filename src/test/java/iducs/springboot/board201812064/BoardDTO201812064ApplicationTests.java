@@ -33,6 +33,8 @@ class BoardDTO201812064ApplicationTests {
                     .phone("phone" + i)
                     .address("address" + i)
                     .block("unblock")
+                    .delete_yn("n")
+                    .role("user")
                     .build();
             memberRepository.save(member);
         });
@@ -61,6 +63,8 @@ class BoardDTO201812064ApplicationTests {
                 .phone("phone" + new Random().nextInt(50))
                 .address("address" + new Random().nextInt(50))
                 .block("unblock")
+                .delete_yn("n")
+                .role("admin")
                 .build();
         memberRepository.save(entity);
     }

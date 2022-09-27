@@ -25,7 +25,7 @@ public class MemberEntity extends BaseEntity {
     private Long seq;
 
     @Id
-    @Column(length = 50, nullable = false)
+    @Column(length = 50, nullable = false, unique = true)
     private String id;
 
     @Column(length = 50, nullable = false)
@@ -46,6 +46,9 @@ public class MemberEntity extends BaseEntity {
 
     @Builder.Default
     private String delete_yn = "n";
+
+    @Builder.Default
+    private String role = "user";
 
     @Builder.Default
     @OneToMany(mappedBy = "writer") //값을 수정하고 삭제 할수없음 조회만 가능

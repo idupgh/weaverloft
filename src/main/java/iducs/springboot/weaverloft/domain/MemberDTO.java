@@ -42,5 +42,8 @@ public class MemberDTO { // DTO(Data Transform Object) : Client <-> Controller <
     @Builder.Default
     private String delete_yn = "n";
 
+    @Builder.Default
+    private String role = "user";
+
 }
 

@@ -51,6 +51,7 @@ public class MemberServiceImpl implements MemberService{
                 .address(memberDTO.getAddress())
                 .block(memberDTO.getBlock())
                 .delete_yn(memberDTO.getDelete_yn())
+                .role(memberDTO.getRole())
                 .build();
         return entity;
     }
@@ -77,6 +78,7 @@ public class MemberServiceImpl implements MemberService{
                 .address(entity.getAddress())
                 .block(entity.getBlock())
                 .delete_yn(entity.getDelete_yn())
+                .role(entity.getRole())
                 .build();
         return memberDTO;
     }
