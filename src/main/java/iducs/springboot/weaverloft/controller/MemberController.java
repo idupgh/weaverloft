@@ -143,7 +143,7 @@ public class MemberController {
             session.setAttribute("login", dto);
             session.setAttribute("loginSeq", dto.getId());
             session.setAttribute("block",dto.getBlock());
-            if(dto.getId().contains("admin")) // ID > ROLE 변경 예정
+            if(dto.getRole().contains("admin")) // ID > ROLE 변경 예정
                 session.setAttribute("isadmin", dto.getId());
             return "redirect:/";
         }

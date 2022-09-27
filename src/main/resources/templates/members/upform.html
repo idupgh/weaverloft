@@ -86,6 +86,16 @@
                                         </label>
                                         </div>
                                     </div>
+                                    <div class="form-group" th:if="${session.isadmin != null}">
+                                        <div class="form-group"><p><strong>사용자 권한</strong></p>
+                                            <select class="form-control" name="role" id="role" th:value="${memberDTO.role}">
+                                                <option>권한</option>
+                                                <option th:value="user" th:selected="${memberDTO.role =='user'}">User</option>
+                                                <option th:value="admin" th:selected="${memberDTO.role =='admin'}">Admin</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" th:field="*{delete_yn}"/>
 
                                 </div>
                                 <!-- /.card-body -->
