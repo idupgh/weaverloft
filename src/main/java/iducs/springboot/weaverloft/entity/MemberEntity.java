@@ -24,7 +24,7 @@ public class MemberEntity extends BaseEntity {
     @Column(length = 50, nullable = false, unique = true)
     private String id;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 255, nullable = false)
     private String pw;
 
     @Column(length = 50, nullable = false)
@@ -33,19 +33,19 @@ public class MemberEntity extends BaseEntity {
     @Column(length = 50, nullable = false)
     private String email;
     @Column(length = 50, nullable = false)
-    private Integer phone;
+    private String phone;
     @Column(length = 100, nullable = false)
     private String address;
 
-    @Column(length = 7, nullable = false)
+    @Column(length = 7)
     @Builder.Default
     private String block = "unblock"; // 차단 여부
 
-    @Column(length = 2, nullable = false)
+    @Column(length = 2)
     @Builder.Default
     private String delete_yn = "n";
 
-    @Column(length = 10, nullable = false)
+    @Column(length = 10)
     @Builder.Default
     private String role = "user";
 

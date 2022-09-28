@@ -14,6 +14,7 @@ import iducs.springboot.weaverloft.repository.MemberRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,14 +29,19 @@ public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
 
-    public MemberServiceImpl(BoardRepository boardRepository, MemberRepository memberRepository){
+    private final PasswordEncoder passwordEncoder;
+
+    public MemberServiceImpl(BoardRepository boardRepository, MemberRepository memberRepository, PasswordEncoder passwordEncoder){
         this.boardRepository = boardRepository;
         this.memberRepository = memberRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void create(MemberDTO memberDTO) {
         MemberEntity entity = dtoToEntity(memberDTO);
+        String encodedPassword = passwordEncoder.encode(entity.getPw());
+        entity.setPw(encodedPassword);
         validateDuplicateMember(entity);
         memberRepository.save(entity);
     }
