@@ -14,11 +14,15 @@ import javax.persistence.*;
 public class ReplyEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long rno;
 
+    @Column(nullable = false)
     private String text;
-    private String replier;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private BoardEntity board; // 연관관계 지정
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private MemberEntity member; // 연관관계 지정
 }

@@ -18,9 +18,9 @@ public class ReplyDTO {
 
     private String text;
 
-    private String replier;
-
     private Long bno; //게시글 번호
+
+    private String id;
 
     private LocalDateTime regDate, modDate;
 }

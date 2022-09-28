@@ -30,7 +30,7 @@ class BoardDTO201812064ApplicationTests {
                     .pw("pw" + i)
                     .name("name" + i)
                     .email("email" + i + "@naver.com")
-                    .phone("phone" + i)
+                    .phone(i)
                     .address("address" + i)
                     .block("unblock")
                     .delete_yn("n")
@@ -60,7 +60,7 @@ class BoardDTO201812064ApplicationTests {
                 .pw(str)
                 .name("name" + str )
                 .email(str + "@induk.ac.kr")
-                .phone("phone" + new Random().nextInt(50))
+                .phone(new Random().nextInt(50))
                 .address("address" + new Random().nextInt(50))
                 .block("unblock")
                 .delete_yn("n")
@@ -75,13 +75,15 @@ class BoardDTO201812064ApplicationTests {
         IntStream.rangeClosed(1, 300).forEach(i -> {
             // 1부터 100까지 임의의 번호
             long bno = (long) (Math.random() * 100) + 1;
+            String id = "admin";
 
             BoardEntity board = BoardEntity.builder().bno(bno).build();
+            MemberEntity member = MemberEntity.builder().id(id).build();
 
             ReplyEntity reply = ReplyEntity.builder()
                     .text("Reply...." + i)
                     .board(board)
-                    .replier("guest")
+                    .member(member)
                     .build();
 
             replyRepository.save(reply);

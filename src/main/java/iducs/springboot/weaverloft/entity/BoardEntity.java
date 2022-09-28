@@ -17,11 +17,15 @@ import java.util.List;
 public class BoardEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long bno;
 
+    @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
     private String block = "unblock";
 
     @ManyToOne
@@ -30,7 +34,7 @@ public class BoardEntity extends BaseEntity {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int views;
 
-    @Column
+    @Column(nullable = false)
     private Long fileId;
 
 

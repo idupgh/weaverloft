@@ -21,7 +21,7 @@ class MemberDTOTests {
                     .pw("pw-" + i)
                     .name("name-" + i)
                     .email("email-" + i + "@induk.ac.kr")
-                    .phone("phone-" + i)
+                    .phone(i)
                     .build();
             //memberRepository.save(member);
         });

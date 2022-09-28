@@ -139,8 +139,8 @@ public class MemberServiceImpl implements MemberService{
         BooleanBuilder conditionBuilder = new BooleanBuilder();
         if(type.contains("e")) // email 로 검색
             conditionBuilder.or(qMemberEntity.email.contains(keyword));
-        if(type.contains("p")) // phone 로 검색
-            conditionBuilder.or(qMemberEntity.phone.contains(keyword));
+        if(type.contains("n")) // phone 로 검색
+            conditionBuilder.or(qMemberEntity.name.contains(keyword));
         if(type.contains("a")) // address 로 검색
             conditionBuilder.or(qMemberEntity.address.contains(keyword));
         booleanBuilder.and(conditionBuilder);

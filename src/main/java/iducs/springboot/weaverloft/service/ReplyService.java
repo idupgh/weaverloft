@@ -2,6 +2,7 @@ package iducs.springboot.weaverloft.service;
 
 import iducs.springboot.weaverloft.domain.ReplyDTO;
 import iducs.springboot.weaverloft.entity.BoardEntity;
+import iducs.springboot.weaverloft.entity.MemberEntity;
 import iducs.springboot.weaverloft.entity.ReplyEntity;
 
 import java.util.List;
@@ -19,12 +20,13 @@ public interface ReplyService {
     default ReplyEntity dtoToEntity(ReplyDTO replyDTO){
 
         BoardEntity board = BoardEntity.builder().bno(replyDTO.getBno()).build();
+        MemberEntity member = MemberEntity.builder().id(replyDTO.getId()).build();
 
         ReplyEntity reply = ReplyEntity.builder()
                 .rno(replyDTO.getRno())
                 .text(replyDTO.getText())
-                .replier(replyDTO.getReplier())
                 .board(board)
+                .member(member)
                 .build();
 
         return reply;
@@ -36,7 +38,6 @@ public interface ReplyService {
         ReplyDTO replyDTO = ReplyDTO.builder()
                 .rno(reply.getRno())
                 .text(reply.getText())
-                .replier(reply.getReplier())
                 .regDate(reply.getRegDate())
                 .modDate(reply.getModDate())
                 .build();

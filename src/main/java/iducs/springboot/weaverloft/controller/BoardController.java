@@ -98,8 +98,9 @@ public class BoardController {
     }
 
     @GetMapping("")
-    public String getList(PageRequestDTO pageRequestDTO, Model model){
+    public String getList(PageRequestDTO pageRequestDTO, Model model, Long bno){
 
+        model.addAttribute("count", boardService.countBoard(bno));
         model.addAttribute("list", boardService.getList(pageRequestDTO));
         return "/boards/list"; // boards/list.html 전달
     }

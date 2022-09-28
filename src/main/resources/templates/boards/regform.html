@@ -69,10 +69,6 @@
                   </div>
                 </div>
                 <input type="hidden" th:value="${session.login.id}" th:name="writerId">
-                <div class="form-group">
-                  <label for="inputProjectLeader">Writer</label>
-                  <input type="text" th:value="${session.login.email}" th:name="writerEmail" readonly id="inputProjectLeader" class="form-control">
-                </div>
               </div>
               <a href="/" class="btn btn-secondary">Cancel</a>
               <input type="submit" value="Register" class="btn btn-success float-right">

@@ -48,9 +48,6 @@
         <div class="card-header">
           <h3 class="card-title">제목 : [[${boardDTO.title}]]</h3>
 
-          <div class="card-tools">
-            게시글 번호 : [[${boardDTO.bno}]]
-          </div>
         </div>
         <div class="card-body" >
           <div class="row" >
@@ -154,7 +151,7 @@
                   <input class="form-control"  type="text" name="replyText" placeholder="Reply Text...">
                 </div>
                 <div class="form-group" th:if="${session.login != null}">
-                  <input class="form-control"  type="text" th:value="${session.login.id}" th:name="replier" readonly>
+                  <input class="form-control"  type="text" th:value="${session.login.id}" th:name="id" readonly>
                   <input type="hidden" name="rno" >
                 </div>
 
@@ -185,7 +182,7 @@
           $(document).ready(function() {
 
             var bno = [[${boardDTO.bno}]];
-            var replier = [[${session.login.id}]]; // replier 에 session 에 있는 id 값 대입
+            var id = [[${session.login.id}]]; // id 에 session 에 있는 id 값 대입
             var admin = [[${session.isadmin}]]; // admin 로그인 확인하기 위한 변수
 
             var listGroup  = $(".replyList");
@@ -229,13 +226,13 @@
                 $.each(arr, function(idx, reply){
                   console.log(reply);
                   //str += '<a class="card-title" ';
-                  if((replier == reply.replier) || admin != null){
-                    str += '<a class="card-title'+reply.rno +'" href="javascript:modalOpen(\''+reply.rno+'\',\''+replier+'\');" style="font-size: 20px;">'+reply.text+'</a>';
+                  if((id == reply.id) || admin != null){
+                    str += '<a class="card-title'+reply.rno +'" href="javascript:modalOpen(\''+reply.rno+'\',\''+id+'\');" style="font-size: 20px;">'+reply.text+'</a>';
                   }else{
                     str += '<h5 class="card-title'+reply.rno +'">'+reply.text+'</h5>';
                   }
-                  //str += '    <a class="card-title" href="javascript:modalOpen(\''+reply.rno+'\',\''+replier+'\');">'+reply.text+'</a><br>';
-                  str += '    <h6 class="card-subtitle mb-2 text-muted" style="margin-top: 0rem;">'+reply.replier+'</h6>';
+                  //str += '    <a class="card-title" href="javascript:modalOpen(\''+reply.rno+'\',\''+id+'\');">'+reply.text+'</a><br>';
+                  str += '    <h6 class="card-subtitle mb-2 text-muted" style="margin-top: 0rem;">'+id+'</h6>';
                   str += '    <p class="card-text">'+ formatTime(reply.regDate) +'</p>';
                   str += '    </div>';
                 })
@@ -272,7 +269,7 @@
               var reply = {
                 bno: bno,
                 text: $('input[name="replyText"]').val(),
-                replier: replier
+                id: id
               }
               console.log(reply);
               $.ajax({
@@ -299,7 +296,7 @@
               var rno = $(this).data("rno");
 
               $("input[name='replyText']").val( $(this).find('.card-title').html());
-              $("input[name='replier']").val(replier);
+              $("input[name='id']").val(id);
               $("input[name='rno']").val(rno);
 
               $(".modal-footer .btn").hide();
@@ -337,7 +334,7 @@
                 rno: rno,
                 bno: bno,
                 text: $('input[name="replyText"]').val(),
-                replier: replier
+                id: id
               }
 
               console.log(reply);
@@ -364,11 +361,11 @@
         </script>
 
       <script>
-        function modalOpen(rno, replier){
+        function modalOpen(rno, id){
           var modal = $('.modal');
 
           $("input[name='replyText']").val( $(".card-title"+rno).text());
-          $("input[name='replier']").val(replier);
+          $("input[name='id']").val(id);
           $("input[name='rno']").val(rno);
 
           $(".modal-footer .btn").hide();

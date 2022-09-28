@@ -38,4 +38,7 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long>, Searc
     @Modifying
     @Query("update BoardEntity b set b.views = b.views + 1 where b.bno = :bno")
     int updateView(@Param("bno") Long bno);
+
+    @Query("select count(bno) from BoardEntity ")
+    int countBoard(@Param("bno") Long bno);
 }

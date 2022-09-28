@@ -73,6 +73,9 @@
           <table class="table table-striped projects">
               <thead>
               <tr>
+                  <th style="width: 5%">
+                      No
+                  </th>
                   <th style="width: 60%">
                       Title
                   </th>
@@ -92,7 +95,9 @@
               </tr>
               </thead>
               <tbody>
-              <tr th:each="boardDTO : ${list.dtoList}">
+              <tr th:each="boardDTO,i : ${list.dtoList}">
+                  <td th:text="${list.getTotalSize()} - (${list.currentPage}*5) - ${i.index} + 5"></td>
+<!--                  <td th:text="((${list.currentPage}-1)*5)+${i.index}+1"></td>-->
                   <td>
                       <a th:href="@{'/boards/' + ${boardDTO.bno}}">
                           [[${boardDTO.title}]]

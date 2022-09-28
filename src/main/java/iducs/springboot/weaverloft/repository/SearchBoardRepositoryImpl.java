@@ -64,7 +64,7 @@ public class SearchBoardRepositoryImpl
                         conditionBuilder.or(boardEntity.title.contains(keyword));
                         break;
                     case "w":
-                        conditionBuilder.or(memberEntity.email.contains(keyword));
+                        conditionBuilder.or(memberEntity.name.contains(keyword));
                         break;
                     case "c":
                         conditionBuilder.or(boardEntity.content.contains(keyword));

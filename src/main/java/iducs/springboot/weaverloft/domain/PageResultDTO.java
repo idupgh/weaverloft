@@ -18,6 +18,8 @@ public class PageResultDTO<DTO, EN> { //Generics
     private int currentPage; // 현재 페이지
     private int sizeOfPage; //페이지 당 크기
 
+    private long totalSize;
+
     private int startPage, endPage; //페이지 목록의 시작 번호, 마지막 페이지 번호
     private boolean prevPage, nextPage; // 이전 페이지 또는 다음 페이지 존재 유무
     //페이지 번호 목록
@@ -25,6 +27,7 @@ public class PageResultDTO<DTO, EN> { //Generics
     public PageResultDTO(Page<EN> result, Function<EN, DTO> fn) {
         dtoList = result.stream().map(fn).collect(Collectors.toList());
         totalPage = result.getTotalPages();
+        totalSize = result.getTotalElements();
         makePageList(result.getPageable());
     }
     public void makePageList(Pageable pageable) {

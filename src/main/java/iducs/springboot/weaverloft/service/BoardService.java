@@ -4,10 +4,8 @@ package iducs.springboot.weaverloft.service;
 import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.domain.PageResultDTO;
-import iducs.springboot.weaverloft.domain.ReplyDTO;
 import iducs.springboot.weaverloft.entity.BoardEntity;
 import iducs.springboot.weaverloft.entity.MemberEntity;
-import org.springframework.transaction.annotation.Transactional;
 
 public interface BoardService {
     Long register(BoardDTO boardDTO);  // Board : boardDTO or Domain
@@ -61,4 +59,6 @@ public interface BoardService {
     Long update(Long bno, BoardDTO boardDTO);
 
     int updateView(Long bno);
+
+    Object countBoard(Long bno);
 }
