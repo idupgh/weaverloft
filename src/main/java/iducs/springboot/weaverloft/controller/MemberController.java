@@ -35,7 +35,7 @@ public class MemberController {
 
     @PostMapping("")
     public String postMember(@Valid MemberDTO memberDTO, BindingResult bindingResult, Model model){
-
+        // *주의* BindingResult 를 검증할 객체 바로 뒤에 사용하여야 한다.
         if(bindingResult.hasErrors()){
             return "/members/regform";
         }
@@ -48,23 +48,6 @@ public class MemberController {
 
         return "redirect:/";
         //return "/members/"+ member.getClass() +"/upform";
-    }
-
-    @GetMapping("/{idx}/upform")
-    public String getUpform(@PathVariable("idx") String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
-        // 정보를 전달받을 객체를 보냄
-        MemberDTO memberDTO = memberService.readById(id);
-        model.addAttribute("memberDTO", memberDTO);
-        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getId())) {
-            response.setContentType("text/html; charset=utf-8");
-            PrintWriter out = response.getWriter();
-            String element =
-                    "<script> alert('자신의 개인정보만 수정 할 수 있습니다.'); location.href='/'; </script>";
-            out.println(element);
-            out.flush();//브라우저 출력 비우기
-            out.close();//아웃객체 닫기
-        }
-        return "/members/upform"; // view resolving : upform.html
     }
 
     @GetMapping("/{idx}")
@@ -93,11 +76,38 @@ public class MemberController {
         return "/members/members";
     }
 
-    @PutMapping("/{idx}")
-    public String putMember(@ModelAttribute("memberDTO") MemberDTO memberDTO, Model model) {
+    @GetMapping("/update/{idx}")
+    public String getUpform(@PathVariable("idx") String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+        // 정보를 전달받을 객체를 보냄
+        MemberDTO memberDTO = memberService.readById(id);
+        model.addAttribute("memberDTO", memberDTO);
+        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getId())) {
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            String element =
+                    "<script> alert('자신의 개인정보만 수정 할 수 있습니다.'); location.href='/'; </script>";
+            out.println(element);
+            out.flush();//브라우저 출력 비우기
+            out.close();//아웃객체 닫기
+        }
+        return "/members/upform"; // view resolving : upform.html
+    }
+
+    @PutMapping("/update/{idx}")
+    public String putMember(@Valid @ModelAttribute("memberDTO") MemberDTO memberDTO, BindingResult bindingResult ,Model model) {
         // HTML 에서 전달된 model 객체를 전달 받음 : member 라는 애트리뷰트 명 th:object 애트리뷰트 값
-        memberService.update(memberDTO);
-        model.addAttribute(memberDTO);
+
+        if(bindingResult.hasErrors()){
+            return "/members/upform";
+        }
+        try{
+            memberService.update(memberDTO);
+            model.addAttribute(memberDTO);
+        } catch (IllegalStateException e){
+            model.addAttribute("errorMessage",e.getMessage());
+            return "/members/upform";
+        }
+
         return "/members/contacts"; // view resolving : update info 확인
     }
 
@@ -138,7 +148,7 @@ public class MemberController {
     public String postLogin(@ModelAttribute("memberDTO") MemberDTO memberDTO, HttpServletRequest request, HttpServletResponse response) throws IOException {
         MemberDTO dto = null;
         MemberDTO deletedto = null;
-        if(((dto = memberService.loginByEmail(memberDTO)) != null)) {
+        if(((dto = memberService.loginById(memberDTO)) != null)) {
             HttpSession session = request.getSession();
             session.setAttribute("login", dto);
             session.setAttribute("loginSeq", dto.getId());

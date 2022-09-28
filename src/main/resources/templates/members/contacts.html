@@ -68,7 +68,7 @@
 
                 <div class="card-footer">
                   <div class="text-right" th:if="${session.isadmin != null}">
-                    <a th:href="@{'/members/' + ${memberDTO.id} + '/upform'}" class="btn btn-sm bg-teal">
+                    <a th:href="@{'/members/' + 'update/' + ${memberDTO.id}}" class="btn btn-sm bg-teal">
                       <i class="fas fa-comments"></i> update
                     </a>
                     <a th:href="@{'/members/' + ${memberDTO.id} + '/delform'}" class="btn btn-sm bg-teal">

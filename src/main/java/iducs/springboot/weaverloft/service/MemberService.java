@@ -24,7 +24,7 @@ public interface MemberService {
     MemberDTO readByName(MemberDTO memberDTO);
     MemberDTO readByEmail(String member);
 
-    MemberDTO loginByEmail(MemberDTO memberDTO);
+    MemberDTO loginById(MemberDTO memberDTO);
 
     MemberDTO loginByDelete(MemberDTO member, String delete);
 
