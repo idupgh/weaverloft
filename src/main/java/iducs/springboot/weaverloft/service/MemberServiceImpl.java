@@ -165,12 +165,11 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public MemberDTO loginById(MemberDTO member) {
-        MemberDTO memberDTO = null;
-        Object result = memberRepository.getMemberByEmail(member.getEmail(), member.getPw());
+        Object result = memberRepository.getMemberById(member.getId(), member.getPw());
         if(result != null){
-            memberDTO = entityToDto((MemberEntity) result);
+            member = entityToDto((MemberEntity) result);
         }
-        return memberDTO;
+        return member;
     }
 
     @Override
