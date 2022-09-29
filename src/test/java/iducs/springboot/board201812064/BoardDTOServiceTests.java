@@ -19,7 +19,7 @@ public class BoardDTOServiceTests {
 
     @Test
     public void testRegister() { //47개의 BoardDTO 데이터 만들기
-        IntStream.rangeClosed(2, 50).forEach(i -> {
+        IntStream.rangeClosed(1, 100).forEach(i -> {
             BoardDTO dto = BoardDTO.builder()
                     .title("Test" + i)
                     .content("Content" + i)

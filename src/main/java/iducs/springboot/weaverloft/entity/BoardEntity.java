@@ -34,7 +34,6 @@ public class BoardEntity extends BaseEntity {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int views;
 
-    @Column(nullable = false)
     private Long fileId;
 
 

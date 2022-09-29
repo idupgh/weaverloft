@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/members")
@@ -92,6 +93,22 @@ public class MemberController {
         }
         return "/members/upform"; // view resolving : upform.html
     }
+    @GetMapping("/pwupdate/{idx}")
+    public String getPwUpform(@PathVariable("idx") String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+        // 정보를 전달받을 객체를 보냄
+        MemberDTO memberDTO = memberService.readById(id);
+        model.addAttribute("memberDTO", memberDTO);
+        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getId())) {
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            String element =
+                    "<script> alert('자신의 개인정보만 수정 할 수 있습니다.'); location.href='/'; </script>";
+            out.println(element);
+            out.flush();//브라우저 출력 비우기
+            out.close();//아웃객체 닫기
+        }
+        return "/members/pwupform"; // view resolving : upform.html
+    }
 
     @PutMapping("/update/{idx}")
     public String putMember(@Valid @ModelAttribute("memberDTO") MemberDTO memberDTO, BindingResult bindingResult ,Model model) {
@@ -116,7 +133,7 @@ public class MemberController {
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(id);
         model.addAttribute("memberDTO", memberDTO);
-        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getId())) {
+        if((session.getAttribute("isadmin") == null) || (session.getAttribute("loginSeq") != memberDTO.getId())) {
             response.setContentType("text/html; charset=utf-8");
             PrintWriter out = response.getWriter();
             String element =
@@ -135,7 +152,9 @@ public class MemberController {
         memberService.deleteMember(memberDTO.getId());
         //memberService.delete(memberDTO); > DB 에서 삭제
         model.addAttribute(memberDTO);
-        session.invalidate();
+        if(session.getAttribute("isadmin") == null) {
+            session.invalidate();
+        }
         return "redirect:/"; //'/members' 요청을 함,
     }
 
@@ -148,26 +167,39 @@ public class MemberController {
     public String postLogin(@ModelAttribute("memberDTO") MemberDTO memberDTO, HttpServletRequest request, HttpServletResponse response) throws IOException {
         MemberDTO dto = null;
         MemberDTO deletedto = null;
-        if(((dto = memberService.loginById(memberDTO)) != null)) {
-            HttpSession session = request.getSession();
-            session.setAttribute("login", dto);
-            session.setAttribute("loginSeq", dto.getId());
-            session.setAttribute("block",dto.getBlock());
-            if(dto.getRole().contains("admin")) // ID > ROLE 변경 예정
-                session.setAttribute("isadmin", dto.getId());
-            return "redirect:/";
-        }
-        else {
+        if(((memberService.loginById(memberDTO)) == null)) {
             response.setContentType("text/html; charset=utf-8");
             PrintWriter out = response.getWriter();
             String element =
-                    "<script> alert('없는 아이디 입니다.'); location.href='/members/login';</script>";
+                    "<script> alert('정보가 올바르지 않습니다.'); location.href='/members/login';</script>";
             out.println(element);
             out.flush();//브라우저 출력 비우기
             out.close();//아웃객체 닫기
 
             return "/members/loginfail";
         }
+        else if (Objects.equals(memberService.loginById(memberDTO).getDelete_yn(), String.valueOf('y'))) {
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            String element =
+                    "<script> alert('탈퇴한 사용자 입니다.'); location.href='/';</script>";
+            out.println(element);
+            out.flush();//브라우저 출력 비우기
+            out.close();//아웃객체 닫기
+
+            return "/";
+        }
+        else if(((dto = memberService.loginById(memberDTO)) != null)) {
+            HttpSession session = request.getSession();
+            session.setAttribute("login", dto);
+            session.setAttribute("loginSeq", dto.getId());
+            session.setAttribute("block",dto.getBlock());
+            session.setAttribute("delete",dto.getDelete_yn());
+            if(dto.getRole().contains("admin")) // ID > ROLE 변경 예정
+                session.setAttribute("isadmin", dto.getId());
+            return "redirect:/";
+        }
+        return "redirect:/";
     }
     @GetMapping("/logout")
     public String getLogout(HttpSession session) {
