@@ -98,13 +98,13 @@
         <div class="text-center mt-5 mb-3">
           <a  th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }"
               th:href="@{'/boards/' + ${boardDTO.bno} + '/upform'}" class="btn btn-sm btn-primary button_event" >게시글 수정</a>
-          <span th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }" class="btn btn-sm btn-success addReply"> 댓글 쓰기 </span>
+          <span th:if="${(session.login != null)}" class="btn btn-sm btn-success addReply"> 댓글 쓰기 </span>
           <br>
 
 
           <a  th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }"
               th:href="@{'/boards/' + ${boardDTO.bno} + '/delform'}" class="btn btn-sm btn-warning">게시글 삭제</a>
-          <span th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }" class="btn btn-sm btn-dark replyCount"> 댓글 보기</span>
+          <span th:if="${(session.login != null)}" class="btn btn-sm btn-dark replyCount"> 댓글 보기</span>
         </div>
       </div>
       <div th:if="${boardDTO.block == 'block'}">
@@ -152,6 +152,7 @@
                 </div>
                 <div class="form-group" th:if="${session.login != null}">
                   <input class="form-control"  type="text" th:value="${session.login.id}" th:name="id" readonly>
+                  <input th:value="replyList.">
                   <input type="hidden" name="rno" >
                 </div>
 
@@ -182,6 +183,7 @@
           $(document).ready(function() {
 
             var bno = [[${boardDTO.bno}]];
+            var count = [[${boardDTO.replyCount}]]; // id 에 session 에 있는 count 값 대입
             var id = [[${session.login.id}]]; // id 에 session 에 있는 id 값 대입
             var admin = [[${session.isadmin}]]; // admin 로그인 확인하기 위한 변수
 
@@ -232,7 +234,7 @@
                     str += '<h5 class="card-title'+reply.rno +'">'+reply.text+'</h5>';
                   }
                   //str += '    <a class="card-title" href="javascript:modalOpen(\''+reply.rno+'\',\''+id+'\');">'+reply.text+'</a><br>';
-                  str += '    <h6 class="card-subtitle mb-2 text-muted" style="margin-top: 0rem;">'+id+'</h6>';
+                  str += '    <h6 class="card-subtitle mb-2 text-muted" style="margin-top: 0rem;">'+reply.id+'</h6>';
                   str += '    <p class="card-text">'+ formatTime(reply.regDate) +'</p>';
                   str += '    </div>';
                 })
@@ -243,6 +245,9 @@
             }
 
             $(".replyCount").click(function(){
+              if(count == 0){
+                alert("댓글이 없습니다.")
+              }
 
               loadJSONData();
             })//end click

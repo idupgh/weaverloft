@@ -5,11 +5,11 @@ package iducs.springboot.weaverloft.controller;
 import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.FileDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
+import iducs.springboot.weaverloft.domain.ReplyDTO;
 import iducs.springboot.weaverloft.service.BoardService;
 import iducs.springboot.weaverloft.service.FileService;
 import iducs.springboot.weaverloft.service.ReplyService;
 import iducs.springboot.weaverloft.util.MD5Generator;
-import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -29,7 +29,6 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,9 +38,11 @@ public class BoardController {
     // 생성자 주입 : Spring Framework <- Autowired (필드 주입)
     private final BoardService boardService;
     private final FileService fileService;
+    private final ReplyService replyService;
     public BoardController(BoardService boardService, ReplyService replyService, FileService fileService) {
         this.boardService = boardService;
         this.fileService = fileService;
+        this.replyService = replyService;
     }
 
     @GetMapping("/regform")
@@ -114,6 +115,7 @@ public class BoardController {
 
         model.addAttribute("fileList", fileService.getList(bno));
         model.addAttribute("boardDTO", boardDTO);
+        model.addAttribute("replyList", replyService.getList(bno));
 
         return "/boards/read";
     }

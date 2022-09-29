@@ -1,5 +1,6 @@
 package iducs.springboot.weaverloft.service;
 
+import iducs.springboot.weaverloft.domain.BoardDTO;
 import iducs.springboot.weaverloft.domain.ReplyDTO;
 import iducs.springboot.weaverloft.entity.BoardEntity;
 import iducs.springboot.weaverloft.entity.MemberEntity;
@@ -40,6 +41,8 @@ public interface ReplyService {
                 .text(reply.getText())
                 .regDate(reply.getRegDate())
                 .modDate(reply.getModDate())
+                .bno(reply.getBoard().getBno())
+                .id(reply.getMember().getId())
                 .build();
 
         return replyDTO;
