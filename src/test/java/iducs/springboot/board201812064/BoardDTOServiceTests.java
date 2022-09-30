@@ -36,7 +36,7 @@ public class BoardDTOServiceTests {
             BoardDTO dto = BoardDTO.builder()
                     .title("Title")
                     .content("Content")
-                    .writerSeq(10L)
+                    .writerId("admin")
                     .build();
             Long bno = boardService.register(dto);
     }

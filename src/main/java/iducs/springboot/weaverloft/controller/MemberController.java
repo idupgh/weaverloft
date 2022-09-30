@@ -56,7 +56,18 @@ public class MemberController {
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(id);
         model.addAttribute("memberDTO", memberDTO);
-        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getId())) {
+        if(!(session.getAttribute("loginid").equals(memberDTO.getId()))) {
+            if(session.getAttribute("isadmin") != null) {
+                return "/members/contacts";
+            } else {
+                response.setContentType("text/html; charset=utf-8");
+                PrintWriter out = response.getWriter();
+                String element =
+                        "<script> alert('자신의 개인정보만 볼 수 있습니다.'); location.href='/'; </script>";
+                out.println(element);
+                out.flush();//브라우저 출력 비우기
+                out.close();//아웃객체 닫기
+            }
             response.setContentType("text/html; charset=utf-8");
             PrintWriter out = response.getWriter();
             String element =
@@ -64,8 +75,9 @@ public class MemberController {
             out.println(element);
             out.flush();//브라우저 출력 비우기
             out.close();//아웃객체 닫기
-        }
-        return "/members/contacts";
+            return "/";
+        } else
+            return "/members/contacts";
     }
 
     @GetMapping("/list")
@@ -82,32 +94,56 @@ public class MemberController {
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(id);
         model.addAttribute("memberDTO", memberDTO);
-        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getId())) {
+        if(!(session.getAttribute("loginid").equals(memberDTO.getId()))) {
+            if(session.getAttribute("isadmin") != null) {
+                return "/members/upform";
+            } else {
+                response.setContentType("text/html; charset=utf-8");
+                PrintWriter out = response.getWriter();
+                String element =
+                        "<script> alert('자신의 개인정보만 수정할 수 있습니다.'); location.href='/'; </script>";
+                out.println(element);
+                out.flush();//브라우저 출력 비우기
+                out.close();//아웃객체 닫기
+            }
             response.setContentType("text/html; charset=utf-8");
             PrintWriter out = response.getWriter();
             String element =
-                    "<script> alert('자신의 개인정보만 수정 할 수 있습니다.'); location.href='/'; </script>";
+                    "<script> alert('자신의 개인정보만 수정할 수 있습니다.'); location.href='/'; </script>";
             out.println(element);
             out.flush();//브라우저 출력 비우기
             out.close();//아웃객체 닫기
-        }
-        return "/members/upform"; // view resolving : upform.html
+            return "/";
+        } else
+            return "/members/upform"; // view resolving : upform.html
     }
     @GetMapping("/pwupdate/{idx}")
     public String getPwUpform(@PathVariable("idx") String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(id);
         model.addAttribute("memberDTO", memberDTO);
-        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != memberDTO.getId())) {
+        if(!(session.getAttribute("loginid").equals(memberDTO.getId()))) {
+            if(session.getAttribute("isadmin") != null) {
+                return "/members/pwupform";
+            } else {
+                response.setContentType("text/html; charset=utf-8");
+                PrintWriter out = response.getWriter();
+                String element =
+                        "<script> alert('자신의 비밀번호만 수정할 수 있습니다.'); location.href='/'; </script>";
+                out.println(element);
+                out.flush();//브라우저 출력 비우기
+                out.close();//아웃객체 닫기
+            }
             response.setContentType("text/html; charset=utf-8");
             PrintWriter out = response.getWriter();
             String element =
-                    "<script> alert('자신의 개인정보만 수정 할 수 있습니다.'); location.href='/'; </script>";
+                    "<script> alert('자신의 비밀번호만 수정할 수 있습니다.'); location.href='/'; </script>";
             out.println(element);
             out.flush();//브라우저 출력 비우기
             out.close();//아웃객체 닫기
-        }
-        return "/members/pwupform"; // view resolving : upform.html
+            return "/";
+        } else
+            return "/members/pwupform"; // view resolving : upform.html
     }
 
     @PutMapping("/update/{idx}")
@@ -133,16 +169,28 @@ public class MemberController {
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(id);
         model.addAttribute("memberDTO", memberDTO);
-        if((session.getAttribute("isadmin") == null) || (session.getAttribute("loginSeq") != memberDTO.getId())) {
+        if(!(session.getAttribute("loginid").equals(memberDTO.getId()))) {
+            if(session.getAttribute("isadmin") != null) {
+                return "/members/delform";
+            } else {
+                response.setContentType("text/html; charset=utf-8");
+                PrintWriter out = response.getWriter();
+                String element =
+                        "<script> alert('자신의 개인정보만 삭제할 수 있습니다.'); location.href='/'; </script>";
+                out.println(element);
+                out.flush();//브라우저 출력 비우기
+                out.close();//아웃객체 닫기
+            }
             response.setContentType("text/html; charset=utf-8");
             PrintWriter out = response.getWriter();
             String element =
-                    "<script> alert('자신의 개인정보만 삭제 할 수 있습니다.'); location.href='/'; </script>";
+                    "<script> alert('자신의 개인정보만 삭제할 수 있습니다.'); location.href='/'; </script>";
             out.println(element);
             out.flush();//브라우저 출력 비우기
             out.close();//아웃객체 닫기
-        }
-        return "/members/delform"; // view resolving : upform.html
+            return "/";
+        } else
+            return "/members/delform"; // view resolving : upform.html
     }
 
     @DeleteMapping("/{idx}") //삭제 구현
@@ -165,7 +213,6 @@ public class MemberController {
     }
     @PostMapping("/login")
     public String postLogin(@ModelAttribute("memberDTO") MemberDTO memberDTO, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        MemberDTO dto = null;
         MemberDTO deletedto = null;
         if(((memberService.loginById(memberDTO)) == null)) {
             response.setContentType("text/html; charset=utf-8");
@@ -189,14 +236,14 @@ public class MemberController {
 
             return "/";
         }
-        else if(((dto = memberService.loginById(memberDTO)) != null)) {
+        else if(((memberDTO = memberService.loginById(memberDTO)) != null)) {
             HttpSession session = request.getSession();
-            session.setAttribute("login", dto);
-            session.setAttribute("loginSeq", dto.getId());
-            session.setAttribute("block",dto.getBlock());
-            session.setAttribute("delete",dto.getDelete_yn());
-            if(dto.getRole().contains("admin")) // ID > ROLE 변경 예정
-                session.setAttribute("isadmin", dto.getId());
+            session.setAttribute("login", memberDTO);
+            session.setAttribute("loginid", memberDTO.getId());
+            session.setAttribute("block",memberDTO.getBlock());
+            session.setAttribute("delete",memberDTO.getDelete_yn());
+            if(memberDTO.getRole().contains("admin")) // ID > ROLE 변경 예정
+                session.setAttribute("isadmin", memberDTO.getId());
             return "redirect:/";
         }
         return "redirect:/";

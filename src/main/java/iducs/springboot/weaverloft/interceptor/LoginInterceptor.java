@@ -16,7 +16,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     // 적용할 경로 > 로그인 안되어 있으면 접속 x
     public List loginEssential
-            = Arrays.asList("/boards/regform","/boards/{bno}/**","/members/{seq}/**");
+            = Arrays.asList("/boards/regform","/boards/{bno}/**","/members/{id}/**");
 
     // 적용 안할 경로 > 로그인 안해도 접속 가능
     public List loginInessential

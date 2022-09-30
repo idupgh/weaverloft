@@ -70,24 +70,11 @@
                     <input type="hidden" name="address" th:field="*{address}" class="form-control" id="exampleInputAddress1" placeholder="Address">
                   </div>
                   <div data-toggle="buttons" class="btn-group" role="group" th:if="${session.isadmin != null}">
-                    <div class="form-group"><p><strong>사용자 글쓰기, 댓글 기능 제한</strong></p>
-                      <label class="btn mb-2 col-md-5 btn-light" style="">
-                        <input type="radio" name="mode"  value="block" th:field="*{block}"
-                               th:attr="checked=*{block.toString() == 'block' ? 'true' : 'false'}"  autocomplete="off"><br>제한
-                      </label>
-                      <label class="btn mb-2 col-md-5 btn-light" style="" >
-                        <input type="radio" name="mode" value="unblock" th:field="*{block}"
-                               th:attr="checked=*{block.toString() == 'unblock' ? 'true' : 'false'}" autocomplete="off"><br>허용
-                      </label>
-                    </div>
+                        <input type="hidden" name="mode"  value="block" th:field="*{block}">
                   </div>
                   <div class="form-group" th:if="${session.isadmin != null}">
                     <div class="form-group"><p><strong>사용자 권한</strong></p>
-                      <select class="form-control" name="role" id="role" th:value="${memberDTO.role}">
-                        <option th:value="user" th:selected="${memberDTO.role =='user'}">User</option>
-                        <option th:value="admin" th:selected="${memberDTO.role =='admin'}">Admin</option>
-                      </select>
-                    </div>
+                      <input type="hidden" th:field="${role}">
                   </div>
                   <input type="hidden" th:field="*{delete_yn}"/>
 

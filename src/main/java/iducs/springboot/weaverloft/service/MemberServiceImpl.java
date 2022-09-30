@@ -166,15 +166,20 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public MemberDTO loginById(MemberDTO member) {
-        Object result = memberRepository.getMemberById(member.getId()); // id를 통해 받아온 정보
-        MemberEntity entity = (MemberEntity) result;
-        if(passwordEncoder.matches(member.getPw(), entity.getPw())) { // 만약 입력한 pw가 db에 있는 pw와 같으면
-            member = entityToDto((MemberEntity) result);
-            return member;
-        }else
-            member = null;
-            return member;
+    public MemberDTO loginById(MemberDTO memberDTO) {
+        Object result = memberRepository.getMemberById(memberDTO.getId()); // id를 통해 받아온 정보
+        if(result == null) {
+            memberDTO = null;
+        } else {
+            MemberEntity entity = (MemberEntity) result;
+            if (passwordEncoder.matches(memberDTO.getPw(), entity.getPw())) { // 만약 입력한 pw가 db에 있는 pw와 같으면
+                memberDTO = entityToDto((MemberEntity) result);
+                return memberDTO;
+            } else
+                memberDTO = null;
+            return memberDTO;
+        }
+        return memberDTO;
     }
 
     @Override

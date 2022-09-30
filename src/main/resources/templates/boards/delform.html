@@ -54,13 +54,13 @@
               <form action="#" th:action="@{'/boards/' + ${boardDTO.bno}}" th:object="${boardDTO}" th:method="delete">
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputSeq1">Seq</label>
+                    <label for="exampleInputId">Seq</label>
                     <input type="text" name="bno" th:field="*{bno}" th:value="*{bno}"
-                           class="form-control" id="exampleInputSeq1" placeholder="Enter Id" readonly>
+                           class="form-control" id="exampleInputId" placeholder="Enter Id" readonly>
                   </div>
                   <div class="form-group">
                     <label for="inputWriter">Writer</label>
-                    <input type="text" id="inputWriter" th:value="${session.login.id}" th:name="writerSeq" readonly class="form-control">
+                    <input type="text" id="inputWriter" th:value="${session.login.id}" th:name="writerId" readonly class="form-control">
                   </div>
                   <div class="form-group">
                     <label for="exampleInputId1">Title</label>
