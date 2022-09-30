@@ -2,6 +2,7 @@ package iducs.springboot.weaverloft.domain;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
@@ -12,10 +13,13 @@ import java.time.LocalDateTime;
 
 public class BoardDTO {
     private Long bno; // no? seq?
+
+    @NotBlank(message = "제목을 입력해 주세요.")
     private String title;
+
+    @NotBlank(message = "내용을 입력해 주세요.")
     private String content;
 
-    private Long writerSeq;
     private String writerId;
     private String writerName;
     private String writerEmail;

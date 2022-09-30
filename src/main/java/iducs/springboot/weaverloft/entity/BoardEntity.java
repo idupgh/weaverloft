@@ -36,7 +36,6 @@ public class BoardEntity extends BaseEntity {
 
     private Long fileId;
 
-
     private int replyCount;
 
 }

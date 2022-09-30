@@ -47,7 +47,7 @@
               <h3 class="card-title">Board Update</h3>
             </div>
 
-            <form action="#" th:action="@{'/boards/' + ${boardDTO.bno}}" th:object="${boardDTO}" th:method="PUT" enctype="multipart/form-data">
+            <form action="#" th:action="@{'/boards/'+ 'update/' + ${boardDTO.bno}}" th:object="${boardDTO}" th:method="PUT" enctype="multipart/form-data">
               <input type="hidden" th:field="*{views}"/>
               <input type="hidden" name="deleteFileId" id="deleteFileId"/>
 
@@ -71,20 +71,18 @@
                     </div>
                   </div>
 
-                  <input hidden th:value="*{writerSeq}">
-                  <div class="form-group">
-                    <label for="inputW">Writer</label>
-                    <input type="text" name="writerId" th:field="*{writerId}"  id="inputW" class="form-control" readonly>
-                  </div>
+                  <input hidden th:value="${boardDTO.writerId}" th:name="writerId">
 
                     <div class="form-group">
                       <label for="inputTitle">Title</label>
                       <input type="text" name="title" th:field="*{title}"  id="inputTitle" class="form-control">
+                      <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError">Incorrect data</p>
                     </div>
 
                     <div class="form-group">
                       <label for="inputContent" th:height="100px">content</label>
                       <textarea type="text" name="content" th:field="*{content}"  id="inputContent" class="form-control"></textarea>
+                      <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError">Incorrect data</p>
                     </div>
 
                     <!--파일 추가 자리-->

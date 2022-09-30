@@ -76,9 +76,9 @@
           </div>
         </div>
         <div class="text-center mt-5 mb-3">
-          <a  th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }"
+          <a  th:if="${(session.login != null && session.login.id == boardDTO.writerId) || session.isadmin != null }"
               th:href="@{'/boards/' + ${boardDTO.bno} + '/upform'}" class="btn btn-sm btn-primary">게시글 수정</a>
-          <a  th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }"
+          <a  th:if="${(session.login != null && session.login.id == boardDTO.writerId) || session.isadmin != null }"
               th:href="@{'/boards/' + ${boardDTO.bno} + '/delform'}" class="btn btn-sm btn-warning">게시글 삭제</a>
           <br>
 

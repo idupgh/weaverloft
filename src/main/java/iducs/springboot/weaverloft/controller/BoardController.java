@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,7 @@ import org.springframework.core.io.Resource;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -53,47 +55,52 @@ public class BoardController {
 
     // 게시글 등록
     @PostMapping("")
-    public String post(@RequestParam(value = "file",required = false)List<MultipartFile> files, BoardDTO boardDTO, Model model) {
+    public String post(@RequestParam(value = "file",required = false)List<MultipartFile> files, @Valid BoardDTO boardDTO, BindingResult bindingResult, Model model) {
 
-        long bno = boardService.register(boardDTO);
-
-        try {
-
-            for(MultipartFile file : files) {
-                String origFilename = file.getOriginalFilename();
-                if(!origFilename.isEmpty()){
-                    String uuid = UUID.randomUUID().toString();
-                    String[] filenameArray = origFilename.split("\\.");
-                    String filename = new MD5Generator(uuid + filenameArray[0]).toString() + "." + filenameArray[1];
-
-                    /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-                    String savePath = (file.getContentType().startsWith("image") == true) ? "C:\\Users\\GeunHyeong\\IdeaProjects\\weaverloft\\src\\main\\resources\\static\\images" : System.getProperty("user.dir") + "\\files";
-                    /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-                    if (!new File(savePath).exists()) {
-                        try {
-                            new File(savePath).mkdir();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                    }
-                    String filePath = savePath + "\\" + filename;
-                    file.transferTo(new File(filePath));
-
-                    FileDTO fileDTO = new FileDTO();
-                    fileDTO.setOrigFilename(origFilename);
-                    fileDTO.setFilename(filename);
-                    fileDTO.setFilePath(filePath);
-                    fileDTO.setBno(bno);
-                    model.addAttribute("filename", filename);
-                    fileService.saveFile(fileDTO);
-                }
-            }
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
+        if(bindingResult.hasErrors()){
+            return "/boards/regform";
         }
+        try{
+            // 원래 있던 부분
+            long bno = boardService.register(boardDTO);
 
+            try {
+                for(MultipartFile file : files) {
+                    String origFilename = file.getOriginalFilename();
+                    if(!origFilename.isEmpty()){
+                        String uuid = UUID.randomUUID().toString();
+                        String[] filenameArray = origFilename.split("\\.");
+                        String filename = new MD5Generator(uuid + filenameArray[0]).toString() + "." + filenameArray[1];
+
+                        /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+                        String savePath = (file.getContentType().startsWith("image") == true) ? "C:\\Users\\GeunHyeong\\IdeaProjects\\weaverloft\\src\\main\\resources\\static\\images" : System.getProperty("user.dir") + "\\files";
+                        /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+                        if (!new File(savePath).exists()) {
+                            try {
+                                new File(savePath).mkdir();
+                            } catch (Exception e) {
+                                e.getStackTrace();
+                            }
+                        }
+                        String filePath = savePath + "\\" + filename;
+                        file.transferTo(new File(filePath));
+
+                        FileDTO fileDTO = new FileDTO();
+                        fileDTO.setOrigFilename(origFilename);
+                        fileDTO.setFilename(filename);
+                        fileDTO.setFilePath(filePath);
+                        fileDTO.setBno(bno);
+                        model.addAttribute("filename", filename);
+                        fileService.saveFile(fileDTO);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } // 원래 있던 부분 종점
+        } catch (IllegalStateException e){
+            model.addAttribute("errorMessage",e.getMessage());
+            return "/boards/regform";
+        }
         return "redirect:/boards/"; // 등록 후 상세보기
         // return "redirect:/boards/" + bno; >> 등록 후 바로 상세보기 띄우기였음
     }
@@ -120,7 +127,7 @@ public class BoardController {
         return "/boards/read";
     }
 
-    @GetMapping("/{bno}/upform") //업데이트폼
+    @GetMapping("/update/{bno}") //업데이트폼
     public String getUpform(@PathVariable("bno") Long bno, Model model, HttpSession session, HttpServletResponse response)
             throws IOException {
         BoardDTO boardDTO = boardService.getById(bno);
@@ -128,74 +135,95 @@ public class BoardController {
         model.addAttribute("fileList", fileService.getList(bno));
         model.addAttribute("boardDTO", boardDTO); //입력한 객체를 전달, DB로부터 가져온 것 아님
 
-        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != boardDTO.getWriterSeq())) {
+        if(!(session.getAttribute("loginid").equals(boardDTO.getWriterId()))) {
+            if(session.getAttribute("isadmin") != null) {
+                return "/boards/upform";
+            } else {
+                response.setContentType("text/html; charset=utf-8");
+                PrintWriter out = response.getWriter();
+                String element =
+                        "<script> alert('자신의 작성한 글만 수정할 수 있습니다.'); location.href='/'; </script>";
+                out.println(element);
+                out.flush();//브라우저 출력 비우기
+                out.close();//아웃객체 닫기
+            }
             response.setContentType("text/html; charset=utf-8");
             PrintWriter out = response.getWriter();
             String element =
-                    "<script> alert('자신이 작성한 글만 수정할 수 있습니다.'); location.href='/'; </script>";
+                    "<script> alert('자신의 작성한 글만 수정할 수 있습니다.'); location.href='/'; </script>";
             out.println(element);
             out.flush();//브라우저 출력 비우기
             out.close();//아웃객체 닫기
-        }
-        return "/boards/upform"; //view resolving : upform.html
+            return "/";
+        } else
+            return "/boards/upform"; // view resolving : upform.html
     }
 
-    @PutMapping("/{bno}") //업데이트 구현
+    @PutMapping("/update/{bno}") //업데이트 구현
     public String putBoard(@RequestParam(value = "file", required = false)
                                List<MultipartFile> files, @RequestParam(value = "deleteFileId", required = false)
-            String deleteFileId, Long bno, BoardDTO boardDTO, Model model){
+            String deleteFileId, Long bno,@Valid BoardDTO boardDTO, BindingResult bindingResult, Model model){
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
 
         Long id = boardDTO.getFileId();
 
-        try {
-            if(!deleteFileId.equals("")){
-                String[] strArr = deleteFileId.split(",");
-                for(int i=0; i < strArr.length; i++){
-                    Long delid = Long.parseLong(strArr[i]);
-                    fileService.deleteFile(delid, bno);
-                }
-            }
-
-        }catch (Exception e) {
-
-            e.printStackTrace();
+        if(bindingResult.hasErrors()){
+            return "/boards/upform";
         }
-
-        try {
-
-            for(MultipartFile file : files) {
-                String origFilename = file.getOriginalFilename();
-                if(!origFilename.isEmpty()){
-                    String[] filenameArray = origFilename.split("\\.");
-                    String filename = new MD5Generator(filenameArray[0]).toString() + "." + filenameArray[1];
-
-                    /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-                    String savePath = (file.getContentType().startsWith("image") == true) ? "C:\\Users\\GeunHyeong\\IdeaProjects\\weaverloft\\src\\main\\resources\\static\\images" : System.getProperty("user.dir") + "\\files";
-                    /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-                    if (!new File(savePath).exists()) {
-                        try {
-                            new File(savePath).mkdir();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
+        try{
+            try {
+                if(!deleteFileId.equals("")){
+                    String[] strArr = deleteFileId.split(",");
+                    for(int i=0; i < strArr.length; i++){
+                        Long delid = Long.parseLong(strArr[i]);
+                        fileService.deleteFile(delid, bno);
                     }
-                    String filePath = savePath + "\\" + filename;
-                    file.transferTo(new File(filePath));
-
-                    FileDTO fileDTO = new FileDTO();
-                    fileDTO.setOrigFilename(origFilename);
-                    fileDTO.setFilename(filename);
-                    fileDTO.setFilePath(filePath);
-                    fileDTO.setBno(bno);
-                    model.addAttribute("filename", filename);
-                    fileService.saveFile(fileDTO);
                 }
+
+            }catch (Exception e) {
+
+                e.printStackTrace();
             }
 
-        } catch (Exception e) {
+            try {
 
-            e.printStackTrace();
+                for(MultipartFile file : files) {
+                    String origFilename = file.getOriginalFilename();
+                    if(!origFilename.isEmpty()){
+                        String[] filenameArray = origFilename.split("\\.");
+                        String filename = new MD5Generator(filenameArray[0]).toString() + "." + filenameArray[1];
+
+                        /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+                        String savePath = (file.getContentType().startsWith("image") == true) ? "C:\\Users\\GeunHyeong\\IdeaProjects\\weaverloft\\src\\main\\resources\\static\\images" : System.getProperty("user.dir") + "\\files";
+                        /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+                        if (!new File(savePath).exists()) {
+                            try {
+                                new File(savePath).mkdir();
+                            } catch (Exception e) {
+                                e.getStackTrace();
+                            }
+                        }
+                        String filePath = savePath + "\\" + filename;
+                        file.transferTo(new File(filePath));
+
+                        FileDTO fileDTO = new FileDTO();
+                        fileDTO.setOrigFilename(origFilename);
+                        fileDTO.setFilename(filename);
+                        fileDTO.setFilePath(filePath);
+                        fileDTO.setBno(bno);
+                        model.addAttribute("filename", filename);
+                        fileService.saveFile(fileDTO);
+                    }
+                }
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+            // 원래 있던 부분 종점
+        } catch (IllegalStateException e){
+            model.addAttribute("errorMessage",e.getMessage());
+            return "/boards/upform";
         } boardService.update(bno, boardDTO);
         return "redirect:/boards";
     }
@@ -206,17 +234,28 @@ public class BoardController {
         // html에서 model 객체를 전달 받음 : memberDTO (애드트리뷰트 명으로 접근, th:object 애트리뷰트 값)
         BoardDTO boardDTO = boardService.getById(bno);
         model.addAttribute("boardDTO", boardDTO);
-        if((session.getAttribute("isadmin") == null) && (session.getAttribute("loginSeq") != boardDTO.getWriterSeq())) {
+        if(!(session.getAttribute("loginid").equals(boardDTO.getWriterId()))) {
+            if(session.getAttribute("isadmin") != null) {
+                return "/boards/delform";
+            } else {
+                response.setContentType("text/html; charset=utf-8");
+                PrintWriter out = response.getWriter();
+                String element =
+                        "<script> alert('자신의 작성한 글만 삭제할 수 있습니다.'); location.href='/'; </script>";
+                out.println(element);
+                out.flush();//브라우저 출력 비우기
+                out.close();//아웃객체 닫기
+            }
             response.setContentType("text/html; charset=utf-8");
             PrintWriter out = response.getWriter();
             String element =
-                    "<script> alert('자신이 작성한 글만 삭제할 수 있습니다.'); location.href='/'; </script>";
+                    "<script> alert('자신의 작성한 글만 삭제할 수 있습니다.'); location.href='/'; </script>";
             out.println(element);
             out.flush();//브라우저 출력 비우기
             out.close();//아웃객체 닫기
-        }
-        //return "members/delform";
-        return "/boards/delform";
+            return "/";
+        } else
+            return "/boards/delform"; // view resolving : upform.html
 
     }
     @DeleteMapping("/{bno}") //삭제 구현

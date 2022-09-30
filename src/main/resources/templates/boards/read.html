@@ -47,8 +47,11 @@
       <div class="card" th:if="${boardDTO.block == 'unblock'}" >
         <div class="card-header">
           <h3 class="card-title">제목 : [[${boardDTO.title}]]</h3>
-
+          <div class="card-tools">
+            <a th:href="@{'/boards'}" class="btn btn-sm btn-light" >게시글 목록</a>
+          </div>
         </div>
+
         <div class="card-body" >
           <div class="row" >
             <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
@@ -58,9 +61,8 @@
                     <div class="user-block">
                       <img class="img-circle img-bordered-sm" src="/dist/img/user1-128x128.jpg" alt="user image">
                       <span class="username">
-                          <a>작성자 : [[${boardDTO.writerName}]]</a>
-                        </span>
-                      <span class="description">이메일 : [[${boardDTO.writerEmail}]]</span><br><br>
+                          <a>작성자 : [[${boardDTO.writerId}]]</a>
+                        </span><br><br>
 
                     </div>
                     <!-- /.user-block -->
@@ -96,13 +98,13 @@
 <!--          </div>-->
         </div>
         <div class="text-center mt-5 mb-3">
-          <a  th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }"
-              th:href="@{'/boards/' + ${boardDTO.bno} + '/upform'}" class="btn btn-sm btn-primary button_event" >게시글 수정</a>
+          <a  th:if="${(session.login != null && session.login.id == boardDTO.writerId) || session.isadmin != null }"
+              th:href="@{'/boards/' + 'update/' + ${boardDTO.bno}}" class="btn btn-sm btn-primary button_event" >게시글 수정</a>
           <span th:if="${(session.login != null)}" class="btn btn-sm btn-success addReply"> 댓글 쓰기 </span>
           <br>
 
 
-          <a  th:if="${(session.login != null && session.login.id == boardDTO.writerSeq) || session.isadmin != null }"
+          <a  th:if="${(session.login != null && session.login.id == boardDTO.writerId) || session.isadmin != null }"
               th:href="@{'/boards/' + ${boardDTO.bno} + '/delform'}" class="btn btn-sm btn-warning">게시글 삭제</a>
           <span th:if="${(session.login != null)}" class="btn btn-sm btn-dark replyCount"> 댓글 보기</span>
         </div>
@@ -110,7 +112,7 @@
       <div th:if="${boardDTO.block == 'block'}">
         <p>차단된 페이지입니다</p>
         <a  th:if="${session.isadmin != null }"
-            th:href="@{'/boards/' + ${boardDTO.bno} + '/upform'}" class="btn btn-sm bg-teal">Modify(수정)</a>
+            th:href="@{'/boards/'+ 'update/' + ${boardDTO.bno}}" class="btn btn-sm bg-teal">Modify(수정)</a>
         <a  th:if="${session.isadmin != null }"
             th:href="@{'/boards/' + ${boardDTO.bno} + '/delform'}" class="btn btn-sm bg-teal">Delete(삭제)</a>
       </div>
@@ -152,7 +154,6 @@
                 </div>
                 <div class="form-group" th:if="${session.login != null}">
                   <input class="form-control"  type="text" th:value="${session.login.id}" th:name="id" readonly>
-                  <input th:value="replyList.">
                   <input type="hidden" name="rno" >
                 </div>
 
@@ -270,29 +271,35 @@
             }); // -----------------------
 
             $(".replySave").click(function() {
-
-              var reply = {
-                bno: bno,
-                text: $('input[name="replyText"]').val(),
-                id: id
-              }
-              console.log(reply);
-              $.ajax({
-                url: '/replies/',
-                method: 'post',
-                data:  JSON.stringify(reply), // JS 객체를 생성 후 해당 객체를 JSON.stringify()를 이용해 JSON 문자열로 바꾸어 전송
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                success: function(data){
-                  console.log(data);
-
-                  var newRno = parseInt(data);
-
-                  alert("댓글이 등록되었습니다.")
-                  modal.modal('hide');
-                  loadJSONData();
+              var text = $('input[name="replyText"]').val();
+              if(text == '') {
+                alert("댓글을 등록해주세요.")
+              } else {
+                var reply = {
+                  bno: bno,
+                  text: $('input[name="replyText"]').val(),
+                  id: id
                 }
-              })
+                console.log(reply);
+                $.ajax({
+                  url: '/replies/',
+                  method: 'post',
+                  data:  JSON.stringify(reply), // JS 객체를 생성 후 해당 객체를 JSON.stringify()를 이용해 JSON 문자열로 바꾸어 전송
+                  contentType: 'application/json; charset=utf-8',
+                  dataType: 'json',
+                  success: function(data){
+                    console.log(data);
+
+                    var newRno = parseInt(data);
+
+                    alert("댓글이 등록되었습니다.")
+                    modal.modal('hide');
+                    loadJSONData();
+                  }
+                })
+              }
+
+
             }); // 댓글 등록 완료 -------------------
 
             /*
@@ -334,33 +341,36 @@
             $(".replyModify").click(function() {
 
               var rno = $("input[name='rno']").val();
-
-              var reply = {
-                rno: rno,
-                bno: bno,
-                text: $('input[name="replyText"]').val(),
-                id: id
-              }
-
-              console.log(reply);
-              $.ajax({
-                url: '/replies/' + rno,
-                method: 'put',
-                data:  JSON.stringify(reply),
-                contentType: 'application/json; charset=utf-8',
-                success: function(result){
-
-                  console.log("RESULT: " + result);
-
-                  if(result ==='success'){
-                    alert("댓글이 수정되었습니다");
-                    modal.modal('hide');
-                    loadJSONData();
-                  }
+              var text = $('input[name="replyText"]').val();
+              if(text == '') {
+                alert("댓글을 등록해주세요.")
+              } else {
+                var reply = {
+                  rno: rno,
+                  bno: bno,
+                  text: $('input[name="replyText"]').val(),
+                  id: id
                 }
-              });
-            });
 
+                console.log(reply);
+                $.ajax({
+                  url: '/replies/' + rno,
+                  method: 'put',
+                  data:  JSON.stringify(reply),
+                  contentType: 'application/json; charset=utf-8',
+                  success: function(result){
+
+                    console.log("RESULT: " + result);
+
+                    if(result ==='success'){
+                      alert("댓글이 수정되었습니다");
+                      modal.modal('hide');
+                      loadJSONData();
+                    }
+                  }
+                });
+              }
+            });
           });
 
         </script>
