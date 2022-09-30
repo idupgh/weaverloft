@@ -50,6 +50,7 @@
               </div>
             </div>
             <form action="#" th:action="@{'/boards'}" th:object="${boardDTO}" th:method="post" enctype="multipart/form-data">
+              <input type="hidden" th:value="${session.login.id}" th:name="writerId">
               <div class="card-body">
                 <div class="form-group">
                   <label for="inputName">Title</label>
@@ -70,7 +71,6 @@
                       </div>
                   </div>
                 </div>
-                <input type="hidden" th:value="${session.login.id}" th:name="writerId">
               </div>
               <a href="/" class="btn btn-secondary">Cancel</a>
               <input type="submit" value="Register" class="btn btn-success float-right">
@@ -90,13 +90,6 @@
   </div>
   <!-- /.content-wrapper -->
   <script>
-    $(document).ready(function(){
-      var errorMessage = [[${errorMessage}]];
-      if(errorMessage != null){
-        alert(errorMessage);
-      }
-    });
-
     $(document).ready(function(){
       $("a[name='file-delete']").on("click",function(e){
         e.preventDefault();
