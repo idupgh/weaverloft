@@ -88,13 +88,13 @@
                             <li class="nav-item">
                                 <a th:href="@{/members/regform}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Member Register(회원 등록)</p>
+                                    <p>회원 가입</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a th:href="@{/members/login}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Member Login</p>
+                                    <p>로그인</p>
                                 </a>
                             </li>
                         </ul>
@@ -103,32 +103,38 @@
                             <li class="nav-item" th:if="${session.isadmin != null}">
                                 <a th:href="@{/members/list}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Member List(회원 목록)</p>
+                                    <p>관리자 - 회원 목록</p>
                                 </a>
                             </li>
 
                             <li class="nav-item">
                                 <a th:href="'/members/' + ${session.login.id}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Member Info</p>
+                                    <p>개인 정보</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a th:href="@{'/members/' + 'update/' + ${session.login.id}}" class="nav-link">
+                                <a th:href="@{'/members/' + 'upform/' + ${session.login.id}}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Member Modify(수정)</p>
+                                    <p>개인 정보 수정</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a th:href="@{'/members/' + 'pwupform/' + ${session.login.id}}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>비밀 번호 수정</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a th:href="@{'/members/' + ${session.login.id} + '/delform'}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Member Delete(탈퇴)</p>
+                                    <p>회원 탈퇴</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a th:href="@{/members/logout}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Member Logout(로그아웃)</p>
+                                    <p>로그아웃</p>
                                 </a>
                             </li>
                         </ul>
@@ -136,7 +142,7 @@
                             <li class="nav-item">
                                 <a href="/members/logout" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Member Logout(로그아웃)</p>
+                                    <p>로그아웃</p>
                                 </a>
                             </li>
                         </ul>
@@ -249,13 +255,13 @@
                             <li class="nav-item">
                                 <a th:href="@{/boards}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>List</p>
+                                    <p>게시글 목록</p>
                                 </a>
                             </li>
                             <li class="nav-item" th:if="${session.login != null && session.block == 'unblock'}">
                                 <a th:href="@{/boards/regform}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Register</p>
+                                    <p>글 작성</p>
                                 </a>
                             </li>
 

@@ -19,6 +19,9 @@ public interface MemberService {
     MemberDTO readById(String id);
     List<MemberDTO> readAll();
     void update(MemberDTO memberDTO);
+
+    void pwupdate(MemberDTO memberDTO);
+
     void delete(MemberDTO memberDTO);
     PageResultDTO<MemberDTO, MemberEntity> readListBy(PageRequestDTO pageRequestDTO);
     MemberDTO readByName(MemberDTO memberDTO);

@@ -101,10 +101,17 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void update(MemberDTO memberDTO) {
         MemberEntity entity = dtoToEntity(memberDTO);
+        memberRepository.save(entity);
+    }
+
+    @Override
+    public void pwupdate(MemberDTO memberDTO) {
+        MemberEntity entity = dtoToEntity(memberDTO);
         String encodedPassword = passwordEncoder.encode(entity.getPw());
         entity.setPw(encodedPassword);
         memberRepository.save(entity);
     }
+
 
     @Override
     public void delete(MemberDTO memberDTO) {

@@ -48,7 +48,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="#" th:action="@{'/members/'+ 'update/' + ${memberDTO.id}}" th:object="${memberDTO}" th:method="put">
+              <form action="#" th:action="@{'/members/'+ 'pwupdate/' + ${memberDTO.id}}" th:object="${memberDTO}" th:method="put">
                 <div class="card-body">
                   <div class="form-group">
                     <input type="hidden" name="id" th:field="*{id}" class="form-control" id="exampleInputId1" placeholder="Enter Id" readonly>
@@ -75,10 +75,11 @@
                   <div class="form-group" th:if="${session.isadmin != null}">
                     <div class="form-group"><p><strong>사용자 권한</strong></p>
                       <input type="hidden" th:field="${role}">
+                    </div>
                   </div>
                   <input type="hidden" th:field="*{delete_yn}"/>
-
-                </div>
+                  <input type="hidden" th:field="*{block}"/>
+                  <input type="hidden" th:field="*{role}"/>
                 <!-- /.card-body -->
 
                 <div class="card-footer">

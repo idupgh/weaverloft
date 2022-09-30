@@ -14,7 +14,6 @@ import javax.validation.constraints.Pattern;
 public class MemberDTO { // DTO(Data Transform Object) : Client <-> Controller <-> Service
 
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
-    @Pattern(regexp = "^(?!admin).*$", message = "ID 에 admin은 포함할 수 없습니다.")
     @Pattern(regexp = "^[a-z0-9]{4,20}$", message = "아이디는 영어 소문자와 숫자만 사용하여 4~20자리여야 합니다.")
     private String id;
 

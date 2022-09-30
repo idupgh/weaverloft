@@ -89,7 +89,7 @@ public class MemberController {
         return "/members/members";
     }
 
-    @GetMapping("/update/{idx}")
+    @GetMapping("/upform/{idx}")
     public String getUpform(@PathVariable("idx") String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(id);
@@ -117,7 +117,7 @@ public class MemberController {
         } else
             return "/members/upform"; // view resolving : upform.html
     }
-    @GetMapping("/pwupdate/{idx}")
+    @GetMapping("/pwupform/{idx}")
     public String getPwUpform(@PathVariable("idx") String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         // 정보를 전달받을 객체를 보냄
         MemberDTO memberDTO = memberService.readById(id);
@@ -159,6 +159,24 @@ public class MemberController {
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage",e.getMessage());
             return "/members/upform";
+        }
+
+        return "/members/contacts"; // view resolving : update info 확인
+    }
+
+    @PutMapping("/pwupdate/{idx}")
+    public String putMemberPw(@Valid @ModelAttribute("memberDTO") MemberDTO memberDTO, BindingResult bindingResult ,Model model) {
+        // HTML 에서 전달된 model 객체를 전달 받음 : member 라는 애트리뷰트 명 th:object 애트리뷰트 값
+
+        if(bindingResult.hasErrors()){
+            return "/members/pwupform";
+        }
+        try{
+            memberService.pwupdate(memberDTO);
+            model.addAttribute(memberDTO);
+        } catch (IllegalStateException e){
+            model.addAttribute("errorMessage",e.getMessage());
+            return "/members/pwupform";
         }
 
         return "/members/contacts"; // view resolving : update info 확인
