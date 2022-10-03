@@ -48,7 +48,7 @@
           <h3 class="card-title">Boards</h3>
 
             <div class="card-tools">
-                <form name="form" th:method="get">
+                <form name="form" th:method="get" style=" width: 90%; float: left; margin-top: 5px;">
                     <div class="input-group">
                         <input type="hidden" id="page" name="page" value="1">
                         <div class="input-group-prepend">
@@ -63,13 +63,14 @@
                             </select>
                         </div>
                         <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="keyword" th:value="${pageRequestDTO.keyword}">
-                        <div class="input-group-append">
-                            <button class="btn btn-default" onclick="javascript:search()">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
+
                     </div>
                 </form>
+                <div class="input-group-append" style="float: left;">
+                    <button class="btn btn-default" onclick="search();">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
             </div>
         </div>
         <div class="card-body p-0">
@@ -140,7 +141,7 @@
 
                   <li th:class="'page-item' + ${list.currentPage == page? ' active':''}"
                       th:each="page : ${list.pageList}">
-                      <a class="page-link" th:href="@{/boards(page=${page},sort=${pageRequestDTO.sort},
+                      <a class="page-link" th:href="@{/boards(page=${page},
                     type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">[[${page}]]</a>
                   </li>
                   <li class="page-item" th:if="${list.nextPage}">
@@ -156,7 +157,7 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-    <script th:inline="javascript">
+    <script>
         var keyword = "";
         var page = "";
         var type = "";
@@ -166,15 +167,16 @@
             page = $("#page").val();
             if(type == "검색"){
                 alert("종류를 선택하세요.");
-                $("#tpye").focus();
-                return ;
+                $("#type").focus();
+                return false;
             }
             else if(keyword == ""){
                 alert("검색어를 입력하세요.");
                 $("#keyword").focus();
-                return ;
-            }else{
-                var form = document.from;
+                return false;
+            }
+            else{
+                var form = document.form;
                 form.action = "/boards";
                 form.submit();
             }
