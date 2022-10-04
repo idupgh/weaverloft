@@ -93,6 +93,9 @@
                         -->
                         </tbody>
                       </table>
+                      <td th:if="${list.dtoList.isEmpty()}">
+                        <h2 style="text-align: center">검색 결과가 없습니다.</h2>
+                      </td>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer clearfix">
@@ -116,6 +119,9 @@
                         </li>
                       </ul>
                       <a th:href="@{'/members/regform'}" class="btn btn-sm bg-teal">등록</a>
+                      <form action='/members/excel/download' method="get">
+                        <button type="submit">Excel</button>
+                      </form>
                     </div>
                   </div>
                   <!-- /.card -->

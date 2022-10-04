@@ -13,6 +13,9 @@ import java.util.stream.IntStream;
 
 public class PageResultDTO<DTO, EN> { //Generics
     private List<DTO> dtoList;
+
+    private List<DTO> allList;
+    private List<DTO> list;
     private int totalPage; // 총 페이지수
 
     private int currentPage; // 현재 페이지
@@ -25,7 +28,12 @@ public class PageResultDTO<DTO, EN> { //Generics
     //페이지 번호 목록
     private List<Integer> pageList;
     public PageResultDTO(Page<EN> result, Function<EN, DTO> fn) {
+
+
         dtoList = result.stream().map(fn).collect(Collectors.toList());
+//        for(int i = 0; i<result.getTotalPages(); i++) {
+//            allList.addAll(dtoList);
+//        }
         totalPage = result.getTotalPages();
         totalSize = result.getTotalElements();
         makePageList(result.getPageable());

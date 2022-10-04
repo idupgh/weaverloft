@@ -1,5 +1,6 @@
 package iducs.springboot.weaverloft.service;
 
+import com.querydsl.core.BooleanBuilder;
 import iducs.springboot.weaverloft.domain.MemberDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.domain.PageResultDTO;
@@ -24,6 +25,12 @@ public interface MemberService {
 
     void delete(MemberDTO memberDTO);
     PageResultDTO<MemberDTO, MemberEntity> readListBy(PageRequestDTO pageRequestDTO);
+//    List<MemberEntity> search(String keyword);
+
+    PageResultDTO<MemberDTO, MemberEntity> readAllListBy(PageRequestDTO pageRequestDTO);
+
+    BooleanBuilder findByCondition(PageRequestDTO pageRequestDTO);
+
     MemberDTO readByName(MemberDTO memberDTO);
     MemberDTO readByEmail(String member);
 

@@ -2,7 +2,13 @@ package iducs.springboot.weaverloft.controller;
 
 import iducs.springboot.weaverloft.domain.MemberDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
+import iducs.springboot.weaverloft.entity.MemberEntity;
 import iducs.springboot.weaverloft.service.MemberService;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -270,5 +277,50 @@ public class MemberController {
     public String getLogout(HttpSession session) {
         session.invalidate();
         return "redirect:/"; // view resolving
+    }
+
+    //Excel
+    @GetMapping("/excel/download")
+    public void excelDownload(HttpServletResponse response, MemberDTO memberDTO, PageRequestDTO pageRequestDTO) throws IOException {
+//        Workbook wb = new HSSFWorkbook();
+        List<MemberDTO> members = memberService.readAllListBy(pageRequestDTO).getDtoList(); // domain 의 리스트, DTO 의 리스트
+        int page = memberService.readListBy(pageRequestDTO).getTotalPage();
+        int j = pageRequestDTO.getPage();
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("첫번째 시트");
+        Row row = null;
+        Cell cell = null;
+        int rowNum = 0;
+
+        // Header
+        row = sheet.createRow(rowNum++);
+        cell = row.createCell(0);
+        cell.setCellValue("번호");
+        cell = row.createCell(1);
+        cell.setCellValue("이름");
+        cell = row.createCell(2);
+        cell.setCellValue("제목");
+
+        // Body
+
+        for (int i = 0; i < page; i++) {
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(0);
+            cell.setCellValue(members.get(i).getId());
+            cell = row.createCell(1);
+            cell.setCellValue(i + "_name");
+            cell = row.createCell(2);
+            cell.setCellValue(i + "_title");
+        }
+
+
+        // 컨텐츠 타입과 파일명 지정
+        response.setContentType("ms-vnd/excel");
+//        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
+        response.setHeader("Content-Disposition", "attachment;filename=example.xlsx");
+
+        // Excel File Output
+        wb.write(response.getOutputStream());
+        wb.close();
     }
 }

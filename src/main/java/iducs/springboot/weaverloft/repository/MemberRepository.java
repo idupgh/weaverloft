@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface MemberRepository extends JpaRepository<MemberEntity, Long>,
         QuerydslPredicateExecutor<MemberEntity> {
     @Query("select m from MemberEntity m where m.id = :id")

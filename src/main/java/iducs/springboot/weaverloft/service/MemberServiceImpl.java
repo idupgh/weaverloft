@@ -136,7 +136,35 @@ public class MemberServiceImpl implements MemberService{
 
         return new PageResultDTO<>(result, fn);
     }
-    private BooleanBuilder findByCondition(PageRequestDTO pageRequestDTO) {
+
+    @Override
+    public PageResultDTO<MemberDTO, MemberEntity> readAllListBy(PageRequestDTO pageRequestDTO) {
+        Sort sort = Sort.by("regDate").descending();
+        if(pageRequestDTO.getSort() == null)
+            sort = Sort.by("regDate").descending();
+        else if(pageRequestDTO.getSort().equals("asc"))
+            sort = Sort.by("regDate").ascending();
+        BooleanBuilder booleanBuilder = findByCondition(pageRequestDTO);
+        Pageable pageable = pageRequestDTO.getPageable(sort);
+
+
+        Page<MemberEntity> result = memberRepository.findAll(booleanBuilder, pageable);
+        pageRequestDTO.setSize(result.getTotalPages());
+
+        // Page<MemberEntity> result = memberRepository.findAll(pageable);
+        Function<MemberEntity, MemberDTO> fn = (entity -> entityToDto(entity));
+
+        return new PageResultDTO<>(result, fn);
+    }
+
+    //@Override
+//    public List<MemberEntity> search(String keyword) {
+//        List<MemberEntity> memberList = memberRepository.findByTitleContaining(keyword);
+//        return memberList;
+//    }
+
+    @Override
+    public BooleanBuilder findByCondition(PageRequestDTO pageRequestDTO) {
         String type = pageRequestDTO.getType();
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
