@@ -45,23 +45,24 @@
 
 
           <div class="card-tools">
-                        <form th:action="@{'/members/list'}" th:method="get">
+                        <form th:action="@{'/members/list'}" th:method="get" style=" width: 90%; float: left; margin-top: 5px;">
                           <div class="input-group input-group-sm" style="width: 350px;">
-                            <select class="form-control" name="type">
-                              <option value=""> 검색</option>
+                            <select class="form-control" id="type" name="type">
+                              <option value="검색"> 검색</option>
                               <option value="e">email</option>
                               <option value="n">name</option>
                               <option value="a">address</option>
                               <option value="ea">email + address</option>
                             </select>
-                            <input type="text" name="keyword" class="form-control float-right" placeholder="keyword">
-                            <div class="input-group-append">
-                              <button type="submit" class="btn btn-default">
-                                <i class="fas fa-search"></i>
-                              </button>
-                            </div>
+                            <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="keyword">
+
                           </div>
                         </form>
+                        <div class="input-group-append">
+                          <button class="btn btn-default" onclick="search();">
+                            <i class="fas fa-search"></i>
+                          </button>
+                        </div>
                       </div>
                     </div>
                     <!-- /.card-header -->
@@ -129,6 +130,31 @@
 
 </div>
 <!-- ./wrapper -->
+<script>
+  var keyword = "";
+  var page = "";
+  var type = "";
+  function search(){
+    keyword = $("#keyword").val();
+    type = $("#type").val();
+    page = $("#page").val();
+    if(type == "검색"){
+      alert("종류를 선택하세요.");
+      $("#type").focus();
+      return false;
+    }
+    else if(keyword == ""){
+      alert("검색어를 입력하세요.");
+      $("#keyword").focus();
+      return false;
+    }
+    else{
+      var form = document.form;
+      form.action = "/members/list";
+      form.submit();
+    }
+  }
+</script>
 <script th:inline="javascript">
   var list = [[${list.dtoList}]];
   var name = "";
