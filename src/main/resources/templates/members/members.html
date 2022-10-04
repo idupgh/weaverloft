@@ -107,7 +107,7 @@
 
                         <li th:class="'page-item' + ${list.currentPage == page? ' active':''}"
                             th:each="page : ${list.pageList}">
-                          <a class="page-link" th:href="@{/members/list(page=${page},sort=${pageRequestDTO.sort},
+                          <a class="page-link" th:href="@{/members/list(page=${page},
                           type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">[[${page}]]</a>
                         </li>
                         <li class="page-item" th:if="${list.nextPage}">
