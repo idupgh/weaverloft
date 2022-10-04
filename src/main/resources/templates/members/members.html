@@ -45,16 +45,16 @@
 
 
           <div class="card-tools">
-                        <form th:action="@{'/members/list'}" th:method="get" style=" width: 90%; float: left; margin-top: 5px;">
-                          <div class="input-group input-group-sm" style="width: 350px;">
-                            <select class="form-control" id="type" name="type">
-                              <option value="검색"> 검색</option>
-                              <option value="e">email</option>
-                              <option value="n">name</option>
-                              <option value="a">address</option>
-                              <option value="ea">email + address</option>
+                        <form name="form" th:method="get" style=" width: 90%; float: left; margin-top: 5px;">
+                          <div class="input-group" style="width: 350px;">
+                            <select class="form-control" id="type" name="type" th:value="${pageRequestDTO.type}">
+                              <option value="검색" th:selected="${pageRequestDTO.type == null}"> 검색</option>
+                              <option value="e" th:selected="${pageRequestDTO.type == 'e'}">email</option>
+                              <option value="n" th:selected="${pageRequestDTO.type == 'n'}">name</option>
+                              <option value="a" th:selected="${pageRequestDTO.type == 'a'}">address</option>
+                              <option value="ea" th:selected="${pageRequestDTO.type == 'ea'}">email + address</option>
                             </select>
-                            <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="keyword">
+                            <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="keyword" th:value="${pageRequestDTO.keyword}">
 
                           </div>
                         </form>
@@ -63,6 +63,9 @@
                             <i class="fas fa-search"></i>
                           </button>
                         </div>
+            <div style="float:right">
+                        검색결과 : [[${count}]] 건
+            </div>
                       </div>
                     </div>
                     <!-- /.card-header -->
@@ -119,8 +122,10 @@
                         </li>
                       </ul>
                       <a th:href="@{'/members/regform'}" class="btn btn-sm bg-teal">등록</a>
-                      <form action='/members/excel/download' method="get">
-                        <button type="submit">Excel</button>
+                      <form method="get" name="excelform" style="float:right">
+                        <input type="hidden" name="keyword">
+                        <input type="hidden" name="type">
+                        <button onclick="exceldownload();">Excel</button>
                       </form>
                     </div>
                   </div>
@@ -159,6 +164,14 @@
       form.action = "/members/list";
       form.submit();
     }
+  }
+
+  function exceldownload(){
+    var form = document.excelform;
+    form.keyword.value = document.form.keyword.value;
+    form.type.value = document.form.type.value;
+    form.action = "/members/excel/download";
+    form.submit();
   }
 </script>
 <script th:inline="javascript">

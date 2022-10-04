@@ -92,6 +92,7 @@ public class MemberController {
         //List<Member> members = memberService.readAll(); // domain 의 리스트, DTO 의 리스트
         //List<MemoEntity> memos = memoService.findAll();
         model.addAttribute("list", memberService.readListBy(pageRequestDTO));
+        model.addAttribute("count",memberService.readListBy(pageRequestDTO).getTotalSize());
         //return "/members/members";
         return "/members/members";
     }
@@ -283,8 +284,9 @@ public class MemberController {
     @GetMapping("/excel/download")
     public void excelDownload(HttpServletResponse response, MemberDTO memberDTO, PageRequestDTO pageRequestDTO) throws IOException {
 //        Workbook wb = new HSSFWorkbook();
-        List<MemberDTO> members = memberService.readAllListBy(pageRequestDTO).getDtoList(); // domain 의 리스트, DTO 의 리스트
-        int page = memberService.readListBy(pageRequestDTO).getTotalPage();
+        pageRequestDTO.setSize((int) memberService.readListBy(pageRequestDTO).getTotalSize());
+        List<MemberDTO> members = memberService.readListBy(pageRequestDTO).getDtoList(); // domain 의 리스트, DTO 의 리스트
+        int count = pageRequestDTO.getSize();
         int j = pageRequestDTO.getPage();
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet("첫번째 시트");
@@ -295,29 +297,41 @@ public class MemberController {
         // Header
         row = sheet.createRow(rowNum++);
         cell = row.createCell(0);
-        cell.setCellValue("번호");
+        cell.setCellValue("Id");
         cell = row.createCell(1);
         cell.setCellValue("이름");
         cell = row.createCell(2);
-        cell.setCellValue("제목");
+        cell.setCellValue("Email");
+        cell = row.createCell(3);
+        cell.setCellValue("전화번호");
+        cell = row.createCell(4);
+        cell.setCellValue("주소");
+        cell = row.createCell(5);
+        cell.setCellValue("탈퇴여부");
 
         // Body
 
-        for (int i = 0; i < page; i++) {
+        for (int i = 0; i < count; i++) {
             row = sheet.createRow(rowNum++);
             cell = row.createCell(0);
             cell.setCellValue(members.get(i).getId());
             cell = row.createCell(1);
-            cell.setCellValue(i + "_name");
+            cell.setCellValue(members.get(i).getName());
             cell = row.createCell(2);
-            cell.setCellValue(i + "_title");
+            cell.setCellValue(members.get(i).getEmail());
+            cell = row.createCell(3);
+            cell.setCellValue(members.get(i).getPhone());
+            cell = row.createCell(4);
+            cell.setCellValue(members.get(i).getAddress());
+            cell = row.createCell(5);
+            cell.setCellValue(members.get(i).getDelete_yn());
         }
 
 
         // 컨텐츠 타입과 파일명 지정
         response.setContentType("ms-vnd/excel");
 //        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
-        response.setHeader("Content-Disposition", "attachment;filename=example.xlsx");
+        response.setHeader("Content-Disposition", "attachment;filename=member_list.xlsx");
 
         // Excel File Output
         wb.write(response.getOutputStream());
