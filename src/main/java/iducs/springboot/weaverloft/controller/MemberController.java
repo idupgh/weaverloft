@@ -331,7 +331,7 @@ public class MemberController {
         response.setContentType("ms-vnd/excel");
 //        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
         String fileName = "회원목록" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        // 엑셀 다운로드시 한글 깨짐 처리
+        // 엑셀 다운로드시 엑셀 이름 한글 깨짐 처리
         String outputFileName = new String(fileName.getBytes("KSC5601"), "8859_1");
         response.setHeader("Content-Disposition", "attachment;filename=" + outputFileName + ".xlsx");
         response.setStatus(200);
@@ -347,7 +347,7 @@ public class MemberController {
 
         List<ExcelData> dataList = new ArrayList<>();
         List<MemberDTO> memberDTOList = memberService.readAll(); // 모든 멤버의 리스트
-        List<Object> memberid = memberDTOList.stream().map(e -> e.getId()).collect(Collectors.toCollection(ArrayList::new));
+        List<Object> memberid = memberDTOList.stream().map(MemberDTO::getId).collect(Collectors.toCollection(ArrayList::new));
         // 비교하기 위해 변환
 
 
@@ -375,9 +375,9 @@ public class MemberController {
 
             data.setId(row.getCell(0).getStringCellValue());
 
-            dataList.add(data);
+            dataList.add(data); // 엑셀 데이터를 리스트로
         }
-        List<String> dataid = dataList.stream().map(e -> e.getId()).collect(Collectors.toCollection(ArrayList::new));
+        List<String> dataid = dataList.stream().map(ExcelData::getId).collect(Collectors.toCollection(ArrayList::new));
         // 비교하기 위해 변환
 
         model.addAttribute("datas", dataList); // 5 >>
@@ -387,9 +387,14 @@ public class MemberController {
         List<Object> result = memberid.stream().filter(dataid::contains).collect(Collectors.toList());
         // 두 리스트의 교집합. 존재하는 값만 추출
         List<MemberDTO> resultid = (List<MemberDTO>) (Object) result;
-        model.addAttribute("result", result);
-        for(int i = 0; i< result.size(); i++) {
-            resultid.add(memberService.readById(resultid.get(i).getId()));
+        model.addAttribute("result", resultid);
+        for(int i = 0; i< memberDTOList.size(); i++) {
+            for(int j = 0; j<result.size(); j++) {
+                if (memberDTOList.get(i).getId().contains(resultid.get(j).getId())) {
+                    memberid.add(memberService.readById((String) result.get(j)));
+                }
+            }
+//            resultid.add(memberService.readById(resultid.get(i).getId()));
         }
         for(int i = 0; i < result.size(); i++) {
             MemberDTO memberDTO = memberService.readById(resultid.get(i).getId());
