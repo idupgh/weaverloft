@@ -349,6 +349,7 @@ public class MemberController {
         List<MemberDTO> memberDTOList = memberService.readAll(); // 모든 멤버의 리스트
         List<Object> memberid = memberDTOList.stream().map(MemberDTO::getId).collect(Collectors.toCollection(ArrayList::new));
         // 비교하기 위해 변환
+        List<MemberDTO> newList = new ArrayList<>();
 
 
         String extension = FilenameUtils.getExtension(file.getOriginalFilename()); // 3
@@ -387,22 +388,35 @@ public class MemberController {
         List<Object> result = memberid.stream().filter(dataid::contains).collect(Collectors.toList());
         // 두 리스트의 교집합. 존재하는 값만 추출
         List<MemberDTO> resultid = (List<MemberDTO>) (Object) result;
-        model.addAttribute("result", resultid);
+        int succount = 0;
+
         for(int i = 0; i< memberDTOList.size(); i++) {
             for(int j = 0; j<result.size(); j++) {
-                if (memberDTOList.get(i).getId().contains(resultid.get(j).getId())) {
-                    memberid.add(memberService.readById((String) result.get(j)));
+                if (memberDTOList.get(i).getId().contains((CharSequence) resultid.get(j))){
+                    //newList.add(memberService.readById((String) result.get(j)));
+                    MemberDTO memberDTO = memberService.readById(String.valueOf(resultid.get(j)));
+                    if(!memberDTO.getDelete_yn().equals("y")){
+                        memberDTO.setDelete_yn("y");
+                        memberService.update(memberDTO);
+                        succount++;
+                    }
                 }
             }
 //            resultid.add(memberService.readById(resultid.get(i).getId()));
         }
-        for(int i = 0; i < result.size(); i++) {
-            MemberDTO memberDTO = memberService.readById(resultid.get(i).getId());
-            memberDTO.setDelete_yn("y");
-            memberService.update(memberDTO);
-        }
+        int dulcount = resultid.size()-succount;
+        model.addAttribute("allcount", dataList.size());
+        model.addAttribute("succount", succount);
+        model.addAttribute("facount", dataList.size() - succount);
 
-        return "redirect:/members/list?page=1&type=&keyword=";
+//        for(int i = 0; i < result.size(); i++) {
+//            MemberDTO memberDTO = memberService.readById(resultid.get(i).getId());
+//            memberDTO.setDelete_yn("y");
+//            memberService.update(memberDTO);
+//        }
+
+//        return "redirect:/members/list";
+        return "redirect:/members/list?allcount="+dataList.size()+"&succount="+succount+"&facount="+(dataList.size() - succount)+"&dulcount="+dulcount;
 
     }
 }

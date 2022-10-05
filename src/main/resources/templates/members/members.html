@@ -142,6 +142,25 @@
 
 </div>
 <!-- ./wrapper -->
+<script th:inline="javascript">
+
+
+  $(document).ready(function() {
+
+    const urlParams = new URL(location.href).searchParams;
+    const allcount = urlParams.get('allcount');
+    const succount = urlParams.get('succount');
+    const facount = urlParams.get('facount');
+    const dulcount = urlParams.get('dulcount');
+
+
+    if(allcount != null && succount != null && facount != null){
+      alert("업로드 시도 한 갯수 : " + allcount + "\n" + "성공 갯수 : " + succount + "\n" + "실패 갯수 : " + facount + "(중복된 데이터 :" + dulcount + ")");
+    }
+  });
+
+
+</script>
 <script>
   var keyword = "";
   var page = "";
@@ -177,12 +196,12 @@
 
   function fileclick(){
     var fileCheck = document.getElementById("file").value;
+    var form = document.excelupload;
     if(!fileCheck){
       alert("파일을 첨부해 주세요");
       return false;
     }
     else {
-      var form = document.excelupload;
       form.action = "/members/excel/read";
       form.submit();
     }
