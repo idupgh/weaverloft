@@ -1,9 +1,11 @@
 package iducs.springboot.weaverloft.controller;
 
+import iducs.springboot.weaverloft.domain.ExcelData;
 import iducs.springboot.weaverloft.domain.MemberDTO;
 import iducs.springboot.weaverloft.domain.PageRequestDTO;
-import iducs.springboot.weaverloft.entity.MemberEntity;
 import iducs.springboot.weaverloft.service.MemberService;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -12,8 +14,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,9 +23,10 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/members")
@@ -303,10 +306,8 @@ public class MemberController {
         cell = row.createCell(2);
         cell.setCellValue("Email");
         cell = row.createCell(3);
-        cell.setCellValue("전화번호");
-        cell = row.createCell(4);
         cell.setCellValue("주소");
-        cell = row.createCell(5);
+        cell = row.createCell(4);
         cell.setCellValue("탈퇴여부");
 
         // Body
@@ -320,10 +321,8 @@ public class MemberController {
             cell = row.createCell(2);
             cell.setCellValue(members.get(i).getEmail());
             cell = row.createCell(3);
-            cell.setCellValue(members.get(i).getPhone());
-            cell = row.createCell(4);
             cell.setCellValue(members.get(i).getAddress());
-            cell = row.createCell(5);
+            cell = row.createCell(4);
             cell.setCellValue(members.get(i).getDelete_yn());
         }
 
@@ -331,10 +330,74 @@ public class MemberController {
         // 컨텐츠 타입과 파일명 지정
         response.setContentType("ms-vnd/excel");
 //        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
-        response.setHeader("Content-Disposition", "attachment;filename=member_list.xlsx");
+        String fileName = "회원목록" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        // 엑셀 다운로드시 한글 깨짐 처리
+        String outputFileName = new String(fileName.getBytes("KSC5601"), "8859_1");
+        response.setHeader("Content-Disposition", "attachment;filename=" + outputFileName + ".xlsx");
+        response.setStatus(200);
 
         // Excel File Output
         wb.write(response.getOutputStream());
         wb.close();
+    }
+
+    @PostMapping("/excel/read")
+    public String readExcel(@RequestParam("file") MultipartFile file, Model model)
+            throws IOException { // 2
+
+        List<ExcelData> dataList = new ArrayList<>();
+        List<MemberDTO> memberDTOList = memberService.readAll(); // 모든 멤버의 리스트
+        List<Object> memberid = memberDTOList.stream().map(e -> e.getId()).collect(Collectors.toCollection(ArrayList::new));
+        // 비교하기 위해 변환
+
+
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename()); // 3
+
+        if (!extension.equals("xlsx") && !extension.equals("xls")) {
+            throw new IOException("엑셀파일만 업로드 해주세요.");
+        }
+
+        Workbook workbook = null;
+
+        if (extension.equals("xlsx")) {
+            workbook = new XSSFWorkbook(file.getInputStream());
+        } else if (extension.equals("xls")) {
+            workbook = new HSSFWorkbook(file.getInputStream());
+        }
+
+        Sheet worksheet = workbook.getSheetAt(0);
+
+        for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) { // 4
+
+            Row row = worksheet.getRow(i);
+
+            ExcelData data = new ExcelData();
+
+            data.setId(row.getCell(0).getStringCellValue());
+
+            dataList.add(data);
+        }
+        List<String> dataid = dataList.stream().map(e -> e.getId()).collect(Collectors.toCollection(ArrayList::new));
+        // 비교하기 위해 변환
+
+        model.addAttribute("datas", dataList); // 5 >>
+        // -------------------------excel 파일 데이터 리스트
+
+
+        List<Object> result = memberid.stream().filter(dataid::contains).collect(Collectors.toList());
+        // 두 리스트의 교집합. 존재하는 값만 추출
+        List<MemberDTO> resultid = (List<MemberDTO>) (Object) result;
+        model.addAttribute("result", result);
+        for(int i = 0; i< result.size(); i++) {
+            resultid.add(memberService.readById(resultid.get(i).getId()));
+        }
+        for(int i = 0; i < result.size(); i++) {
+            MemberDTO memberDTO = memberService.readById(resultid.get(i).getId());
+            memberDTO.setDelete_yn("y");
+            memberService.update(memberDTO);
+        }
+
+        return "redirect:/members/list?page=1&type=&keyword=";
+
     }
 }

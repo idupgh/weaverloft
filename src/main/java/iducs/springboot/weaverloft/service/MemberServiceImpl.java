@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.*;
 import java.util.function.Function;
 
@@ -275,4 +276,5 @@ public class MemberServiceImpl implements MemberService{
             member.setDelete_yn("y");
         }
     }
+
 }

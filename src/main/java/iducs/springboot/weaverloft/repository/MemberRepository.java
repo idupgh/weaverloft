@@ -23,4 +23,5 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long>,
     MemberEntity findById(String id);
 
     MemberEntity getById(String id);
+
 }

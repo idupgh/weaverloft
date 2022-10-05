@@ -109,6 +109,7 @@ public class BoardController {
     public String getList(PageRequestDTO pageRequestDTO, Model model, Long bno, HttpServletResponse response) throws IOException {
 
         model.addAttribute("list", boardService.getList(pageRequestDTO));
+        model.addAttribute("count", boardService.getList(pageRequestDTO).getTotalSize());
 
         return "/boards/list"; // boards/list.html 전달
     }

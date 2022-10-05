@@ -52,8 +52,8 @@ dependencies {
     implementation group: 'org.imgscalr', name: 'imgscalr-lib', version: '4.2' // 이미지
 
     //excel
-    compile group: 'org.apache.poi', name: 'poi', version: '4.1.2'        // HSSFWorkbook 사용가능
-    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'  // XSSFWorkbook 사용가능
+    compile group: 'org.apache.poi', name: 'poi', version: '3.11'        // HSSFWorkbook 사용가능
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.11'  // XSSFWorkbook 사용가능
 }
 
 tasks.named('test') {

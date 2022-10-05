@@ -42,32 +42,29 @@
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">Members</h3>
-
-
           <div class="card-tools">
-                        <form name="form" th:method="get" style=" width: 90%; float: left; margin-top: 5px;">
-                          <div class="input-group" style="width: 350px;">
-                            <select class="form-control" id="type" name="type" th:value="${pageRequestDTO.type}">
-                              <option value="검색" th:selected="${pageRequestDTO.type == null}"> 검색</option>
-                              <option value="e" th:selected="${pageRequestDTO.type == 'e'}">email</option>
-                              <option value="n" th:selected="${pageRequestDTO.type == 'n'}">name</option>
-                              <option value="a" th:selected="${pageRequestDTO.type == 'a'}">address</option>
-                              <option value="ea" th:selected="${pageRequestDTO.type == 'ea'}">email + address</option>
-                            </select>
-                            <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="keyword" th:value="${pageRequestDTO.keyword}">
-
-                          </div>
-                        </form>
-                        <div class="input-group-append">
-                          <button class="btn btn-default" onclick="search();">
-                            <i class="fas fa-search"></i>
-                          </button>
-                        </div>
-            <div style="float:right">
-                        검색결과 : [[${count}]] 건
+            <form name="form" th:method="get" style=" width: 90%; float: left; margin-top: 5px;">
+              <div class="input-group" style="width: 350px;">
+                <select class="form-control" id="type" name="type" th:value="${pageRequestDTO.type}">
+                  <option value="검색" th:selected="${pageRequestDTO.type == null}"> 검색</option>
+                  <option value="e" th:selected="${pageRequestDTO.type == 'e'}">email</option>
+                  <option value="n" th:selected="${pageRequestDTO.type == 'n'}">name</option>
+                  <option value="a" th:selected="${pageRequestDTO.type == 'a'}">address</option>
+                  <option value="ea" th:selected="${pageRequestDTO.type == 'ea'}">email + address</option>
+                </select>
+                <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="keyword" th:value="${pageRequestDTO.keyword}">
+              </div>
+            </form>
+            <div class="input-group-append">
+              <button class="btn btn-default" onclick="search();">
+                <i class="fas fa-search"></i>
+              </button>
             </div>
-                      </div>
-                    </div>
+            <div style="float:right">
+              검색결과 : [[${count}]] 건
+            </div>
+          </div>
+        </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                       <table class="table table-bordered">
@@ -102,9 +99,6 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer clearfix">
-
-
-
                       <ul class="pagination pagination-sm"  style="margin-left: 50%;">
                         <li class="page-item" th:if="${list.prevPage}">
                           <a class="page-link" th:href="@{/members/list(page=${list.startPage - 1},
@@ -125,8 +119,15 @@
                       <form method="get" name="excelform" style="float:right">
                         <input type="hidden" name="keyword">
                         <input type="hidden" name="type">
-                        <button onclick="exceldownload();">Excel</button>
+                        <button onclick="exceldownload();">회원목록 다운로드</button>
                       </form>
+                      <br>
+                        <div class="upload_file" style="float:right">
+                          <form name="excelupload" method="POST" enctype="multipart/form-data">
+                            <input type="file" name="file" id="file" accept=".xls,.xlsx" onchange='chk_file_type(this)'>
+                            <input type="button" value="upload" name="upload" onclick="fileclick()"/>
+                          </form>
+                        </div>
                     </div>
                   </div>
                   <!-- /.card -->
@@ -173,6 +174,36 @@
     form.action = "/members/excel/download";
     form.submit();
   }
+
+  function fileclick(){
+    var fileCheck = document.getElementById("file").value;
+    if(!fileCheck){
+      alert("파일을 첨부해 주세요");
+      return false;
+    }
+    else {
+      var form = document.excelupload;
+      form.action = "/members/excel/read";
+      form.submit();
+    }
+  }
+
+  function chk_file_type(obj) {
+    var file_kind = obj.value.lastIndexOf('.');
+    var file_name = obj.value.substring(file_kind+1,obj.length);
+    var file_type = file_name.toLowerCase();
+    var check_file_type=new Array();
+    check_file_type=['xlsx','xls'];
+    if(check_file_type.indexOf(file_type)==-1) {
+      alert('엑셀파일만 업로드 해주세요.');
+      var form = document.excelupload;
+      form.file.value = null;
+      parentObj  = obj.parentNode
+      node = parentObj.replaceChild(obj.cloneNode(true),obj);
+      return false;
+    }
+  }
+
 </script>
 <script th:inline="javascript">
   var list = [[${list.dtoList}]];

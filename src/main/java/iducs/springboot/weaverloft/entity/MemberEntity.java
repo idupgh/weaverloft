@@ -24,7 +24,7 @@ public class MemberEntity extends BaseEntity {
     @Column(length = 50, nullable = false, unique = true)
     private String id;
 
-    @Column(length = 255, nullable = false)
+    @Column(nullable = false)
     private String pw;
 
     @Column(length = 50, nullable = false)
