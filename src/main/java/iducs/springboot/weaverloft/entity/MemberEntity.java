@@ -37,7 +37,7 @@ public class MemberEntity extends BaseEntity {
     @Column(length = 100, nullable = false)
     private String address;
 
-    @Column(length = 7)
+    @Column(length = 20)
     @Builder.Default
     private String block = "unblock"; // 차단 여부
 

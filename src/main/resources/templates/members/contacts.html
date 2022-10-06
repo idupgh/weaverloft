@@ -68,10 +68,10 @@
 
                 <div class="card-footer">
                   <div class="text-right" th:if="${session.isadmin != null}">
-                    <a th:href="@{'/members/' + 'update/' + ${memberDTO.id}}" class="btn btn-sm bg-teal">
+                    <a th:href="@{'/members/' + 'upform/' + ${memberDTO.id}}" class="btn btn-sm bg-teal">
                       <i class="fas fa-comments"></i> 개인정보변경
                     </a>
-                    <a th:href="@{'/members/' + 'pwupdate/' + ${memberDTO.id}}" class="btn btn-sm bg-teal">
+                    <a th:href="@{'/members/' + 'pwupform/' + ${memberDTO.id}}" class="btn btn-sm bg-teal">
                       <i class="fas fa-comments"></i> 비밀번호변경
                     </a>
                     <a th:href="@{'/members/' + ${memberDTO.id} + '/delform'}" class="btn btn-sm bg-teal">

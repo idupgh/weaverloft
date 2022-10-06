@@ -24,7 +24,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Simple Tables</h1>
+            <h1>회원 목록</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -41,7 +41,7 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Members</h3>
+          <a th:href="@{'/members/regform'}" class="btn btn-sm bg-teal" style="float: left">회원 등록</a>
           <div class="card-tools">
             <form name="form" th:method="get" style=" width: 90%; float: left; margin-top: 5px;">
               <div class="input-group" style="width: 350px;">
@@ -115,15 +115,14 @@
                           type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">&raquo;</a>
                         </li>
                       </ul>
-                      <a th:href="@{'/members/regform'}" class="btn btn-sm bg-teal">등록</a>
-                      <form method="get" name="excelform" style="float:right">
+                      <form method="get" name="excelform" style="float:left">
                         <input type="hidden" name="keyword">
                         <input type="hidden" name="type">
                         <button onclick="exceldownload();">회원목록 다운로드</button>
                       </form>
-                      <br>
                         <div class="upload_file" style="float:right">
                           <form name="excelupload" method="POST" enctype="multipart/form-data">
+                            회원 일괄 탈퇴
                             <input type="file" name="file" id="file" accept=".xls,.xlsx" onchange='chk_file_type(this)'>
                             <input type="button" value="upload" name="upload" onclick="fileclick()"/>
                           </form>
@@ -156,6 +155,7 @@
 
     if(allcount != null && succount != null && facount != null){
       alert("업로드 시도 한 갯수 : " + allcount + "\n" + "성공 갯수 : " + succount + "\n" + "실패 갯수 : " + facount + "(중복된 데이터 :" + dulcount + ")");
+      location.href = 'http://localhost:8088/members/list?page=1&type=&keyword='
     }
   });
 

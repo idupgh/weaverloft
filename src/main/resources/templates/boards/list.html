@@ -45,14 +45,10 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Boards</h3>
-
             <div class="card-tools">
                 <form name="form" th:method="get" style=" width: 90%; float: left; margin-top: 5px;">
                     <div class="input-group">
                         <input type="hidden" id="page" name="page" value="1">
-                        <div class="input-group-prepend">
-
                             <select class="form-control" id="type" name="type">
                                 <option value="검색" th:selected="${pageRequestDTO.type == null}">검색</option>
                                 <option value="t" th:selected="${pageRequestDTO.type =='t'}">제목</option>
@@ -61,12 +57,10 @@
                                 <option value="tc" th:selected="${pageRequestDTO.type =='tc'}">제목 + 내용</option>
                                 <option value="tcw" th:selected="${pageRequestDTO.type =='tcw'}">제목 + 내용 + 작성자</option>
                             </select>
-                        </div>
                         <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="keyword" th:value="${pageRequestDTO.keyword}">
-
                     </div>
                 </form>
-                <div class="input-group-append" style="float: left;">
+                <div class="input-group-append">
                     <button class="btn btn-default" onclick="search();">
                         <i class="fas fa-search"></i>
                     </button>
