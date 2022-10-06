@@ -6,10 +6,7 @@ import iducs.springboot.weaverloft.domain.PageRequestDTO;
 import iducs.springboot.weaverloft.service.MemberService;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -297,6 +294,14 @@ public class MemberController {
         Cell cell = null;
         int rowNum = 0;
 
+        sheet.setColumnWidth(0, 3500); // cell 넓이 설정
+        sheet.setColumnWidth(1, 3500);
+        sheet.setColumnWidth(2, 6000);
+        sheet.setColumnWidth(3, 8000);
+
+        CellStyle cellStyle = wb.createCellStyle();
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+
         // Header
         row = sheet.createRow(rowNum++);
         cell = row.createCell(0);
@@ -342,17 +347,23 @@ public class MemberController {
     }
 
     @PostMapping("/excel/read")
-    public String readExcel(@RequestParam("file") MultipartFile file, Model model)
-            throws IOException { // 2
+    public String readExcel(@RequestParam("file") MultipartFile file, Model model) throws IOException {
+
+//        ExcelData dataList = Excel 값 담을 리스트
+//        MemeberDTO memberDTOList = 모든 멤버 리스트
+//        Object memberid = 비교를 위한 멤버 형변환 리스트
+//        String dataid = 비교를 위한 Excel 형변환 리스트
+//        Object result = 멤버 형변환 리스트와 Excel 형변환 리스트의 교집합 리스트
+//        MembetDTO resultid = 교집합 리스트를 MemberDTO로 전환
+
 
         List<ExcelData> dataList = new ArrayList<>();
-        List<MemberDTO> memberDTOList = memberService.readAll(); // 모든 멤버의 리스트
-        List<Object> memberid = memberDTOList.stream().map(MemberDTO::getId).collect(Collectors.toCollection(ArrayList::new));
+        // 모든 멤버 리스트
+        List<MemberDTO> memberDTOList = memberService.readAll();
         // 비교하기 위해 변환
-        List<MemberDTO> newList = new ArrayList<>();
+        List<Object> memberid = memberDTOList.stream().map(MemberDTO::getId).collect(Collectors.toCollection(ArrayList::new));
 
-
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename()); // 3
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
         if (!extension.equals("xlsx") && !extension.equals("xls")) {
             throw new IOException("엑셀파일만 업로드 해주세요.");
@@ -368,7 +379,7 @@ public class MemberController {
 
         Sheet worksheet = workbook.getSheetAt(0);
 
-        for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) { // 4
+        for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
 
             Row row = worksheet.getRow(i);
 
@@ -381,13 +392,13 @@ public class MemberController {
         List<String> dataid = dataList.stream().map(ExcelData::getId).collect(Collectors.toCollection(ArrayList::new));
         // 비교하기 위해 변환
 
-        model.addAttribute("datas", dataList); // 5 >>
+        model.addAttribute("datas", dataList); //
         // -------------------------excel 파일 데이터 리스트
+        Set<Object> result = new HashSet<>(memberid);
+        result.retainAll(dataid); // 공통요소만 남기고 제거
+        List<Object> commonList = new ArrayList<>(result); // List 로 변환
+        List<MemberDTO> resultid = (List<MemberDTO>) (Object) commonList; // MemberDTO로 변환
 
-
-        List<Object> result = memberid.stream().filter(dataid::contains).collect(Collectors.toList());
-        // 두 리스트의 교집합. 존재하는 값만 추출
-        List<MemberDTO> resultid = (List<MemberDTO>) (Object) result;
         int succount = 0;
 
         for(int i = 0; i< memberDTOList.size(); i++) {
