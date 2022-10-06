@@ -40,7 +40,7 @@ public class PageResultDTO<DTO, EN> { //Generics
     }
     public void makePageList(Pageable pageable) {
         this.currentPage = pageable.getPageNumber() + 1;
-        this.sizeOfPage = pageable.getPageSize(); // 페이징 개수 처리
+        this.sizeOfPage = 5; // 페이징 개수 처리
         double pageDouble = (double) sizeOfPage;
         // sizeofPage = 10, pageDouble = 10.0, currentPage = 2
         // 2/10.0 = 0.2 -> Math.ceil(0.2) 올림 : 1 * 10 = 10(일시적인 마지막 페이지)

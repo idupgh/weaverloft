@@ -354,7 +354,7 @@ public class MemberController {
 //        Object memberid = 비교를 위한 멤버 형변환 리스트
 //        String dataid = 비교를 위한 Excel 형변환 리스트
 //        Object result = 멤버 형변환 리스트와 Excel 형변환 리스트의 교집합 리스트
-//        MembetDTO resultid = 교집합 리스트를 MemberDTO로 전환
+//        MembetDTO resultid = 교집합 리스트를 MemberDTO로 전환![](../../../../../../../../../../GEUNHY~1/AppData/Local/Temp/img1.daumcdn.png)
 
 
         List<ExcelData> dataList = new ArrayList<>();

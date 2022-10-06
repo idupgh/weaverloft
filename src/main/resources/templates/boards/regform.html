@@ -53,6 +53,20 @@
               <input type="hidden" th:value="${session.login.id}" th:name="writerId">
               <div class="card-body">
                 <div class="form-group">
+                  <div data-toggle="buttons" class="btn-group" role="group" th:if="${session.isadmin != null}">
+                    <div class="form-group"><p><strong>게시글 공지&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</strong></p>
+                      <label class="btn mb-2 col-md-5 btn-light" style="">
+                        <input type="radio" name="mode"  value="y" th:field="*{notice_yn}"
+                               th:attr="checked=*{notice_yn.toString() == 'y' ? 'true' : 'false'}"  autocomplete="off"><br>공지
+                      </label>
+                      <label class="btn mb-2 col-md-5 btn-light" style="" >
+                        <input type="radio" name="mode" value="n" th:field="*{notice_yn}"
+                               th:attr="checked=*{notice_yn.toString() == 'n' ? 'true' : 'false'}" autocomplete="off"><br>일반
+                      </label>
+                    </div>
+                  </div>
+                  <br>
+
                   <label for="inputName">Title</label>
                   <input type="text" id="inputName" class="form-control" th:field="*{title}">
                   <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError">Incorrect data</p>

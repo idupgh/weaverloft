@@ -80,7 +80,7 @@
                   <th style="width: 60%">
                       Title
                   </th>
-                  <th style="width: 5%">
+                  <th style="width: 10%">
                       Writer
                   </th>
                   <th style="width: 20%" class="text-center">
@@ -97,14 +97,18 @@
               </thead>
               <tbody>
               <tr th:each="boardDTO,i : ${list.dtoList}">
-                  <td th:text="${list.getTotalSize()} - (${list.currentPage}*5) - ${i.index} + 5"></td>
+                  <td th:text="${list.getTotalSize()} - (${list.currentPage}*10) - ${i.index} + 10"></td>
 <!--                  <td th:text="((${list.currentPage}-1)*5)+${i.index}+1"></td>-->
-                  <td>
+                  <td th:if="${boardDTO.notice_yn == 'n'}">
                       <a th:href="@{'/boards/' + ${boardDTO.bno}}">
                           [[${boardDTO.title}]]
                       </a>
-                      <br/>
-
+                  </td>
+                  <td th:if="${boardDTO.notice_yn == 'y'}">
+                      [공지사항]
+                      <a th:href="@{'/boards/' + ${boardDTO.bno}}">
+                          [[${boardDTO.title}]]
+                      </a>
                   </td>
                   <td>
                       [[${boardDTO.writerName}]]

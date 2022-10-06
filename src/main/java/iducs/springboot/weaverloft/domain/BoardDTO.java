@@ -34,4 +34,7 @@ public class BoardDTO {
     private int replyCount; // 게시물 댓글 수
 
     private Long fileId;
+
+    @Builder.Default
+    private String notice_yn = "n"; // 공지사항 여부
 }

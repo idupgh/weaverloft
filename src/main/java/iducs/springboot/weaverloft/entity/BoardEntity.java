@@ -38,4 +38,8 @@ public class BoardEntity extends BaseEntity {
 
     private int replyCount;
 
+    @Column(length = 2)
+    @Builder.Default
+    private String notice_yn = "n"; // 공지사항 여부
+
 }
