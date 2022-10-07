@@ -636,14 +636,13 @@
             </div>
             <!-- /.card -->
 
-            <!---------------------------------- 공지사항 modal 부분 ---------------------------->
             <div th:unless="${gongList.isEmpty()}">
-              <div th:each="gong : ${gongList}">
+              <div th:each="gong,i : ${gongList}">
                 <div class="modal" id="myModal" tabindex="-1" role="dialog">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title">공지사항</h5>
+                        <h5 class="modal-title">[[${gong.title}]]</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
@@ -711,11 +710,7 @@
 <script src="../dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="../dist/js/pages/dashboard.js"></script>
-<script>
-  $(document).ready(function() {
-    $("#getCodeModal").modal('show');
-  });
-
+<script th:inline="javascript">
   function setCookie(name, value, expiredays){
     var today = new Date();
     today.setDate(today.getDate() + expiredays);
@@ -739,6 +734,12 @@
     $("#myModal").modal("hide");
     setCookie("mycookie", 'popupEnd', 1);
   })
+
+  $('#myModal').modal({
+    backdrop: 'static',
+    keyboard: false
+  })
+
 
   var checkCookie = getCookie("mycookie");
 
