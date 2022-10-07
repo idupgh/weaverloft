@@ -26,6 +26,8 @@
   <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -633,6 +635,33 @@
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
+
+            <!---------------------------------- 공지사항 modal 부분 ---------------------------->
+            <div th:unless="${gongList.isEmpty()}">
+              <div th:each="gong : ${gongList}">
+                <div class="modal" id="myModal" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">공지사항</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p>[[${gong.content}]]</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id = "modal-today-close">today</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
           </section>
           <!-- right col -->
         </div>
@@ -682,5 +711,42 @@
 <script src="../dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="../dist/js/pages/dashboard.js"></script>
+<script>
+  $(document).ready(function() {
+    $("#getCodeModal").modal('show');
+  });
+
+  function setCookie(name, value, expiredays){
+    var today = new Date();
+    today.setDate(today.getDate() + expiredays);
+    document.cookie = name + '=' + escape(value) + '; expires=' + today.toGMTString();
+  }
+
+  function getCookie(name) {
+    var cookie = document.cookie;
+    if (document.cookie != "") {
+      var cookie_array = cookie.split("; ");
+      for ( var index in cookie_array) {
+        var cookie_name = cookie_array[index].split("=");
+        if (cookie_name[0] == "mycookie") {
+          return cookie_name[1];
+        }
+      }
+    }
+    return;
+  }
+  $("#modal-today-close").click(function() {
+    $("#myModal").modal("hide");
+    setCookie("mycookie", 'popupEnd', 1);
+  })
+
+  var checkCookie = getCookie("mycookie");
+
+  if(checkCookie == 'popupEnd') {
+    $("#myModal").modal("hide");
+  } else {
+    $('#myModal').modal("show");
+  }
+</script>
 </body>
 </html>

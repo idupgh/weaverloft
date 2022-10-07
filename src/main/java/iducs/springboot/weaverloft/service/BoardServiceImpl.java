@@ -15,6 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -137,6 +139,7 @@ public class BoardServiceImpl implements BoardService {
                 .notice_yn(entity.getNotice_yn())
                 .block(entity.getBlock())
                 .views(entity.getViews())
+                .replyCount(entity.getReplyCount())
                 .build();
         return boardDTO;
     }
@@ -164,5 +167,16 @@ public class BoardServiceImpl implements BoardService {
     public Object countBoard(Long bno) {
         boardRepository.countBoard(bno);
         return null;
+    }
+
+    @Override
+    public List<BoardDTO> getAll() {
+        List<BoardDTO> boards = new ArrayList<>();
+        List<BoardEntity> entities = boardRepository.findAll();
+        for(BoardEntity entity : entities) {
+            BoardDTO boardDTO = entityToDto(entity);
+            boards.add(boardDTO);
+        }
+        return boards;
     }
 }

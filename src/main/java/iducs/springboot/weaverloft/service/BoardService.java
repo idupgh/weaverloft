@@ -7,10 +7,13 @@ import iducs.springboot.weaverloft.domain.PageResultDTO;
 import iducs.springboot.weaverloft.entity.BoardEntity;
 import iducs.springboot.weaverloft.entity.MemberEntity;
 
+import java.util.List;
+
 public interface BoardService {
     Long register(BoardDTO boardDTO);  // Board : boardDTO or Domain
 
     PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO);
+    List<BoardDTO> getAll();
     BoardDTO getById(Long bno); // Id는 primary key 값 : @ID 필드
     Long modify(BoardDTO boardDTO);
     void DeleteById(Long bno);
