@@ -52,8 +52,9 @@ public class SearchBoardRepositoryImpl
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         BooleanExpression expression= boardEntity.bno.gt(0L);
+        BooleanExpression expression2= boardEntity.block.eq("unblock");
 
-        booleanBuilder.and(expression);
+        booleanBuilder.and(expression).and(expression2);
 
         if(type != null) {
             String[] typeArr = type.split("");
