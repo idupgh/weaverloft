@@ -354,7 +354,7 @@ public class MemberController {
 //        Object memberid = 비교를 위한 멤버 형변환 리스트
 //        String dataid = 비교를 위한 Excel 형변환 리스트
 //        Object result = 멤버 형변환 리스트와 Excel 형변환 리스트의 교집합 리스트
-//        MembetDTO resultid = 교집합 리스트를 MemberDTO로 전환![](../../../../../../../../../../GEUNHY~1/AppData/Local/Temp/img1.daumcdn.png)
+//        MembetDTO resultid = 교집합 리스트를 MemberDTO로 전환
 
 
         List<ExcelData> dataList = new ArrayList<>();
@@ -362,6 +362,8 @@ public class MemberController {
         List<MemberDTO> memberDTOList = memberService.readAll();
         // 비교하기 위해 변환
         List<Object> memberid = memberDTOList.stream().map(MemberDTO::getId).collect(Collectors.toCollection(ArrayList::new));
+
+
 
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
@@ -394,10 +396,18 @@ public class MemberController {
 
         model.addAttribute("datas", dataList); //
         // -------------------------excel 파일 데이터 리스트
+
         Set<Object> result = new HashSet<>(memberid);
         result.retainAll(dataid); // 공통요소만 남기고 제거
         List<Object> commonList = new ArrayList<>(result); // List 로 변환
-        List<MemberDTO> resultid = (List<MemberDTO>) (Object) commonList; // MemberDTO로 변환
+        List<MemberDTO> resultid = (List<MemberDTO>) (Object) commonList; // MemberDTO로 변환 >> 멤버리스트와 엑셀 리스트의 공통 리스트
+        // 실패목록 리스트
+        List<String> dupfailList = new ArrayList<>(); // 중복되서 실패
+
+        Set<Object> subResult = new HashSet<>(dataid);
+        subResult.removeAll(result);
+        List<Object> subList = new ArrayList<>(subResult); // 없는 아이디여서 실패
+        List<String> nofailList = (List<String>) (Object) subList;
 
         int succount = 0;
 
@@ -410,11 +420,15 @@ public class MemberController {
                         memberDTO.setDelete_yn("y");
                         memberService.update(memberDTO);
                         succount++;
+                    }else{
+                        dupfailList.add(memberDTO.getId()); // 목록중에 중복되서 실패한 리스트
                     }
                 }
+
             }
 //            resultid.add(memberService.readById(resultid.get(i).getId()));
         }
+        nofailList.removeAll(dupfailList);
         int dulcount = resultid.size()-succount;
         model.addAttribute("allcount", dataList.size());
         model.addAttribute("succount", succount);
@@ -426,8 +440,11 @@ public class MemberController {
 //            memberService.update(memberDTO);
 //        }
 
+        String strdupfailList = String.join(",", dupfailList);
+        String strnofailList = String.join(",", nofailList);
+
 //        return "redirect:/members/list";
-        return "redirect:/members/list?allcount="+dataList.size()+"&succount="+succount+"&facount="+(dataList.size() - succount)+"&dulcount="+dulcount;
+        return "redirect:/members/list?allcount="+dataList.size()+"&succount="+succount+"&facount="+(dataList.size() - succount)+"&dulcount="+dulcount+"&dupfailList="+strdupfailList+"&nofailList="+strnofailList;
 
     }
 }

@@ -151,10 +151,21 @@
     const succount = urlParams.get('succount');
     const facount = urlParams.get('facount');
     const dulcount = urlParams.get('dulcount');
+    const dupfailList = urlParams.get('dupfailList');
+    const nofailList = urlParams.get('nofailList');
+
+    // var str = ""
+    //
+    // for(i=0; i<dupfailList.length; i++) {
+    //   var nostr = str + dupfailList[i];
+    //   for(j=0; j<dupfailList.length-1; j++){
+    //     nostr = nostr +',';
+    //   }
+    // }
 
 
     if(allcount != null && succount != null && facount != null){
-      alert("업로드 시도 한 갯수 : " + allcount + "\n" + "성공 갯수 : " + succount + "\n" + "실패 갯수 : " + facount + "(중복된 데이터 :" + dulcount + ")");
+      alert("업로드 시도 한 갯수 : " + allcount + "\n" + "성공 갯수 : " + succount + "\n" + "실패 갯수 : " + facount +"\n"+ "이미 탈퇴한 회원 :" + dupfailList+"\n"+ "정보가 없는 회원 :" + nofailList);
       location.href = 'http://localhost:8088/members/list?page=1&type=&keyword='
     }
   });
