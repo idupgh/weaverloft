@@ -36,7 +36,7 @@
     <img class="animation__shake" src="../dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
   </div>
 
-  <div th:replace="~{/nav :: navfrag}"/>
+ <div th:replace="~{/nav :: navfrag}"/>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -152,8 +152,8 @@
                   <!-- Morris chart - Sales -->
                   <div class="chart tab-pane active" id="revenue-chart"
                        style="position: relative; height: 300px;">
-                    <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>
-                  </div>
+                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>
+                   </div>
                   <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
                     <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>
                   </div>
@@ -637,7 +637,7 @@
 
             <div th:unless="${gongList.isEmpty()}">
               <div th:each="gong,i : ${gongList}">
-                <div class="modal" th:id="myModal+${i.index}" tabindex="-1" role="dialog">
+                <div class="modal" th:id="popup_+${gong.bno}" tabindex="-1" role="dialog">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -650,7 +650,7 @@
                         <p>[[${gong.content}]]</p>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" th:attr="onclick=|openModal('${gong.bno}','${i.index}')|">오늘 그만 보기</button>
+                        <button type="button" class="btn btn-primary" th:bno="${gong.bno}" th:attr="onclick=|close_pop_allday(true,'${gong.bno}')|">오늘 그만 보기</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                       </div>
                     </div>
@@ -714,50 +714,43 @@
 <script th:inline="javascript">
   var list = [[${gongList}]];
   var length = [[${gongList.size}]];
+  var bno = [[${gongList.get(1).bno}]]
+
   function setCookie(name, value, expiredays){
     var today = new Date();
     today.setDate(today.getDate() + expiredays);
     document.cookie = name + '=' + escape(value) + '; expires=' + today.toGMTString();
   }
 
-  function openModal(bno,i) {
-    setCookie("mycookie"+bno, 'popupEnd', 1);
-    $("#myModal"+i).modal("hide");
+  function close_pop_allday(flag, bno) {
+    _this = $(this);
+    var popupString = "popup"+bno;
+
+    if ( flag == true ) {
+      //쿠키세팅(그냥닫기 오늘안보기)
+      setCookie("popup"+bno,"end",1);
+      $("#popup_"+bno).hide();
+    }else{
+      //false로 들어오면 그냥 숨기기만
+      $("#popup_"+bno).hide();
     }
+  };
 
   for(i = 0; i< length; i++){
     var bno = list[i].bno;
 
-    $('#myModal'+i).modal({
-      backdrop: 'static',
-      keyboard: false
-    })
 
-    function getCookie(name) {
-      var cookie = document.cookie;
-      if (document.cookie != "") {
-        var cookie_array = cookie.split("; ");
-        for ( var index in cookie_array) {
-          var cookie_name = cookie_array[index].split("=");
-          if (cookie_name[0] == "mycookie"+bno) {
-            return cookie_name[1];
-          }
+
+    $(document).on('ready', function () {
+
+      //팝업 쿠키확인후 보여주기
+          var popup_no = bno;
+          if ($.cookie('popup'+popup_no)!="end"){
+          //쿠키없는거만 보여주기
+          $("#popup_"+popup_no).show();
+          $("#popup_"+popup_no).draggable();
         }
-      }
-      return;
-    }
-
-    $("#modal-today-close"+i).click(function() {
-      setCookie("mycookie"+bno, 'popupEnd', 1);
-    })
-
-    var checkCookie = getCookie("mycookie"+bno);
-
-    if(checkCookie == 'popupEnd') {
-      $("#myModal"+i).modal("hide");
-    } else {
-      $('#myModal'+i).modal("show");
-    }
+    });
   } // for 문 닫히는 위치
 
 

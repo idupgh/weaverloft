@@ -650,7 +650,7 @@
                         <p>[[${gong.content}]]</p>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" th:attr="onclick=|openModal('${gong.bno}','${i.index}')|">오늘 그만 보기</button>
+                        <button type="button" class="btn btn-primary" th:id="modal-today-close+${i.index}">오늘 그만 보기</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                       </div>
                     </div>
@@ -714,16 +714,12 @@
 <script th:inline="javascript">
   var list = [[${gongList}]];
   var length = [[${gongList.size}]];
+  var bno = [[${gongList.get(1).bno}]]
   function setCookie(name, value, expiredays){
     var today = new Date();
     today.setDate(today.getDate() + expiredays);
     document.cookie = name + '=' + escape(value) + '; expires=' + today.toGMTString();
   }
-
-  function openModal(bno,i) {
-    setCookie("mycookie"+bno, 'popupEnd', 1);
-    $("#myModal"+i).modal("hide");
-    }
 
   for(i = 0; i< length; i++){
     var bno = list[i].bno;
@@ -749,6 +745,7 @@
 
     $("#modal-today-close"+i).click(function() {
       setCookie("mycookie"+bno, 'popupEnd', 1);
+      $("#myModal"+i).modal("hide");
     })
 
     var checkCookie = getCookie("mycookie"+bno);
