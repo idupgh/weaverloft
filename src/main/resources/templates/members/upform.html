@@ -96,10 +96,11 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div th:unless="${session.isadmin != null}">
+                                        <input type="hidden" th:field="*{block}">
+                                        <input type="hidden" th:field="*{role}">
+                                    </div>
                                     <input type="hidden" th:field="*{delete_yn}"/>
-                                    <input type="hidden" th:field="*{block}">
-                                    <input type="hidden" th:field="*{role}">
-
                                 </div>
                                 <!-- /.card-body -->
 
