@@ -36,9 +36,9 @@ class BoardDTO201812064ApplicationTests {
         // Integer 데이터 흐름 ..? Lambda 식 - 함수형 언어의 특징을 활용
         IntStream.rangeClosed(1, 100).forEach(i -> {
             MemberEntity member = MemberEntity.builder()
-                    .id("id" + i)
+                    .id("idid" + i)
                     .pw("pw" + i)
-                    .name("이름"+i)
+                    .name("아무개")
                     .email("email" + i + "@naver.com")
                     .phone("01012345678")
                     .address("address" + i)

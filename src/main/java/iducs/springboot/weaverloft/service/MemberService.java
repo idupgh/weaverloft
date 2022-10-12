@@ -24,6 +24,8 @@ public interface MemberService {
 
     void pwupdate(MemberDTO memberDTO);
 
+    void dateupdate(MemberDTO memberDTO);
+
     void delete(MemberDTO memberDTO);
     PageResultDTO<MemberDTO, MemberEntity> readListBy(PageRequestDTO pageRequestDTO);
 //    List<MemberEntity> search(String keyword);

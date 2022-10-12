@@ -154,6 +154,34 @@ public class MemberController {
         } else
             return "/members/pwupform"; // view resolving : upform.html
     }
+    @GetMapping("/pwupform2/{idx}")
+    public String getPwUpform2(@PathVariable("idx") String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+        // 정보를 전달받을 객체를 보냄
+        MemberDTO memberDTO = memberService.readById(id);
+        model.addAttribute("memberDTO", memberDTO);
+        if(!(session.getAttribute("loginid").equals(memberDTO.getId()))) {
+            if(session.getAttribute("isadmin") != null) {
+                return "/members/pwupform2";
+            } else {
+                response.setContentType("text/html; charset=utf-8");
+                PrintWriter out = response.getWriter();
+                String element =
+                        "<script> alert('자신의 비밀번호만 수정할 수 있습니다.'); location.href='/'; </script>";
+                out.println(element);
+                out.flush();//브라우저 출력 비우기
+                out.close();//아웃객체 닫기
+            }
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            String element =
+                    "<script> alert('자신의 비밀번호만 수정할 수 있습니다.'); location.href='/'; </script>";
+            out.println(element);
+            out.flush();//브라우저 출력 비우기
+            out.close();//아웃객체 닫기
+            return "/";
+        } else
+            return "/members/pwupform2"; // view resolving : upform.html
+    }
 
     @PutMapping("/update/{idx}")
     public String putMember(@Valid @ModelAttribute("memberDTO") MemberDTO memberDTO, BindingResult bindingResult ,Model model) {
@@ -187,6 +215,15 @@ public class MemberController {
             model.addAttribute("errorMessage",e.getMessage());
             return "/members/pwupform";
         }
+
+        return "/members/contacts"; // view resolving : update info 확인
+    }
+
+    @PutMapping("/pwupdate2/{idx}")
+    public String putMemberPw2(@ModelAttribute("memberDTO") MemberDTO memberDTO, BindingResult bindingResult ,Model model) {
+        // HTML 에서 전달된 model 객체를 전달 받음 : member 라는 애트리뷰트 명 th:object 애트리뷰트 값
+        memberService.dateupdate(memberDTO);
+        model.addAttribute(memberDTO);
 
         return "/members/contacts"; // view resolving : update info 확인
     }
@@ -241,6 +278,9 @@ public class MemberController {
     @PostMapping("/login")
     public String postLogin(@ModelAttribute("memberDTO") MemberDTO memberDTO, HttpServletRequest request, HttpServletResponse response) throws IOException {
         MemberDTO deletedto = null;
+
+        // 만약 로그인 한 날짜가 upDate 보다
+
         if(((memberService.loginById(memberDTO)) == null)) {
             response.setContentType("text/html; charset=utf-8");
             PrintWriter out = response.getWriter();
@@ -262,15 +302,28 @@ public class MemberController {
             out.close();//아웃객체 닫기
 
             return "/";
-        } // 이부분에 비밀번호 변경 주기 비교 들어가기
+        }
         else if(((memberDTO = memberService.loginById(memberDTO)) != null)) {
+            String id = memberDTO.getId();
             HttpSession session = request.getSession();
             session.setAttribute("login", memberDTO);
             session.setAttribute("loginid", memberDTO.getId());
             session.setAttribute("block",memberDTO.getBlock());
             session.setAttribute("delete",memberDTO.getDelete_yn());
+            LocalDateTime lastDate = memberDTO.getPwUpdateDate(); // 비밀번호 변경한 날짜
+            LocalDateTime upDate = lastDate.plusDays(90); // 그로부터 90일 이후
+            LocalDateTime toDay = LocalDateTime.now(); // 로그인한 날짜
             if(memberDTO.getRole().contains("admin")) // ID > ROLE 변경 예정
                 session.setAttribute("isadmin", memberDTO.getId());
+            if(upDate.isBefore(toDay)){
+                response.setContentType("text/html; charset=utf-8");
+                PrintWriter out = response.getWriter();
+                String element =
+                        "<script> alert('비밀번호 변경 대상자 입니다');location.href='/members/pwupform2/"+ id +"';</script>";
+                out.println(element);
+                out.flush();//브라우저 출력 비우기
+                out.close();//아웃객체 닫기
+            }
             return "redirect:/";
         }
         return "redirect:/";

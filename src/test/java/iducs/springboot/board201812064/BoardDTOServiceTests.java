@@ -23,7 +23,7 @@ public class BoardDTOServiceTests {
             BoardDTO dto = BoardDTO.builder()
                     .title("Test" + i)
                     .content("Content" + i)
-                    .writerId("id"+i)
+                    .writerId("idid"+i)
                     .block("unblock")
                     .notice_yn("n")
                     .fileId(null)

@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -72,11 +73,13 @@
                   <input type="hidden" th:field="*{delete_yn}"/>
                   <input type="hidden" th:field="*{block}"/>
                   <input type="hidden" th:field="*{role}"/>
+                  <input type="hidden" th:field="*{pw}"/>
                 </div>
                 <!-- /.card-body -->
 
                 <div class="card-footer">
                   <button style="float:right;" type="submit" class="btn btn-primary" onclick="update()">Update</button>
+                  <button style="float:left;" type="submit" class="btn btn-primary" onclick="later()">다음에 변경하기</button>
                 </div>
               </form>
             </div>
@@ -117,9 +120,15 @@
 
     var id = "[[${memberDTO.id}]]";
     function update(){
-        var form = document.form;
-        form.action = "/members/pwupdate/"+id;
-        form.submit();
+      var form = document.form;
+      form.action = "/members/pwupdate/"+id;
+      form.submit();
+    }
+
+    function later(){
+      var form = document.form;
+      form.action = "/members/pwupdate2/"+id;
+      form.submit();
     }
   </script>
 </div>

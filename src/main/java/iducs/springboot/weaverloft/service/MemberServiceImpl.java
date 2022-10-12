@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -61,6 +60,7 @@ public class MemberServiceImpl implements MemberService{
                 .block(memberDTO.getBlock())
                 .delete_yn(memberDTO.getDelete_yn())
                 .role(memberDTO.getRole())
+                .pwUpdateDate(memberDTO.getPwUpdateDate())
                 .build();
         return entity;
     }
@@ -87,6 +87,7 @@ public class MemberServiceImpl implements MemberService{
                 .block(entity.getBlock())
                 .delete_yn(entity.getDelete_yn())
                 .role(entity.getRole())
+                .pwUpdateDate(entity.getPwUpdateDate())
                 .build();
         return memberDTO;
     }
@@ -113,6 +114,19 @@ public class MemberServiceImpl implements MemberService{
         MemberEntity entity = dtoToEntity(memberDTO);
         String encodedPassword = passwordEncoder.encode(entity.getPw());
         entity.setPw(encodedPassword);
+        LocalDateTime date = LocalDateTime.now();
+        entity.setPwUpdateDate(date);
+        memberRepository.save(entity);
+    }
+
+    @Override
+    public void dateupdate(MemberDTO memberDTO) {
+        MemberEntity entity = dtoToEntity(memberDTO);
+        String oldPw = entity.getPw();
+        String newPw[] = oldPw.split(",");
+        entity.setPw(newPw[1]);
+        LocalDateTime date = LocalDateTime.now();
+        entity.setPwUpdateDate(date);
         memberRepository.save(entity);
     }
 
