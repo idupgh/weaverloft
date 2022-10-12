@@ -57,7 +57,7 @@
                                 <option value="tc" th:selected="${pageRequestDTO.type =='tc'}">제목 + 내용</option>
                                 <option value="tcw" th:selected="${pageRequestDTO.type =='tcw'}">제목 + 내용 + 작성자</option>
                             </select>
-                        <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="keyword" th:value="${pageRequestDTO.keyword}">
+                        <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="keyword" th:value="${pageRequestDTO.keyword}" onkeypress="enterkey();">
                     </div>
                 </form>
                 <div class="input-group-append">
@@ -180,6 +180,29 @@
                 var form = document.form;
                 form.action = "/boards";
                 form.submit();
+            }
+        }
+
+        function enterkey() {
+            if (window.event.keyCode == 13) {
+                keyword = $("#keyword").val();
+                type = $("#type").val();
+                page = $("#page").val();
+                if(type == "검색"){
+                    alert("종류를 선택하세요.");
+                    $("#type").focus();
+                    return false;
+                }
+                else if(keyword == ""){
+                    alert("검색어를 입력하세요.");
+                    $("#keyword").focus();
+                    return false;
+                }
+                else{
+                    var form = document.form;
+                    form.action = "/boards";
+                    form.submit();
+                }
             }
         }
 

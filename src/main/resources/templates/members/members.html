@@ -45,14 +45,13 @@
           <div class="card-tools">
             <form name="form" th:method="get" style=" width: 90%; float: left; margin-top: 5px;">
               <div class="input-group" style="width: 350px;">
-                <select class="form-control" id="type" name="type" th:value="${pageRequestDTO.type}">
+                <select class="form-control" id="type" name="type">
                   <option value="검색" th:selected="${pageRequestDTO.type == null}"> 검색</option>
                   <option value="i" th:selected="${pageRequestDTO.type == 'i'}">id</option>
                   <option value="n" th:selected="${pageRequestDTO.type == 'n'}">name</option>
                   <option value="a" th:selected="${pageRequestDTO.type == 'a'}">address</option>
-                  <option value="ea" th:selected="${pageRequestDTO.type == 'ea'}">email + address</option>
                 </select>
-                <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="keyword" th:value="${pageRequestDTO.keyword}">
+                <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="keyword" th:value="${pageRequestDTO.keyword}" onkeypress="enterkey();">
               </div>
             </form>
             <div class="input-group-append">
@@ -194,6 +193,29 @@
       var form = document.form;
       form.action = "/members/list";
       form.submit();
+    }
+  }
+
+  function enterkey() {
+    if (window.event.keyCode == 13) {
+      keyword = $("#keyword").val();
+      type = $("#type").val();
+      page = $("#page").val();
+      if(type == "검색"){
+        alert("종류를 선택하세요.");
+        $("#type").focus();
+        return false;
+      }
+      else if(keyword == ""){
+        alert("검색어를 입력하세요.");
+        $("#keyword").focus();
+        return false;
+      }
+      else{
+        var form = document.form;
+        form.action = "/members/list";
+        form.submit();
+      }
     }
   }
 
