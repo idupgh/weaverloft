@@ -1,9 +1,12 @@
 package iducs.springboot.weaverloft.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,4 +55,8 @@ public class MemberEntity extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "writer") //값을 수정하고 삭제 할수없음 조회만 가능
     private List<BoardEntity> boardEntities = new ArrayList<>();
+
+    @Column
+    private LocalDateTime pwUpdateDate;
+
 }

@@ -125,6 +125,7 @@ public class MemberController {
         } else
             return "/members/upform"; // view resolving : upform.html
     }
+
     @GetMapping("/pwupform/{idx}")
     public String getPwUpform(@PathVariable("idx") String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         // 정보를 전달받을 객체를 보냄
@@ -261,7 +262,7 @@ public class MemberController {
             out.close();//아웃객체 닫기
 
             return "/";
-        }
+        } // 이부분에 비밀번호 변경 주기 비교 들어가기
         else if(((memberDTO = memberService.loginById(memberDTO)) != null)) {
             HttpSession session = request.getSession();
             session.setAttribute("login", memberDTO);

@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -37,7 +38,7 @@ class BoardDTO201812064ApplicationTests {
             MemberEntity member = MemberEntity.builder()
                     .id("id" + i)
                     .pw("pw" + i)
-                    .name("이름")
+                    .name("이름"+i)
                     .email("email" + i + "@naver.com")
                     .phone("01012345678")
                     .address("address" + i)
@@ -47,6 +48,8 @@ class BoardDTO201812064ApplicationTests {
                     .build();
             String encodedPassword = passwordEncoder.encode(member.getPw());
             member.setPw(encodedPassword);
+            LocalDateTime date = LocalDateTime.now();
+            member.setPwUpdateDate(date);
             memberRepository.save(member);
         });
     }
@@ -65,10 +68,10 @@ class BoardDTO201812064ApplicationTests {
     @Test
     void testAdmin() {
         // Integer 데이터 흐름, Lambda 식 - 함수형 언어의 특징을 활용
-        String str = "admin";
+        String str = "pg9912";
         MemberEntity entity = MemberEntity.builder()
                 .id(str)
-                .pw(str)
+                .pw("1234")
                 .name("관리자")
                 .email(str + "@naver.com")
                 .phone("01012341234")
@@ -79,6 +82,8 @@ class BoardDTO201812064ApplicationTests {
                 .build();
         String encodedPassword = passwordEncoder.encode(entity.getPw());
         entity.setPw(encodedPassword);
+        LocalDateTime date = LocalDateTime.now();
+        entity.setPwUpdateDate(date);
         memberRepository.save(entity);
     }
 

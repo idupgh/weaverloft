@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 
@@ -43,6 +44,8 @@ public class MemberServiceImpl implements MemberService{
         MemberEntity entity = dtoToEntity(memberDTO);
         String encodedPassword = passwordEncoder.encode(entity.getPw());
         entity.setPw(encodedPassword);
+        LocalDateTime date = LocalDateTime.now();
+        entity.setPwUpdateDate(date);
         validateDuplicateMember(entity);
         memberRepository.save(entity);
     }
@@ -181,8 +184,8 @@ public class MemberServiceImpl implements MemberService{
         String keyword = pageRequestDTO.getKeyword();
 
         BooleanBuilder conditionBuilder = new BooleanBuilder();
-        if(type.contains("e")) // email 로 검색
-            conditionBuilder.or(qMemberEntity.email.contains(keyword));
+        if(type.contains("i")) // email 로 검색
+            conditionBuilder.or(qMemberEntity.id.contains(keyword));
         if(type.contains("n")) // phone 로 검색
             conditionBuilder.or(qMemberEntity.name.contains(keyword));
         if(type.contains("a")) // address 로 검색

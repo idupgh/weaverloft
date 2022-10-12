@@ -19,12 +19,13 @@ public class BoardDTOServiceTests {
 
     @Test
     public void testRegister() { //47개의 BoardDTO 데이터 만들기
-        IntStream.rangeClosed(1, 100).forEach(i -> {
+        IntStream.rangeClosed(1, 90).forEach(i -> {
             BoardDTO dto = BoardDTO.builder()
                     .title("Test" + i)
                     .content("Content" + i)
-                    .writerId("admin")
+                    .writerId("id"+i)
                     .block("unblock")
+                    .notice_yn("n")
                     .fileId(null)
                     .build();
             Long bno = boardService.register(dto);
