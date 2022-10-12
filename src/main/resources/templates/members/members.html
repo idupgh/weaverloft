@@ -47,7 +47,7 @@
               <div class="input-group" style="width: 350px;">
                 <select class="form-control" id="type" name="type" th:value="${pageRequestDTO.type}">
                   <option value="검색" th:selected="${pageRequestDTO.type == null}"> 검색</option>
-                  <option value="e" th:selected="${pageRequestDTO.type == 'e'}">email</option>
+                  <option value="i" th:selected="${pageRequestDTO.type == 'i'}">id</option>
                   <option value="n" th:selected="${pageRequestDTO.type == 'n'}">name</option>
                   <option value="a" th:selected="${pageRequestDTO.type == 'a'}">address</option>
                   <option value="ea" th:selected="${pageRequestDTO.type == 'ea'}">email + address</option>
