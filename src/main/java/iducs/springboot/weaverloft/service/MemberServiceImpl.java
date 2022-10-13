@@ -118,15 +118,16 @@ public class MemberServiceImpl implements MemberService{
         entity.setPw(encodedPassword);
         LocalDateTime date = LocalDateTime.now();
         entity.setPwUpdateDate(date);
+        entity.setPwcount(0);
         memberRepository.save(entity);
     }
 
     @Override
     public void dateupdate(MemberDTO memberDTO) {
         MemberEntity entity = dtoToEntity(memberDTO);
-//        String oldPw = entity.getPw();
-//        String newPw[] = oldPw.split(",");
-//        entity.setPw(newPw[1]);
+        String oldPw = entity.getPw();
+        String newPw[] = oldPw.split(",");
+        entity.setPw(newPw[1]);
         LocalDateTime date = LocalDateTime.now();
         entity.setPwUpdateDate(date);
         entity.setPwcount(1);
