@@ -45,6 +45,7 @@ class BoardDTO201812064ApplicationTests {
                     .block("unblock")
                     .delete_yn("n")
                     .role("user")
+                    .pwcount(0)
                     .build();
             String encodedPassword = passwordEncoder.encode(member.getPw());
             member.setPw(encodedPassword);
@@ -79,6 +80,7 @@ class BoardDTO201812064ApplicationTests {
                 .block("unblock")
                 .delete_yn("n")
                 .role("admin")
+                .pwcount(0)
                 .build();
         String encodedPassword = passwordEncoder.encode(entity.getPw());
         entity.setPw(encodedPassword);

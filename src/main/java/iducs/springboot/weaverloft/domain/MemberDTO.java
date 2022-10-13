@@ -42,5 +42,6 @@ public class MemberDTO { // DTO(Data Transform Object) : Client <-> Controller <
 
     private LocalDateTime pwUpdateDate;
 
+    private Integer pwcount;
 }
 

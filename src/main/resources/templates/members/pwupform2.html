@@ -79,8 +79,10 @@
 
                 <div class="card-footer">
                   <button style="float:right;" type="submit" class="btn btn-primary" onclick="update()">Update</button>
-                  <button style="float:left;" type="submit" class="btn btn-primary" onclick="later()">다음에 변경하기</button>
-                </div>
+                  <div th:if="${memberDTO.pwcount == 0}">
+                    <button style="float:left;" type="submit" class="btn btn-primary" onclick="later()">다음에 변경하기</button>
+                  </div>
+                  </div>
               </form>
             </div>
             <!-- /.card -->

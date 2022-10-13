@@ -61,6 +61,7 @@ public class MemberServiceImpl implements MemberService{
                 .delete_yn(memberDTO.getDelete_yn())
                 .role(memberDTO.getRole())
                 .pwUpdateDate(memberDTO.getPwUpdateDate())
+                .pwcount(memberDTO.getPwcount())
                 .build();
         return entity;
     }
@@ -88,6 +89,7 @@ public class MemberServiceImpl implements MemberService{
                 .delete_yn(entity.getDelete_yn())
                 .role(entity.getRole())
                 .pwUpdateDate(entity.getPwUpdateDate())
+                .pwcount(entity.getPwcount())
                 .build();
         return memberDTO;
     }
@@ -127,6 +129,7 @@ public class MemberServiceImpl implements MemberService{
         entity.setPw(newPw[1]);
         LocalDateTime date = LocalDateTime.now();
         entity.setPwUpdateDate(date);
+        entity.setPwcount(1);
         memberRepository.save(entity);
     }
 

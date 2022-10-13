@@ -59,4 +59,7 @@ public class MemberEntity extends BaseEntity {
     @Column
     private LocalDateTime pwUpdateDate;
 
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private Integer pwcount;
+
 }
