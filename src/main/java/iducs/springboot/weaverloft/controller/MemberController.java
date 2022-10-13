@@ -209,6 +209,9 @@ public class MemberController {
             return "/members/pwupform";
         }
         try{
+            String oldPw = memberDTO.getPw();
+            String newPw[] = oldPw.split(",");
+            memberDTO.setPw(newPw[0]);
             memberService.pwupdate(memberDTO);
             model.addAttribute(memberDTO);
         } catch (IllegalStateException e){
@@ -310,10 +313,12 @@ public class MemberController {
             session.setAttribute("loginid", memberDTO.getId());
             session.setAttribute("block",memberDTO.getBlock());
             session.setAttribute("delete",memberDTO.getDelete_yn());
+
             LocalDateTime lastDate = memberDTO.getPwUpdateDate(); // 비밀번호 변경한 날짜
             LocalDateTime upDate = lastDate.plusDays(90); // 그로부터 90일 이후
             LocalDateTime toDay = LocalDateTime.now(); // 로그인한 날짜
-            if(memberDTO.getRole().contains("admin")) // ID > ROLE 변경 예정
+
+            if(memberDTO.getRole().contains("admin"))
                 session.setAttribute("isadmin", memberDTO.getId());
             if(upDate.isBefore(toDay)){
                 response.setContentType("text/html; charset=utf-8");

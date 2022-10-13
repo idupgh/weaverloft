@@ -73,14 +73,16 @@
                   <input type="hidden" th:field="*{delete_yn}"/>
                   <input type="hidden" th:field="*{block}"/>
                   <input type="hidden" th:field="*{role}"/>
+                  <input type="hidden" th:field="*{pwcount}"/>
                   <input type="hidden" th:field="*{pw}"/>
+
                 </div>
                 <!-- /.card-body -->
 
                 <div class="card-footer">
                   <button style="float:right;" type="submit" class="btn btn-primary" onclick="update()">Update</button>
                   <div th:if="${memberDTO.pwcount == 0}">
-                    <button style="float:left;" type="submit" class="btn btn-primary" onclick="later()">다음에 변경하기</button>
+                    <button style="float:left;" type="submit" class="btn btn-primary" onclick="later()">90일뒤에 변경하기</button>
                   </div>
                   </div>
               </form>

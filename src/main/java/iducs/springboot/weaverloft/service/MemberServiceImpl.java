@@ -124,9 +124,9 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void dateupdate(MemberDTO memberDTO) {
         MemberEntity entity = dtoToEntity(memberDTO);
-        String oldPw = entity.getPw();
-        String newPw[] = oldPw.split(",");
-        entity.setPw(newPw[1]);
+//        String oldPw = entity.getPw();
+//        String newPw[] = oldPw.split(",");
+//        entity.setPw(newPw[1]);
         LocalDateTime date = LocalDateTime.now();
         entity.setPwUpdateDate(date);
         entity.setPwcount(1);

@@ -25,7 +25,7 @@ public class BoardEntity extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String block = "unblock";
 
     @ManyToOne
